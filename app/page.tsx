@@ -1,66 +1,225 @@
-import Head from 'next/head';
-import '../styles/landing.css';
+
 
 export default function Home() {
   return (
-    <div className="container">
-      <Head>
-        <title>Home3</title>
-        <meta name="description" content="One app for a joined-up life." />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className="main">
-        <div className="hero">
-          <div className="eyebrow">One app for a joined-up life.</div>
-          <h1 className="headline">You don't manage three apps. You run one life.</h1>
-          <p className="subtext">Home3 keeps food, money, and plans in one place — so a decision in one shows up where it matters in another.</p>
-          <div className="buttons">
-            <button className="button">Get started</button>
-            <button className="button">Sign in</button>
+    <main id="top">
+      {/* HERO */}
+      <section className="hero" style={{ borderBottom: '1px solid var(--line)' }}>
+        <div className="wrap">
+          <h1>
+            Еда, деньги и будущее —<br />наконец в одном ритме
+          </h1>
+          <p className="hero-sub">
+            Лад — это не ещё одно приложение. Это три, которые вы уже открываете
+            каждый день, собранные в одно: что приготовить, сколько осталось до
+            зарплаты и что вообще делать дальше.
+          </p>
+          <div className="hero-cta">
+            <a className="btn btn-primary" href="#put">
+              Начать бесплатно
+            </a>
+            <a className="btn btn-ghost" href="#stol">
+              Посмотреть, как это работает
+            </a>
+          </div>
+          <div className="hero-trio">
+            <span className="trio-chip">Стол — еда и калории</span>
+            <span className="trio-chip">Счёт — бюджет и траты</span>
+            <span className="trio-chip">Путь — планы и задачи</span>
           </div>
         </div>
+      </section>
 
-        <div className="modules">
-          <div className="module">
-            <h2 className="moduleTitle">Food</h2>
-            <p className="moduleDescription">Plan meals, save recipes, and check off the grocery run without leaving the kitchen in your head.</p>
-            <p className="moduleExample">Live example: Tue — Lentil soup</p>
+      {/* FOOD MODULE */}
+      <section id="stol">
+        <div className="wrap module">
+          <div>
+            <span
+              className="module-tag"
+              style={{ background: 'var(--food-tint)', color: 'var(--food)' }}
+            >
+              Стол
+            </span>
+            <h2>Ужин без пятнадцати вкладок с рецептами</h2>
+            <p className="module-body">
+              Лад.Стол смотрит, что уже лежит в холодильнике, и предлагает, что из
+              этого приготовить сегодня. Калории и БЖУ считаются сами — по
+              фотографии тарелки или по рецепту, без ручного взвешивания гречки.
+            </p>
+            <p className="module-note">
+              По воскресеньям Лад собирает меню на неделю и сразу формирует список
+              покупок — по отделам магазина, а не по алфавиту.
+            </p>
           </div>
-          <div className="module">
-            <h2 className="moduleTitle">Finance</h2>
-            <p className="moduleDescription">See what came in, what went out, and what's left — at a glance, not at month's end.</p>
-            <p className="moduleExample">Live example: This month — $860 left</p>
-          </div>
-          <div className="module">
-            <h2 className="moduleTitle">Future</h2>
-            <p className="moduleDescription">Turn open evenings and long-term goals into a short, clear list of what's next.</p>
-            <p className="moduleExample">Live example: Next — Renew passport</p>
+          <div className="module-visual">
+            <div className="food-menu">
+              <div className="food-menu-row">
+                <span>Овсянка с печёным яблоком и корицей</span>
+                <span>340 ккал</span>
+              </div>
+              <div className="food-menu-row">
+                <span>Боул с булгуром, нутом и тахини</span>
+                <span>510 ккал</span>
+              </div>
+              <div className="food-menu-row">
+                <span>Лосось на пару, спаржа, лимон</span>
+                <span>460 ккал</span>
+              </div>
+              <div className="food-menu-row">
+                <span>Творог с ягодами и мёдом</span>
+                <span>210 ккал</span>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div className="howItConnects">
-          <h2 className="howItConnectsTitle">How It Connects</h2>
-          <p className="howItConnectsText">Log a grocery run in Food, and it appears as a line in Finance. Save toward a goal in Finance, and it turns into a plan in Future. Free up an evening in Future, and Food turns it into a meal plan.</p>
-        </div>
-
-        <div className="closing">
-          <h2 className="closingTitle">Ready to run one life instead of three apps?</h2>
-          <div className="buttons">
-            <button className="button">Get started</button>
+      {/* FINANCE MODULE */}
+      <section id="schet">
+        <div className="wrap module reverse">
+          <div className="module-visual">
+            <div className="ledger">
+              <div className="ledger-row">
+                <span className="cat">Продукты</span>
+                <span className="bar">
+                  <i style={{ width: '72%' }} />
+                </span>
+                <span className="amt">18 400 ₽</span>
+              </div>
+              <div className="ledger-row">
+                <span className="cat">Транспорт</span>
+                <span className="bar">
+                  <i style={{ width: '30%' }} />
+                </span>
+                <span className="amt">4 100 ₽</span>
+              </div>
+              <div className="ledger-row">
+                <span className="cat">Развлечения</span>
+                <span className="bar">
+                  <i style={{ width: '46%' }} />
+                </span>
+                <span className="amt">7 600 ₽</span>
+              </div>
+              <div className="ledger-row">
+                <span className="cat">Можно тратить сегодня</span>
+                <span className="bar">
+                  <i style={{ width: '58%' }} />
+                </span>
+                <span className="amt">1 260 ₽</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span
+              className="module-tag"
+              style={{ background: 'var(--finance-tint)', color: 'var(--finance)' }}
+            >
+              Счёт
+            </span>
+            <h2>Бюджет, который считает сам — и не молчит о лишнем</h2>
+            <p className="module-body">
+              Лад.Счёт подключается к картам и раскладывает траты по конвертам
+              без ваших усилий. Каждое утро он честно говорит, сколько можно
+              потратить сегодня, чтобы в конце месяца не занимать до зарплаты.
+            </p>
+            <p className="module-note">
+              Крупная незапланированная трата — сразу видно, из какого месяца её
+              придётся вычесть, а не сюрприз в конце месяца.
+            </p>
           </div>
         </div>
-      </main>
+      </section>
 
-      <footer className="footer">
-        <nav className="navbar">
-          <ul className="navbarList">
-            <li className="navbarItem">Home</li>
-            <li className="navbarItem">About</li>
-            <li className="navbarItem">Contact</li>
-          </ul>
-        </nav>
+      {/* FUTURE MODULE */}
+      <section id="put">
+        <div className="wrap module">
+          <div>
+            <span
+              className="module-tag"
+              style={{ background: 'var(--future-tint)', color: 'var(--future)' }}
+            >
+              Путь
+            </span>
+            <h2>Большие цели, которые не теряются между дедлайнами</h2>
+            <p className="module-body">
+              Лад.Путь берёт то, что вы давно откладываете — «выучить испанский»,
+              «накопить на квартиру», «найти новую работу» — и превращает в
+              конкретную задачу на сегодня. Раз в неделю Лад показывает, куда вы
+              на самом деле идёте, а не только что горит прямо сейчас.
+            </p>
+            <p className="module-note">
+              Задачи из Стола и Счёта — купить продукты, отложить остаток —
+              попадают в Путь сами, без переноса вручную.
+            </p>
+          </div>
+          <div className="module-visual">
+            <div className="path">
+              <div className="path-item done">
+                <span className="path-dot" />
+                <div className="path-text">
+                  <strong>Собрать список для сертификата B1</strong>
+                  <span>Испанский · сделано во вторник</span>
+                </div>
+              </div>
+              <div className="path-item done">
+                <span className="path-dot" />
+                <div className="path-text">
+                  <strong>Отложить остаток бюджета — 1 260 ₽</strong>
+                  <span>Накопления на квартиру · сегодня</span>
+                </div>
+              </div>
+              <div className="path-item">
+                <span className="path-dot" />
+                <div className="path-text">
+                  <strong>Записаться на пробное занятие</strong>
+                  <span>Испанский · на этой неделе</span>
+                </div>
+              </div>
+              <div className="path-item">
+                <span className="path-dot" />
+                <div className="path-text">
+                  <strong>Обновить резюме</strong>
+                  <span>Новая работа · через 3 дня</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CLOSING */}
+      <section className="closing" style={{ borderBottom: 'none' }}>
+        <div className="wrap">
+          <h2>Один Лад вместо трёх открытых вкладок жизни</h2>
+          <p className="closing-sub">
+            Начните с любого модуля — остальные подключатся сами, когда
+            понадобятся.
+          </p>
+          <div className="price-row">
+            <div className="price-card">
+              <div className="amount">0 ₽</div>
+              <p>Стол, Счёт и Путь по отдельности, с ограничением на 20 задач и рецептов в месяц.</p>
+            </div>
+            <div className="price-card">
+              <div className="amount">
+                399 ₽<small> / мес</small>
+              </div>
+              <p>Полный ритм: всё синхронизировано, без ограничений и напоминаний об оплате.</p>
+            </div>
+          </div>
+          <div className="hero-cta" style={{ marginTop: 40 }}>
+            <a className="btn btn-primary" href="#top">
+              Начать бесплатно
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div className="wrap">Лад · Стол, Счёт и Путь в одном приложении</div>
       </footer>
-    </div>
+
+
+    </main>
   );
 }
