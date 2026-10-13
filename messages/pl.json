@@ -340,7 +340,12 @@
       "manual": "Plany",
       "food": "Z Żywienia",
       "finance": "Z Finansów"
-    }
+    },
+    "planHint": "Kliknij dzień, aby otworzyć go na pełnym ekranie. € — rozlicz zadanie w Finansach.",
+    "openDay": "Otwórz: {day}",
+    "prevDay": "Poprzedni dzień",
+    "nextDay": "Następny dzień",
+    "settle": "€ Rozlicz w Finansach"
   },
   "finance": {
     "kicker": "Nowy wpis",
@@ -413,7 +418,11 @@
       "thisYear": "Ten rok",
       "all": "Cały okres",
       "custom": "Własny zakres"
-    }
+    },
+    "settleBanner": "Rozliczamy „{title}” — wpisz, ile wydano. Po zapisaniu zadanie zostanie oznaczone jako zrobione.",
+    "settleCancel": "Nie teraz",
+    "settled": "Zapisano — zadanie oznaczone jako zrobione.",
+    "backToPlans": "Wróć do Planów →"
   },
   "profile": {
     "title": "Profil",

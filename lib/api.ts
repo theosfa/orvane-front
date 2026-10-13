@@ -247,7 +247,8 @@ export type TransactionType = 'expense' | 'income';
 // balance = initialBalance + income − expenses; can be negative
 export type Wallet = { id: number; name: string; initialBalance: number; balance: number };
 
-export type FinanceCategory = { id: number; name: string; type: TransactionType };
+// key: stable id of a default category ('groceries', 'salary'…), kept when renamed; null for the user's own
+export type FinanceCategory = { id: number; name: string; type: TransactionType; key: string | null };
 
 export type FinanceTransaction = {
   id: number;
@@ -268,6 +269,7 @@ export type TransactionInput = {
   amount: number;
   note?: string;
   date: string;
+  taskId?: number; // settling a Plans task: it's marked done together with this entry
 };
 
 // categoryId 'none': only operations without a category

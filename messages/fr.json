@@ -340,7 +340,12 @@
       "manual": "Plans",
       "food": "Depuis Alimentation",
       "finance": "Depuis Finances"
-    }
+    },
+    "planHint": "Cliquez sur un jour pour l’ouvrir en plein écran. € fait le bilan d’une tâche dans Finances.",
+    "openDay": "Ouvrir : {day}",
+    "prevDay": "Jour précédent",
+    "nextDay": "Jour suivant",
+    "settle": "€ Faire le bilan dans Finances"
   },
   "finance": {
     "kicker": "Nouvelle entrée",
@@ -413,7 +418,11 @@
       "thisYear": "Cette année",
       "all": "Depuis le début",
       "custom": "Personnalisé"
-    }
+    },
+    "settleBanner": "Bilan de « {title} » — indiquez combien vous avez dépensé. En enregistrant, la tâche sera marquée comme faite.",
+    "settleCancel": "Pas maintenant",
+    "settled": "Enregistré — la tâche est marquée comme faite.",
+    "backToPlans": "Retour aux Plans →"
   },
   "profile": {
     "title": "Profil",

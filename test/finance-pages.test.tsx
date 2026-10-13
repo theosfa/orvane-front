@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithIntl } from './render';
+import { mockRouter } from './router-mock';
 import { ApiError, financeApi } from '@/lib/api';
 import SpendingPage from '@/app/finance/spending/page';
 import WalletsPage from '@/app/finance/wallets/page';
@@ -20,9 +21,10 @@ const wallets = [
   { id: 2, name: 'Card', initialBalance: 100, balance: 42.5 },
 ];
 const categories = [
-  { id: 10, name: 'Cafe', type: 'expense' as const },
-  { id: 11, name: 'Coffee', type: 'expense' as const },
-  { id: 20, name: 'Salary', type: 'income' as const },
+  { id: 10, name: 'Cafe', type: 'expense' as const, key: 'cafe' },
+  { id: 11, name: 'Coffee', type: 'expense' as const, key: 'coffee' },
+  { id: 20, name: 'Salary', type: 'income' as const, key: 'salary' },
+  { id: 12, name: 'Groceries', type: 'expense' as const, key: 'groceries' },
 ];
 const emptySummary = { income: 0, expense: 0, net: 0, byCategory: [] };
 
@@ -201,5 +203,51 @@ describe('Categories page', () => {
     await user.type(within(expense).getByLabelText('New expense category'), 'coffee');
     await user.click(within(expense).getByRole('button', { name: 'Add' }));
     expect(await within(expense).findByText('That name is already taken')).toBeInTheDocument();
+  });
+});
+
+describe('settling a Plans task', () => {
+  const settleUrl = `/finance/spending?task=4&title=${encodeURIComponent('Shopping list · Mon, Oct 12')}&source=food`;
+
+  it('opens the form prefilled from the task — only the amount is left', async () => {
+    window.history.replaceState(null, '', settleUrl);
+    api.createTransaction.mockResolvedValue({} as never);
+    const user = userEvent.setup();
+    renderWithIntl(<SpendingPage />);
+
+    const banner = await screen.findByTestId('settle-banner');
+    expect(banner).toHaveTextContent('Settling “Shopping list · Mon, Oct 12”');
+    expect(screen.getByLabelText('Note')).toHaveValue('Shopping list · Mon, Oct 12');
+    expect(screen.getByRole('radio', { name: 'Expense' })).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByRole('button', { name: 'Groceries' })).toHaveAttribute('data-active', '1');
+    expect(screen.getByLabelText('Amount')).toHaveFocus();
+
+    await user.type(screen.getByLabelText('Amount'), '64,20');
+    await user.click(screen.getByRole('button', { name: 'Add expense' }));
+
+    expect(api.createTransaction).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'expense', amount: 64.2, note: 'Shopping list · Mon, Oct 12', categoryId: 12, taskId: 4, walletId: 1 }),
+    );
+    expect(await screen.findByRole('status')).toHaveTextContent('the task is marked as done');
+    expect(mockRouter.replace).toHaveBeenCalledWith('/finance/spending');
+  });
+
+  it('can be dismissed without saving', async () => {
+    window.history.replaceState(null, '', settleUrl);
+    const user = userEvent.setup();
+    renderWithIntl(<SpendingPage />);
+    await user.click(await screen.findByRole('button', { name: 'Not now' }));
+    expect(mockRouter.replace).toHaveBeenCalledWith('/finance/spending');
+    expect(api.createTransaction).not.toHaveBeenCalled();
+  });
+
+  it('a normal entry never sends a taskId', async () => {
+    api.createTransaction.mockResolvedValue({} as never);
+    const user = userEvent.setup();
+    renderWithIntl(<SpendingPage />);
+    await user.type(await screen.findByLabelText('Amount'), '3');
+    await user.click(screen.getByRole('button', { name: 'Add expense' }));
+    expect(api.createTransaction.mock.calls[0][0]).not.toHaveProperty('taskId');
+    expect(screen.queryByTestId('settle-banner')).not.toBeInTheDocument();
   });
 });

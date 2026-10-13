@@ -125,7 +125,7 @@ const DayColumn = forwardRef<HTMLDivElement, Props>(function DayColumn({ day, is
   return (
     <div
       ref={ref}
-      className="menu-day"
+      className="week-column"
       data-testid={`day-${day.date}`}
       data-expanded={editing ? '1' : '0'}
       data-locked={locked ? '1' : '0'}

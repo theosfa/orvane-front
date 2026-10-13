@@ -134,8 +134,8 @@ describe('menu week', () => {
     await user.click(dayCard('2026-10-12'));
 
     expect(day('2026-10-14')).toHaveAttribute('data-locked', '1');
-    // the week stops reacting to hover while editing (see .menu-week[data-editing] in globals.css)
-    expect(document.querySelector('.menu-week')).toHaveAttribute('data-editing', '1');
+    // the week stops reacting to hover while editing (see .week-columns[data-editing] in globals.css)
+    expect(document.querySelector('.week-columns')).toHaveAttribute('data-editing', '1');
     // hovering or pressing keys on another day does nothing
     fireEvent.mouseEnter(day('2026-10-14'));
     fireEvent.keyDown(within(day('2026-10-14')).getByRole('button'), { key: 'Enter' });

@@ -340,7 +340,12 @@
       "manual": "Plans",
       "food": "From Food",
       "finance": "From Finance"
-    }
+    },
+    "planHint": "Click a day to open it full screen. € settles a task in Finance.",
+    "openDay": "Open {day}",
+    "prevDay": "Previous day",
+    "nextDay": "Next day",
+    "settle": "€ Settle in Finance"
   },
   "finance": {
     "kicker": "New entry",
@@ -413,7 +418,11 @@
       "thisYear": "This year",
       "all": "All time",
       "custom": "Custom"
-    }
+    },
+    "settleBanner": "Settling “{title}” — enter how much you spent. Saving marks the task done.",
+    "settleCancel": "Not now",
+    "settled": "Saved — the task is marked as done.",
+    "backToPlans": "Back to Plans →"
   },
   "profile": {
     "title": "Profile",

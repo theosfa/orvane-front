@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState, FormEvent } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState, FormEvent } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import RequireAuth from '@/components/RequireAuth';
 import ConfirmDialog from '@/components/ConfirmDialog';
@@ -17,18 +18,32 @@ import {
 } from '@/lib/api';
 import { today, parseISODate } from '@/lib/dates';
 import { PERIOD_PRESETS, PeriodPreset, parseAmount, periodRange } from '@/lib/finance';
+import { SettlePreset, parseSettle, settleCategory } from '@/lib/settle';
 import { Card, Btn, Chip, GlassInput, GlassSelect, Grid, Pill, Kicker, ErrorMsg, StateMsg, EmptyState } from '@/components/ui';
 
 const TYPES: TransactionType[] = ['expense', 'income'];
 
-function EntryForm({ wallets, categories, onSaved }: { wallets: Wallet[]; categories: FinanceCategory[]; onSaved: () => void }) {
+// settle: closing a Plans task — an expense prefilled from it, dated today; only the amount is left
+function EntryForm({
+  wallets,
+  categories,
+  settle,
+  onSaved,
+  onCancelSettle,
+}: {
+  wallets: Wallet[];
+  categories: FinanceCategory[];
+  settle: SettlePreset | null;
+  onSaved: (settledTask: boolean) => void;
+  onCancelSettle: () => void;
+}) {
   const { t } = useT();
   const [type, setType] = useState<TransactionType>('expense');
   const [amount, setAmount] = useState('');
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState(settle?.title ?? '');
   const [date, setDate] = useState(today());
   const [walletId, setWalletId] = useState<number | ''>('');
-  const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [categoryId, setCategoryId] = useState<number | null>(settle ? settleCategory(settle, categories) : null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,10 +66,10 @@ function EntryForm({ wallets, categories, onSaved }: { wallets: Wallet[]; catego
     setError(null);
     setSaving(true);
     try {
-      await financeApi.createTransaction({ type, amount: value, note, date, walletId: wallet, categoryId });
+      await financeApi.createTransaction({ type, amount: value, note, date, walletId: wallet, categoryId, ...(settle && { taskId: settle.taskId }) });
       setAmount('');
       setNote('');
-      onSaved();
+      onSaved(!!settle);
     } catch {
       setError(t('finance.saveError'));
     } finally {
@@ -74,7 +89,15 @@ function EntryForm({ wallets, categories, onSaved }: { wallets: Wallet[]; catego
   }
 
   return (
-    <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 14, ...(settle && { border: '1.5px solid var(--accent)' }) }}>
+      {settle && (
+        <div data-testid="settle-banner" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 14px', borderRadius: 14, background: 'var(--accent-tint)' }}>
+          <span style={{ fontSize: 13, fontWeight: 600 }}>{t('finance.settleBanner', { title: settle.title })}</span>
+          <Btn onClick={onCancelSettle} style={{ padding: '7px 12px' }}>
+            {t('finance.settleCancel')}
+          </Btn>
+        </div>
+      )}
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
         <Kicker>{t('finance.kicker')}</Kicker>
         <div style={{ display: 'flex', gap: 6 }} role="radiogroup" aria-label={t('finance.typeLabel')}>
@@ -92,6 +115,7 @@ function EntryForm({ wallets, categories, onSaved }: { wallets: Wallet[]; catego
           onChange={(e) => setAmount(e.target.value)}
           placeholder={t('finance.amountPh')}
           inputMode="decimal"
+          autoFocus={!!settle}
           style={{ flex: '0 1 140px', fontSize: 19, fontWeight: 800 }}
         />
         <GlassInput aria-label={t('finance.note')} value={note} onChange={(e) => setNote(e.target.value)} placeholder={t('finance.notePh')} maxLength={200} style={{ flex: '1 1 200px' }} />
@@ -127,6 +151,11 @@ function EntryForm({ wallets, categories, onSaved }: { wallets: Wallet[]; catego
 
 function SpendingPageContent() {
   const { t, lang, money, format } = useT();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  // /finance/spending?task=… — came from Plans to settle a task
+  const settle = useMemo(() => parseSettle(new URLSearchParams(searchParams?.toString() ?? '')), [searchParams]);
+  const [settledNote, setSettledNote] = useState(false);
   const [wallets, setWallets] = useState<Wallet[] | null>(null);
   const [categories, setCategories] = useState<FinanceCategory[]>([]);
   const [transactions, setTransactions] = useState<FinanceTransaction[] | null>(null);
@@ -200,7 +229,28 @@ function SpendingPageContent() {
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
-      <EntryForm wallets={wallets} categories={categories} onSaved={refreshAll} />
+      {settledNote && (
+        <Card role="status" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '14px 18px' }}>
+          <span style={{ fontSize: 14, fontWeight: 700 }}>{t('finance.settled')}</span>
+          <Link href="/future/plan" style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent-deep)' }}>
+            {t('finance.backToPlans')}
+          </Link>
+        </Card>
+      )}
+      <EntryForm
+        key={settle?.taskId ?? 'new'}
+        wallets={wallets}
+        categories={categories}
+        settle={settle}
+        onSaved={(settledTask) => {
+          refreshAll();
+          if (settledTask) {
+            setSettledNote(true);
+            router.replace('/finance/spending');
+          }
+        }}
+        onCancelSettle={() => router.replace('/finance/spending')}
+      />
 
       <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <Kicker>{t('finance.filters')}</Kicker>
@@ -366,7 +416,10 @@ function SpendingPageContent() {
 export default function SpendingPage() {
   return (
     <RequireAuth>
-      <SpendingPageContent />
+      {/* useSearchParams needs a Suspense boundary */}
+      <Suspense>
+        <SpendingPageContent />
+      </Suspense>
     </RequireAuth>
   );
 }

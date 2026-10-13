@@ -149,7 +149,7 @@ function MenuPageContent() {
       {editing && <div data-testid="edit-backdrop" className="menu-backdrop" onClick={requestLeave} />}
 
       <div className="week-slide-frame">
-      <div key={week.weekStart} className="menu-week week-slide" data-testid="week-slide" data-dir={slide} data-editing={editing ? '1' : '0'}>
+      <div key={week.weekStart} className="week-columns week-slide" data-testid="week-slide" data-dir={slide} data-editing={editing ? '1' : '0'}>
         {week.days.map((day) => {
           const isEdited = editing?.date === day.date;
           return (

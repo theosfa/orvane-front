@@ -88,22 +88,22 @@ button { font-family: inherit; }
   .wrap { padding: 0 4px; }
 }
 
-/* Weekly menu: 7 day columns; the hovered (desktop) or edited day gets wider */
-.menu-week {
+/* A week as 7 day columns (menu, Plans): the hovered (desktop) or edited day gets wider */
+.week-columns {
   display: flex;
   gap: 10px;
   align-items: stretch;
 }
-.menu-day {
+.week-column {
   flex: 1 1 0;
   min-width: 0;
   transition: flex-grow 0.25s ease;
 }
-.menu-day[data-expanded='1'] {
+.week-column[data-expanded='1'] {
   flex-grow: 2.6;
 }
 @media (hover: hover) {
-  .menu-week:not([data-editing='1']) .menu-day:hover {
+  .week-columns:not([data-editing='1']) .week-column:hover {
     flex-grow: 2.2;
   }
 }
@@ -114,10 +114,10 @@ button { font-family: inherit; }
   z-index: 30;
 }
 @media (max-width: 860px) {
-  .menu-week {
+  .week-columns {
     flex-direction: column;
   }
-  .menu-day[data-expanded='1'] {
+  .week-column[data-expanded='1'] {
     flex-grow: 1;
   }
 }
