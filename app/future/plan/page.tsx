@@ -11,12 +11,16 @@ import { tasksApi, Task } from '@/lib/api';
 import { addDays, parseISODate, startOfWeek, today, weekDates } from '@/lib/dates';
 import { Card, Btn, ErrorMsg, StateMsg } from '@/components/ui';
 import { useSlideDirection } from '@/lib/use-slide-direction';
+import { useFamily } from '@/lib/family-context';
+import ScopeSwitch from '@/components/ScopeSwitch';
 
 // clicks on the task controls inside a day shouldn't open the day
 const isControl = (e: MouseEvent) => !!(e.target as HTMLElement).closest('button, a, input, form, label');
 
 function PlanPageContent() {
   const { t, format } = useT();
+  // personal or family plans; family members who aren't admins only look
+  const { scope, canEdit } = useFamily();
   const [weekStart, setWeekStart] = useState(() => startOfWeek(today()));
   const [tasks, setTasks] = useState<Task[] | null>(null);
   // the week whose tasks are on screen; it changes only once the next week has loaded
@@ -29,7 +33,7 @@ function PlanPageContent() {
   const load = useCallback(() => {
     let current = true;
     tasksApi
-      .list(weekStart, addDays(weekStart, 6))
+      .list(weekStart, addDays(weekStart, 6), scope)
       .then((list) => {
         if (!current) return;
         setTasks(list);
@@ -39,13 +43,13 @@ function PlanPageContent() {
     return () => {
       current = false;
     };
-  }, [weekStart, t]);
+  }, [weekStart, scope, t]);
 
   useEffect(load, [load]);
 
   const add = async (date: string, title: string) => {
     try {
-      const task = await tasksApi.create({ title, date });
+      const task = await tasksApi.create({ title, date }, scope);
       setTasks((prev) => (prev ? [...prev, task] : prev));
     } catch {
       setError(t('future.saveError'));
@@ -56,7 +60,7 @@ function PlanPageContent() {
   const toggle = async (task: Task) => {
     setTasks((prev) => prev?.map((x) => (x.id === task.id ? { ...x, done: !task.done } : x)) ?? prev);
     try {
-      await tasksApi.update(task.id, { done: !task.done });
+      await tasksApi.update(task.id, { done: !task.done }, scope);
     } catch {
       setTasks((prev) => prev?.map((x) => (x.id === task.id ? { ...x, done: task.done } : x)) ?? prev);
     }
@@ -65,7 +69,7 @@ function PlanPageContent() {
   const remove = async (task: Task) => {
     setTasks((prev) => prev?.filter((x) => x.id !== task.id) ?? prev);
     try {
-      await tasksApi.remove(task.id);
+      await tasksApi.remove(task.id, scope);
     } catch {
       load();
     }
@@ -96,6 +100,7 @@ function PlanPageContent() {
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
+      <ScopeSwitch />
       <Card style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Btn onClick={() => setWeekStart(addDays(weekStart, -7))} aria-label={t('future.prevWeek')} style={{ padding: '9px 14px' }}>
@@ -116,7 +121,7 @@ function PlanPageContent() {
         <div style={{ fontSize: 13, color: 'var(--ink-2)' }}>{t('future.openCount', { count: openCount })}</div>
       </Card>
 
-      <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{t('future.planHint')}</div>
+      <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{canEdit ? t('future.planHint') : t('family.plansViewOnly')}</div>
 
       {!tasks ? (
         <StateMsg>{t('common.loading')}</StateMsg>
@@ -172,9 +177,9 @@ function PlanPageContent() {
                     </div>
                     {dayTasks.length === 0 && <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{t('future.nothingPlanned')}</div>}
                     {dayTasks.map((task) => (
-                      <TaskRow key={task.id} task={task} onToggle={() => toggle(task)} onRemove={() => remove(task)} />
+                      <TaskRow key={task.id} task={task} scope={scope} readOnly={!canEdit} onToggle={() => toggle(task)} onRemove={() => remove(task)} />
                     ))}
-                    <AddTask date={date} label={longLabel} onAdd={add} />
+                    {canEdit && <AddTask date={date} label={longLabel} onAdd={add} />}
                   </Card>
                 </div>
               );
@@ -186,6 +191,8 @@ function PlanPageContent() {
       {focusDate && (
         <DayFocus
           date={focusDate}
+          scope={scope}
+          readOnly={!canEdit}
           tasks={focusTasks}
           onClose={closeFocus}
           onPrev={prevDay}

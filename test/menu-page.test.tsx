@@ -34,7 +34,7 @@ function weekOf(monday: string, meals: Record<string, MenuMeal[]> = {}): WeekMen
   return { weekStart: monday, days, weekTotal: { calories: 0, protein: 0, fat: 0, carbs: 0 } };
 }
 
-const pasta: MenuMeal = { entryId: 1, mealType: 'dinner', recipeId: 7, recipeName: 'Pasta', servings: 2, calories: 600, protein: 20, fat: 10, carbs: 90 };
+const pasta: MenuMeal = { entryId: 1, mealType: 'dinner', recipeId: 7, recipeName: 'Pasta', servings: 2, addedBy: 'me@test.dev', calories: 600, protein: 20, fat: 10, carbs: 90 };
 const liked = [
   { id: 7, name: 'Pasta', autoTranslated: false, liked: true, isPublic: true, isMine: false, servings: 2, calories: 1200 },
   { id: 8, name: 'Omelette', autoTranslated: false, liked: true, isPublic: true, isMine: true, servings: 1, calories: 300 },
@@ -63,25 +63,25 @@ describe('menu week', () => {
     renderWithIntl(<MenuPage />);
 
     expect(await screen.findByTestId('week-range')).toHaveTextContent('Oct 12 – Oct 18, 2026');
-    expect(menu.getWeek).toHaveBeenCalledWith('2026-10-12');
+    expect(menu.getWeek).toHaveBeenCalledWith('2026-10-12', 'personal');
     expect(within(day('2026-10-12')).getByText('Pasta')).toBeInTheDocument();
     expect(within(day('2026-10-12')).getByText(/for 2 people/)).toBeInTheDocument();
     // no slide on the first load
     expect(screen.getByTestId('week-slide')).not.toHaveAttribute('data-dir');
 
     await user.click(screen.getByRole('button', { name: 'Next week' }));
-    await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-19'));
+    await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-19', 'personal'));
     expect(await screen.findByTestId('day-2026-10-25')).toBeInTheDocument();
     expect(screen.getByTestId('week-slide')).toHaveAttribute('data-dir', 'next');
 
     await user.click(screen.getByRole('button', { name: 'Previous week' }));
     await user.click(screen.getByRole('button', { name: 'Previous week' }));
-    await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-05'));
+    await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-05', 'personal'));
     expect(await screen.findByTestId('day-2026-10-05')).toBeInTheDocument();
     expect(screen.getByTestId('week-slide')).toHaveAttribute('data-dir', 'prev');
 
     await user.click(screen.getByRole('button', { name: 'This week' }));
-    await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-12'));
+    await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-12', 'personal'));
   });
 
   it('plans a meal from liked recipes only and submits the day', async () => {
@@ -106,7 +106,7 @@ describe('menu week', () => {
     await user.selectOptions(people, '3');
     await user.click(within(day('2026-10-13')).getByRole('button', { name: 'Submit' }));
 
-    expect(menu.setDay).toHaveBeenCalledWith('2026-10-13', [{ mealType: 'breakfast', recipeId: 8, servings: 3 }]);
+    expect(menu.setDay).toHaveBeenCalledWith('2026-10-13', [{ mealType: 'breakfast', recipeId: 8, servings: 3 }], 'personal');
     await waitFor(() => expect(day('2026-10-13')).toHaveAttribute('data-expanded', '0'));
   });
 
@@ -124,7 +124,7 @@ describe('menu week', () => {
 
     await user.click(within(monday).getByRole('button', { name: 'Remove Pasta' }));
     await user.click(within(monday).getByRole('button', { name: 'Submit' }));
-    expect(menu.setDay).toHaveBeenCalledWith('2026-10-12', [{ mealType: 'lunch', recipeId: 8, servings: 2 }]);
+    expect(menu.setDay).toHaveBeenCalledWith('2026-10-12', [{ mealType: 'lunch', recipeId: 8, servings: 2 }], 'personal');
   });
 
   it('keeps other days still while one is being edited', async () => {
@@ -219,7 +219,7 @@ describe('shopping list', () => {
   it('builds the list for the chosen days', async () => {
     const user = userEvent.setup();
     const dialog = await openAndGenerate(user);
-    expect(menu.shoppingList).toHaveBeenCalledWith(['2026-10-12', '2026-10-13']);
+    expect(menu.shoppingList).toHaveBeenCalledWith(['2026-10-12', '2026-10-13'], 'personal');
     expect(within(dialog).getByText('Shopping list · Mon, Oct 12 – Tue, Oct 13')).toBeInTheDocument();
     expect(within(dialog).getByText('Tomatoes — 333 g')).toBeInTheDocument();
   });
@@ -260,7 +260,7 @@ describe('shopping list', () => {
       notes: 'Pasta — 500 g\nTomatoes — 333 g',
       date: '2026-10-16',
       source: 'food',
-    });
+    }, 'personal');
     expect(within(dialog).getByRole('status')).toHaveTextContent('Added to Plans for Fri, Oct 16.');
   });
 });

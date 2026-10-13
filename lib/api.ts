@@ -201,6 +201,7 @@ export type MenuMeal = {
   recipeId: number;
   recipeName: string;
   servings: number;
+  addedBy: string | null; // email — shown in the family menu
 } & Totals;
 
 export type MenuDay = {
@@ -245,7 +246,8 @@ export type ShoppingListItem = {
 export type TransactionType = 'expense' | 'income';
 
 // balance = initialBalance + income − expenses; can be negative
-export type Wallet = { id: number; name: string; initialBalance: number; balance: number };
+// family: belongs to the family budget
+export type Wallet = { id: number; name: string; initialBalance: number; balance: number; family: boolean };
 
 // key: stable id of a default category ('groceries', 'salary'…), kept when renamed; null for the user's own
 export type FinanceCategory = { id: number; name: string; type: TransactionType; key: string | null };
@@ -260,6 +262,8 @@ export type FinanceTransaction = {
   walletName: string | null;
   categoryId: number | null; // null: no category (or it was deleted)
   categoryName: string | null;
+  transfer: boolean; // one side of a move between wallets; not counted in summaries
+  author: string | null; // who logged it (email) — shown in the family budget
 };
 
 export type TransactionInput = {
@@ -287,6 +291,26 @@ export type FinanceSummary = {
   net: number;
   byCategory: { type: TransactionType; categoryId: number | null; name: string | null; total: number; count: number }[];
 };
+
+// 'family': the shared data of the user's family (?scope=family); 'personal' by default
+export type Scope = 'personal' | 'family';
+const scopeQuery = (scope?: Scope) => (scope === 'family' ? { scope } : {});
+
+export type FamilyRole = 'admin' | 'member'; // admin changes shared data, member only views
+
+export type FamilyOverview = {
+  family: {
+    id: number;
+    name: string;
+    myRole: FamilyRole;
+    maxMembers: number;
+    members: { userId: number; email: string; role: FamilyRole; isMe: boolean }[];
+    invites: { id: number; email: string }[]; // sent, not accepted yet
+  } | null;
+  invitations: { id: number; familyName: string; invitedBy: string }[]; // to me
+};
+
+export type TransferInput = { fromWalletId: number; toWalletId: number; amount: number; date: string; note?: string };
 
 // ---- Endpoint helpers ----
 
@@ -334,43 +358,71 @@ export const ingredientsApi = {
 // Only liked recipes can go on the menu (the API answers 400 otherwise).
 export const menuApi = {
   // the Monday..Sunday week containing `week` (any day); the current week without it
-  getWeek: (week?: string) => apiFetch<WeekMenu>('/menu', { query: { week } }),
+  getWeek: (week?: string, scope?: Scope) => apiFetch<WeekMenu>('/menu', { query: { week, ...scopeQuery(scope) } }),
   // replaces everything planned for that day
-  setDay: (date: string, meals: MenuMealInput[]) => apiFetch<{ saved: number }>(`/menu/days/${date}`, { method: 'PUT', body: { meals } }),
-  removeEntry: (entryId: number) => apiFetch<{ removed: boolean }>(`/menu/${entryId}`, { method: 'DELETE' }),
+  setDay: (date: string, meals: MenuMealInput[], scope?: Scope) =>
+    apiFetch<{ saved: number }>(`/menu/days/${date}`, { method: 'PUT', body: { meals }, query: scopeQuery(scope) }),
+  removeEntry: (entryId: number, scope?: Scope) =>
+    apiFetch<{ removed: boolean }>(`/menu/${entryId}`, { method: 'DELETE', query: scopeQuery(scope) }),
   // ingredients of the chosen days, scaled to the people of each meal
-  shoppingList: (dates: string[]) => apiFetch<ShoppingListItem[]>('/menu/shopping-list', { query: { dates: dates.join(',') } }),
+  shoppingList: (dates: string[], scope?: Scope) =>
+    apiFetch<ShoppingListItem[]>('/menu/shopping-list', { query: { dates: dates.join(','), ...scopeQuery(scope) } }),
 };
 
 // Plans (to-dos per day); other apps send their tasks here too
 export const tasksApi = {
-  list: (from: string, to: string) => apiFetch<Task[]>('/tasks', { query: { from, to } }),
-  create: (dto: CreateTaskInput) => apiFetch<Task>('/tasks', { method: 'POST', body: dto }),
-  update: (id: number, dto: Partial<Pick<Task, 'title' | 'notes' | 'date' | 'done'>>) =>
-    apiFetch<Task>(`/tasks/${id}`, { method: 'PATCH', body: dto }),
-  remove: (id: number) => apiFetch<{ removed: boolean }>(`/tasks/${id}`, { method: 'DELETE' }),
+  list: (from: string, to: string, scope?: Scope) => apiFetch<Task[]>('/tasks', { query: { from, to, ...scopeQuery(scope) } }),
+  create: (dto: CreateTaskInput, scope?: Scope) => apiFetch<Task>('/tasks', { method: 'POST', body: dto, query: scopeQuery(scope) }),
+  update: (id: number, dto: Partial<Pick<Task, 'title' | 'notes' | 'date' | 'done'>>, scope?: Scope) =>
+    apiFetch<Task>(`/tasks/${id}`, { method: 'PATCH', body: dto, query: scopeQuery(scope) }),
+  remove: (id: number, scope?: Scope) => apiFetch<{ removed: boolean }>(`/tasks/${id}`, { method: 'DELETE', query: scopeQuery(scope) }),
+};
+
+// every call answers with the current state, like overview()
+export const familyApi = {
+  overview: () => apiFetch<FamilyOverview>('/family'),
+  create: (name: string) => apiFetch<FamilyOverview>('/family', { method: 'POST', body: { name } }),
+  rename: (name: string) => apiFetch<FamilyOverview>('/family', { method: 'PATCH', body: { name } }),
+  invite: (email: string) => apiFetch<FamilyOverview>('/family/invites', { method: 'POST', body: { email } }),
+  cancelInvite: (id: number) => apiFetch<FamilyOverview>(`/family/invites/${id}`, { method: 'DELETE' }),
+  accept: (invitationId: number) => apiFetch<FamilyOverview>(`/family/invitations/${invitationId}/accept`, { method: 'POST' }),
+  decline: (invitationId: number) => apiFetch<FamilyOverview>(`/family/invitations/${invitationId}`, { method: 'DELETE' }),
+  setRole: (userId: number, role: FamilyRole) => apiFetch<FamilyOverview>(`/family/members/${userId}`, { method: 'PATCH', body: { role } }),
+  remove: (userId: number) => apiFetch<FamilyOverview>(`/family/members/${userId}`, { method: 'DELETE' }),
+  leave: () => apiFetch<FamilyOverview>('/family/leave', { method: 'POST' }),
 };
 
 // The first finance call creates the default categories and a wallet in the UI language.
 export const financeApi = {
-  wallets: () => apiFetch<Wallet[]>('/finance/wallets'),
-  createWallet: (dto: { name: string; initialBalance?: number }) => apiFetch<Wallet>('/finance/wallets', { method: 'POST', body: dto }),
-  updateWallet: (id: number, dto: { name?: string; initialBalance?: number }) =>
-    apiFetch<Wallet>(`/finance/wallets/${id}`, { method: 'PATCH', body: dto }),
+  wallets: (scope?: Scope) => apiFetch<Wallet[]>('/finance/wallets', { query: scopeQuery(scope) }),
+  createWallet: (dto: { name: string; initialBalance?: number }, scope?: Scope) =>
+    apiFetch<Wallet>('/finance/wallets', { method: 'POST', body: dto, query: scopeQuery(scope) }),
+  updateWallet: (id: number, dto: { name?: string; initialBalance?: number }, scope?: Scope) =>
+    apiFetch<Wallet>(`/finance/wallets/${id}`, { method: 'PATCH', body: dto, query: scopeQuery(scope) }),
   // 409 unless the balance is exactly zero
-  deleteWallet: (id: number) => apiFetch<{ removed: boolean }>(`/finance/wallets/${id}`, { method: 'DELETE' }),
+  deleteWallet: (id: number, scope?: Scope) =>
+    apiFetch<{ removed: boolean }>(`/finance/wallets/${id}`, { method: 'DELETE', query: scopeQuery(scope) }),
 
-  categories: (type?: TransactionType) => apiFetch<FinanceCategory[]>('/finance/categories', { query: { type } }),
-  createCategory: (dto: { name: string; type: TransactionType }) =>
-    apiFetch<FinanceCategory>('/finance/categories', { method: 'POST', body: dto }),
-  renameCategory: (id: number, name: string) =>
-    apiFetch<FinanceCategory>(`/finance/categories/${id}`, { method: 'PATCH', body: { name } }),
-  deleteCategory: (id: number) => apiFetch<{ removed: boolean }>(`/finance/categories/${id}`, { method: 'DELETE' }),
+  categories: (scope?: Scope, type?: TransactionType) =>
+    apiFetch<FinanceCategory[]>('/finance/categories', { query: { type, ...scopeQuery(scope) } }),
+  createCategory: (dto: { name: string; type: TransactionType }, scope?: Scope) =>
+    apiFetch<FinanceCategory>('/finance/categories', { method: 'POST', body: dto, query: scopeQuery(scope) }),
+  renameCategory: (id: number, name: string, scope?: Scope) =>
+    apiFetch<FinanceCategory>(`/finance/categories/${id}`, { method: 'PATCH', body: { name }, query: scopeQuery(scope) }),
+  deleteCategory: (id: number, scope?: Scope) =>
+    apiFetch<{ removed: boolean }>(`/finance/categories/${id}`, { method: 'DELETE', query: scopeQuery(scope) }),
 
-  transactions: (filters: TransactionFilters = {}) => apiFetch<FinanceTransaction[]>('/finance/transactions', { query: filters }),
-  createTransaction: (dto: TransactionInput) => apiFetch<FinanceTransaction>('/finance/transactions', { method: 'POST', body: dto }),
-  updateTransaction: (id: number, dto: Partial<TransactionInput>) =>
-    apiFetch<FinanceTransaction>(`/finance/transactions/${id}`, { method: 'PATCH', body: dto }),
-  deleteTransaction: (id: number) => apiFetch<{ removed: boolean }>(`/finance/transactions/${id}`, { method: 'DELETE' }),
-  summary: (filters: TransactionFilters = {}) => apiFetch<FinanceSummary>('/finance/summary', { query: filters }),
+  transactions: (filters: TransactionFilters = {}, scope?: Scope) =>
+    apiFetch<FinanceTransaction[]>('/finance/transactions', { query: { ...filters, ...scopeQuery(scope) } }),
+  createTransaction: (dto: TransactionInput, scope?: Scope) =>
+    apiFetch<FinanceTransaction>('/finance/transactions', { method: 'POST', body: dto, query: scopeQuery(scope) }),
+  updateTransaction: (id: number, dto: Partial<TransactionInput>, scope?: Scope) =>
+    apiFetch<FinanceTransaction>(`/finance/transactions/${id}`, { method: 'PATCH', body: dto, query: scopeQuery(scope) }),
+  // a transfer is undone as a whole (both wallets)
+  deleteTransaction: (id: number, scope?: Scope) =>
+    apiFetch<{ removed: boolean }>(`/finance/transactions/${id}`, { method: 'DELETE', query: scopeQuery(scope) }),
+  // between any two wallets the user may change, e.g. personal -> family budget
+  transfer: (dto: TransferInput) => apiFetch<{ transferId: string }>('/finance/transfers', { method: 'POST', body: dto }),
+  summary: (filters: TransactionFilters = {}, scope?: Scope) =>
+    apiFetch<FinanceSummary>('/finance/summary', { query: { ...filters, ...scopeQuery(scope) } }),
 };

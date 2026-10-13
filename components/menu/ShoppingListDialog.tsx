@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useT } from '@/lib/i18n/context';
-import { menuApi, tasksApi, ShoppingListItem, WeekMenu } from '@/lib/api';
+import { menuApi, tasksApi, ShoppingListItem, WeekMenu, Scope } from '@/lib/api';
 import { addDays, parseISODate, today } from '@/lib/dates';
 import { printShoppingList, shoppingLines, shoppingText } from '@/lib/shopping';
 import { Btn, Card, GlassInput, ErrorMsg, StateMsg } from '@/components/ui';
@@ -12,7 +12,19 @@ import { useSlideDirection } from '@/lib/use-slide-direction';
 type Status = { kind: 'ok' | 'error'; text: string; planLink?: boolean } | null;
 
 // 1) pick the days (any week), 2) get the list for them, 3) copy / print as PDF / send to Plans
-export default function ShoppingListDialog({ initialWeek, onClose }: { initialWeek: string; onClose: () => void }) {
+// scope: the personal or the family menu — the list goes to the matching Plans.
+// canAddToPlan: family members who only view can't add tasks to the family's Plans
+export default function ShoppingListDialog({
+  initialWeek,
+  scope = 'personal',
+  canAddToPlan = true,
+  onClose,
+}: {
+  initialWeek: string;
+  scope?: Scope;
+  canAddToPlan?: boolean;
+  onClose: () => void;
+}) {
   const { t, lang, format } = useT();
   const [weekStart, setWeekStart] = useState(initialWeek);
   const [week, setWeek] = useState<WeekMenu | null>(null);
@@ -27,7 +39,7 @@ export default function ShoppingListDialog({ initialWeek, onClose }: { initialWe
   useEffect(() => {
     let current = true;
     menuApi
-      .getWeek(weekStart)
+      .getWeek(weekStart, scope)
       .then((w) => {
         if (current) setWeek(w);
       })
@@ -35,7 +47,7 @@ export default function ShoppingListDialog({ initialWeek, onClose }: { initialWe
     return () => {
       current = false;
     };
-  }, [weekStart, t]);
+  }, [weekStart, scope, t]);
   const slide = useSlideDirection(week?.weekStart);
 
   useEffect(() => {
@@ -70,7 +82,7 @@ export default function ShoppingListDialog({ initialWeek, onClose }: { initialWe
     setError(null);
     setLoading(true);
     try {
-      setItems(await menuApi.shoppingList(dates));
+      setItems(await menuApi.shoppingList(dates, scope));
       setStatus(null);
     } catch {
       setError(t('food.shopError'));
@@ -94,7 +106,7 @@ export default function ShoppingListDialog({ initialWeek, onClose }: { initialWe
 
   const addToPlan = async () => {
     try {
-      await tasksApi.create({ title, notes: lines.join('\n'), date: planDate, source: 'food' });
+      await tasksApi.create({ title, notes: lines.join('\n'), date: planDate, source: 'food' }, scope);
       setStatus({ kind: 'ok', text: t('food.addedToPlan', { day: short(planDate) }), planLink: true });
     } catch {
       setStatus({ kind: 'error', text: t('food.addToPlanFailed') });
@@ -177,12 +189,14 @@ export default function ShoppingListDialog({ initialWeek, onClose }: { initialWe
                   <Btn onClick={copy}>{t('food.copyList')}</Btn>
                   <Btn onClick={exportPdf}>{t('food.exportPdf')}</Btn>
                 </div>
+                {canAddToPlan && (
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
                   <GlassInput type="date" aria-label={t('food.buyOn')} value={planDate} onChange={(e) => setPlanDate(e.target.value)} required style={{ width: 170 }} />
                   <Btn variant="primary" onClick={addToPlan} disabled={!planDate}>
                     {t('food.addToPlan')}
                   </Btn>
                 </div>
+                )}
                 <div style={{ fontSize: 11, color: 'var(--ink-2)' }}>{t('food.pdfHint')}</div>
               </div>
             )}

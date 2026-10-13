@@ -1,11 +1,13 @@
-import type { FinanceCategory, Task, TaskSource } from './api';
+import type { FinanceCategory, Scope, Task, TaskSource } from './api';
 
 // Settling a Plans task in Finance: the entry form opens prefilled from the task,
 // the user only types the amount, and saving marks the task done.
-export type SettlePreset = { taskId: number; title: string; source: TaskSource };
+// scope: a family task is settled in the family budget
+export type SettlePreset = { taskId: number; title: string; source: TaskSource; scope: Scope };
 
-export function settleHref(task: Pick<Task, 'id' | 'title' | 'source'>): string {
+export function settleHref(task: Pick<Task, 'id' | 'title' | 'source'>, scope: Scope = 'personal'): string {
   const params = new URLSearchParams({ task: String(task.id), title: task.title, source: task.source });
+  if (scope === 'family') params.set('scope', 'family');
   return `/finance/spending?${params}`;
 }
 
@@ -17,6 +19,7 @@ export function parseSettle(params: URLSearchParams): SettlePreset | null {
     taskId,
     title: params.get('title') ?? '',
     source: source === 'food' || source === 'finance' ? source : 'manual',
+    scope: params.get('scope') === 'family' ? 'family' : 'personal',
   };
 }
 

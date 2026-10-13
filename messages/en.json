@@ -422,7 +422,8 @@
     "settleBanner": "Settling “{title}” — enter how much you spent. Saving marks the task done.",
     "settleCancel": "Not now",
     "settled": "Saved — the task is marked as done.",
-    "backToPlans": "Back to Plans →"
+    "backToPlans": "Back to Plans →",
+    "transferPill": "⇄ Transfer"
   },
   "profile": {
     "title": "Profile",
@@ -465,24 +466,63 @@
         "on": false
       }
     ],
-    "householdTitle": "Household",
-    "invite": "Invite someone",
-    "householdSeed": [
-      {
-        "initials": "YOU",
-        "name": "You",
-        "note": "Owner · plans and shops"
-      },
-      {
-        "initials": "P",
-        "name": "Partner",
-        "note": "Cooks Tue & Thu"
-      }
-    ],
     "likedTitle": "Liked recipes",
     "likedEmptyTitle": "Nothing liked yet",
     "likedEmptyBody": "Heart a recipe and it’ll show up here.",
     "logout": "Sign out",
     "likedError": "Couldn’t load recipes"
+  },
+  "family": {
+    "scopeLabel": "Whose data",
+    "scopeMine": "Mine",
+    "scopeFamily": "Family · {name}",
+    "viewOnly": "View only",
+    "familyBudget": "Family budget",
+    "transferTitle": "Move money between wallets",
+    "transferFrom": "From",
+    "transferTo": "To",
+    "transferBtn": "Move",
+    "transferHint": "E.g. put part of your wallet into the family budget. A transfer isn’t counted as spending or income.",
+    "transferDone": "Moved.",
+    "transferSame": "Choose two different wallets",
+    "menuHint": "Family menu: click a day to add a dish from your own liked recipes.",
+    "menuViewOnly": "You can view the family menu; only family admins can change it.",
+    "plansViewOnly": "You can view the family plans; only family admins can change them.",
+    "addedBy": "added by {email}",
+    "title": "Family",
+    "intro": "Up to 5 people share a family budget, plans and menu. Create a family and invite the others by email.",
+    "nameLabel": "Family name",
+    "namePh": "e.g. The Smiths",
+    "create": "Create a family",
+    "invitationsTitle": "Invitations for you",
+    "invitationText": "“{family}” — invited by {by}",
+    "accept": "Join",
+    "decline": "Decline",
+    "role": {
+      "admin": "Admin",
+      "member": "Member"
+    },
+    "rolesHint": "Admins change the family budget, plans and menu and manage people. Members can only view.",
+    "you": "you",
+    "roleOf": "Role of {email}",
+    "removeMember": "Remove {email} from the family?",
+    "removeBody": "They keep their own data but lose access to the family’s.",
+    "pending": "Invited",
+    "cancelInvite": "Cancel the invite for {email}",
+    "inviteLabel": "Email to invite",
+    "invitePh": "their@email.com",
+    "invite": "Invite",
+    "seatsLeft": "{count, plural, one {# more person can join} other {# more people can join}}",
+    "leave": "Leave the family",
+    "leaveTitle": "Leave “{name}”?",
+    "leaveBody": "You keep your own data but lose access to the family’s.",
+    "leaveLastBody": "You’re the last one: the family and all its shared budget, plans and menu will be deleted.",
+    "confirmYes": "Yes",
+    "error": "Something went wrong — try again",
+    "errFull": "A family can have at most 5 people (including pending invites).",
+    "errInvited": "This email is already invited",
+    "errMember": "This person is already in the family",
+    "errLastAdmin": "A family needs at least one admin — make someone else an admin first.",
+    "errInFamily": "To join another family, leave your current one first."
   }
 }

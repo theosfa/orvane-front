@@ -2,8 +2,32 @@ import '@testing-library/jest-dom/vitest';
 import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 
-afterEach(() => {
+// pages read the family / chosen scope from lib/family-context — tests drive it via familyMock
+vi.mock('@/lib/family-context', async () => {
+  const { useFamilyMock } = await import('./family-mock');
+  return { useFamily: useFamilyMock, FamilyProvider: ({ children }: { children: React.ReactNode }) => children };
+});
+
+// Node's own (experimental) localStorage can shadow jsdom's and be unusable — use a plain in-memory one
+if (typeof globalThis.localStorage?.clear !== 'function') {
+  const data = new Map<string, string>();
+  const storage = {
+    getItem: (k: string) => data.get(k) ?? null,
+    setItem: (k: string, v: string) => void data.set(k, String(v)),
+    removeItem: (k: string) => void data.delete(k),
+    clear: () => data.clear(),
+    key: (i: number) => Array.from(data.keys())[i] ?? null,
+    get length() {
+      return data.size;
+    },
+  };
+  Object.defineProperty(globalThis, 'localStorage', { value: storage, configurable: true });
+  Object.defineProperty(window, 'localStorage', { value: storage, configurable: true });
+}
+
+afterEach(async () => {
   cleanup();
+  (await import('./family-mock')).familyMock.reset();
   window.history.replaceState(null, '', '/');
 });
 

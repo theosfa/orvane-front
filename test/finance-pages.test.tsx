@@ -17,8 +17,8 @@ vi.mock('@/lib/api', async (importOriginal) => {
 const api = vi.mocked(financeApi);
 
 const wallets = [
-  { id: 1, name: 'Cash', initialBalance: 0, balance: 0 },
-  { id: 2, name: 'Card', initialBalance: 100, balance: 42.5 },
+  { id: 1, name: 'Cash', initialBalance: 0, balance: 0, family: false },
+  { id: 2, name: 'Card', initialBalance: 100, balance: 42.5, family: false },
 ];
 const categories = [
   { id: 10, name: 'Cafe', type: 'expense' as const, key: 'cafe' },
@@ -62,7 +62,7 @@ describe('Entries page', () => {
       date: '2026-10-01',
       walletId: 2,
       categoryId: 20,
-    });
+    }, 'personal');
     // balances and the list reload after saving
     await waitFor(() => expect(api.wallets).toHaveBeenCalledTimes(2));
   });
@@ -92,15 +92,15 @@ describe('Entries page', () => {
     await user.selectOptions(selects[selects.length - 1], '10');
 
     await waitFor(() =>
-      expect(api.summary).toHaveBeenLastCalledWith(expect.objectContaining({ categoryId: 10, from: expect.any(String), to: expect.any(String) })),
+      expect(api.summary).toHaveBeenLastCalledWith(expect.objectContaining({ categoryId: 10, from: expect.any(String), to: expect.any(String) }), 'personal'),
     );
-    expect(api.transactions).toHaveBeenLastCalledWith(expect.objectContaining({ categoryId: 10 }));
+    expect(api.transactions).toHaveBeenLastCalledWith(expect.objectContaining({ categoryId: 10 }), 'personal');
     expect(screen.getByTestId('sum-expense')).toHaveTextContent('€10.30');
   });
 
   it('asks before deleting an entry', async () => {
     api.transactions.mockResolvedValue([
-      { id: 5, type: 'expense', amount: 4, note: 'Latte', date: '2026-10-02', walletId: 1, walletName: 'Cash', categoryId: 11, categoryName: 'Coffee' },
+      { id: 5, type: 'expense', amount: 4, note: 'Latte', date: '2026-10-02', walletId: 1, walletName: 'Cash', categoryId: 11, categoryName: 'Coffee', transfer: false, author: 'me@test.dev' },
     ]);
     api.deleteTransaction.mockResolvedValue({ removed: true });
     const user = userEvent.setup();
@@ -114,7 +114,7 @@ describe('Entries page', () => {
 
     await user.click(within(row).getByRole('button', { name: 'Remove' }));
     await user.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Remove' }));
-    expect(api.deleteTransaction).toHaveBeenCalledWith(5);
+    expect(api.deleteTransaction).toHaveBeenCalledWith(5, 'personal');
   });
 });
 
@@ -126,7 +126,7 @@ describe('Wallets page', () => {
     await user.type(await screen.findByLabelText('Wallet name'), 'Credit card');
     await user.type(screen.getByLabelText('Starting balance'), '-200');
     await user.click(screen.getByRole('button', { name: 'Add wallet' }));
-    expect(api.createWallet).toHaveBeenCalledWith({ name: 'Credit card', initialBalance: -200 });
+    expect(api.createWallet).toHaveBeenCalledWith({ name: 'Credit card', initialBalance: -200 }, 'personal');
   });
 
   it('only lets a zero-balance wallet be deleted', async () => {
@@ -141,7 +141,7 @@ describe('Wallets page', () => {
     await user.click(within(cash).getByRole('button', { name: 'Remove' }));
     expect(screen.getByRole('alertdialog')).toHaveTextContent('Delete wallet “Cash”?');
     await user.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Remove' }));
-    expect(api.deleteWallet).toHaveBeenCalledWith(1);
+    expect(api.deleteWallet).toHaveBeenCalledWith(1, 'personal');
   });
 
   it('shows the server refusal when the balance changed meanwhile', async () => {
@@ -164,7 +164,7 @@ describe('Wallets page', () => {
     await user.clear(name);
     await user.type(name, 'Visa');
     await user.click(within(card).getByRole('button', { name: 'Save' }));
-    expect(api.updateWallet).toHaveBeenCalledWith(2, { name: 'Visa', initialBalance: 100 });
+    expect(api.updateWallet).toHaveBeenCalledWith(2, { name: 'Visa', initialBalance: 100 }, 'personal');
   });
 });
 
@@ -179,7 +179,7 @@ describe('Categories page', () => {
     const income = await screen.findByTestId('column-income');
     await user.type(within(income).getByLabelText('New income category'), 'Bonus');
     await user.click(within(income).getByRole('button', { name: 'Add' }));
-    expect(api.createCategory).toHaveBeenCalledWith({ name: 'Bonus', type: 'income' });
+    expect(api.createCategory).toHaveBeenCalledWith({ name: 'Bonus', type: 'income' }, 'personal');
 
     const expense = screen.getByTestId('column-expense');
     const cafe = within(expense).getAllByTestId('category-row')[0];
@@ -188,11 +188,11 @@ describe('Categories page', () => {
     await user.clear(input);
     await user.type(input, 'Restaurants');
     await user.click(within(cafe).getByRole('button', { name: 'Save' }));
-    expect(api.renameCategory).toHaveBeenCalledWith(10, 'Restaurants');
+    expect(api.renameCategory).toHaveBeenCalledWith(10, 'Restaurants', 'personal');
 
     await user.click(within(cafe).getByRole('button', { name: 'Remove Cafe' }));
     await user.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Remove' }));
-    expect(api.deleteCategory).toHaveBeenCalledWith(10);
+    expect(api.deleteCategory).toHaveBeenCalledWith(10, 'personal');
   });
 
   it('shows a duplicate-name error', async () => {
@@ -227,6 +227,7 @@ describe('settling a Plans task', () => {
 
     expect(api.createTransaction).toHaveBeenCalledWith(
       expect.objectContaining({ type: 'expense', amount: 64.2, note: 'Shopping list · Mon, Oct 12', categoryId: 12, taskId: 4, walletId: 1 }),
+      'personal',
     );
     expect(await screen.findByRole('status')).toHaveTextContent('the task is marked as done');
     expect(mockRouter.replace).toHaveBeenCalledWith('/finance/spending');

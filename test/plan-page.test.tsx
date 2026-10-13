@@ -39,7 +39,7 @@ describe('Plans week', () => {
   it('shows the 7 days of the week with their dates and tasks', async () => {
     renderWithIntl(<PlanPage />);
     expect(await screen.findByTestId('week-range')).toHaveTextContent('Oct 12 – Oct 18, 2026');
-    expect(api.list).toHaveBeenCalledWith('2026-10-12', '2026-10-18');
+    expect(api.list).toHaveBeenCalledWith('2026-10-12', '2026-10-18', 'personal');
     for (const d of ['12', '13', '14', '15', '16', '17', '18']) {
       expect(screen.getByTestId(`plan-day-2026-10-${d}`)).toBeInTheDocument();
     }
@@ -64,7 +64,7 @@ describe('Plans week', () => {
     renderWithIntl(<PlanPage />);
     const friday = await screen.findByTestId('plan-day-2026-10-16');
     await user.type(within(friday).getByLabelText('Add a task for Friday, October 16'), 'Gym{Enter}');
-    expect(api.create).toHaveBeenCalledWith({ title: 'Gym', date: '2026-10-16' });
+    expect(api.create).toHaveBeenCalledWith({ title: 'Gym', date: '2026-10-16' }, 'personal');
     expect(await within(friday).findByText('Gym')).toBeInTheDocument();
   });
 
@@ -76,7 +76,7 @@ describe('Plans week', () => {
     const box = within(thursday).getByRole('checkbox');
 
     await user.click(box);
-    expect(api.update).toHaveBeenCalledWith(1, { done: true });
+    expect(api.update).toHaveBeenCalledWith(1, { done: true }, 'personal');
     await waitFor(() => expect(box).toHaveAttribute('aria-checked', 'false')); // rolled back
 
     await user.click(box);
@@ -89,7 +89,7 @@ describe('Plans week', () => {
     renderWithIntl(<PlanPage />);
     const wednesday = await screen.findByTestId('plan-day-2026-10-14');
     await user.click(within(wednesday).getByRole('button', { name: 'Remove Call the bank' }));
-    expect(api.remove).toHaveBeenCalledWith(2);
+    expect(api.remove).toHaveBeenCalledWith(2, 'personal');
     expect(within(wednesday).queryByText('Call the bank')).not.toBeInTheDocument();
   });
 
@@ -99,14 +99,14 @@ describe('Plans week', () => {
     await screen.findByTestId('plan-day-2026-10-12');
     expect(screen.getByTestId('week-slide')).not.toHaveAttribute('data-dir');
     await user.click(screen.getByRole('button', { name: 'Next week' }));
-    await waitFor(() => expect(api.list).toHaveBeenLastCalledWith('2026-10-19', '2026-10-25'));
+    await waitFor(() => expect(api.list).toHaveBeenLastCalledWith('2026-10-19', '2026-10-25', 'personal'));
     expect(await screen.findByTestId('plan-day-2026-10-25')).toBeInTheDocument();
     expect(screen.getByTestId('week-slide')).toHaveAttribute('data-dir', 'next');
     // the old week's tasks never show under the new dates
     expect(screen.queryByText('Call the bank')).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Previous week' }));
     await user.click(screen.getByRole('button', { name: 'Previous week' }));
-    await waitFor(() => expect(api.list).toHaveBeenLastCalledWith('2026-10-05', '2026-10-11'));
+    await waitFor(() => expect(api.list).toHaveBeenLastCalledWith('2026-10-05', '2026-10-11', 'personal'));
     expect(await screen.findByTestId('plan-day-2026-10-05')).toBeInTheDocument();
     expect(screen.getByTestId('week-slide')).toHaveAttribute('data-dir', 'prev');
   });
@@ -162,7 +162,7 @@ describe('Plans week', () => {
 
     await user.click(screen.getByRole('button', { name: 'Next day' }));
     const monday = await screen.findByRole('dialog', { name: 'Monday, October 19, 2026' });
-    await waitFor(() => expect(api.list).toHaveBeenLastCalledWith('2026-10-19', '2026-10-25'));
+    await waitFor(() => expect(api.list).toHaveBeenLastCalledWith('2026-10-19', '2026-10-25', 'personal'));
     expect(await within(monday).findByText('Dentist')).toBeInTheDocument();
 
     fireEvent.keyDown(window, { key: 'ArrowLeft' });
@@ -180,11 +180,11 @@ describe('Plans week', () => {
     const focus = screen.getByTestId('day-focus');
 
     await user.type(within(focus).getByLabelText(/Add a task for/), 'Pharmacy{Enter}');
-    expect(api.create).toHaveBeenCalledWith({ title: 'Pharmacy', date: '2026-10-15' });
+    expect(api.create).toHaveBeenCalledWith({ title: 'Pharmacy', date: '2026-10-15' }, 'personal');
     expect(await within(focus).findByText('Pharmacy')).toBeInTheDocument();
 
     await user.click(within(focus).getByRole('checkbox', { name: shopping.title }));
-    expect(api.update).toHaveBeenCalledWith(1, { done: true });
+    expect(api.update).toHaveBeenCalledWith(1, { done: true }, 'personal');
   });
 
   it('links open tasks to Finance to settle them', async () => {

@@ -3,12 +3,27 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useT } from '@/lib/i18n/context';
-import type { Task } from '@/lib/api';
+import type { Scope, Task } from '@/lib/api';
 import { settleHref } from '@/lib/settle';
 import { Pill } from '@/components/ui';
 
 // One to-do. Compact in the week columns; `full` in the opened day (bigger, details shown).
-export default function TaskRow({ task, full, onToggle, onRemove }: { task: Task; full?: boolean; onToggle: () => void; onRemove: () => void }) {
+// readOnly: a family member who isn't an admin — sees the task, can't change it
+export default function TaskRow({
+  task,
+  full,
+  scope = 'personal',
+  readOnly,
+  onToggle,
+  onRemove,
+}: {
+  task: Task;
+  full?: boolean;
+  scope?: Scope;
+  readOnly?: boolean;
+  onToggle: () => void;
+  onRemove: () => void;
+}) {
   const { t } = useT();
   const [open, setOpen] = useState(!!full);
   const notes = task.notes.split('\n').filter(Boolean);
@@ -22,6 +37,8 @@ export default function TaskRow({ task, full, onToggle, onRemove }: { task: Task
           role="checkbox"
           aria-checked={task.done}
           aria-label={task.title}
+          aria-readonly={readOnly || undefined}
+          disabled={readOnly}
           onClick={onToggle}
           style={{
             flex: 'none',
@@ -30,7 +47,7 @@ export default function TaskRow({ task, full, onToggle, onRemove }: { task: Task
             height: box,
             borderRadius: 7,
             padding: 0,
-            cursor: 'pointer',
+            cursor: readOnly ? 'default' : 'pointer',
             fontSize: full ? 14 : 12,
             fontWeight: 800,
             background: task.done ? 'var(--accent)' : 'transparent',
@@ -52,7 +69,7 @@ export default function TaskRow({ task, full, onToggle, onRemove }: { task: Task
           >
             {task.title}
           </span>
-          {(task.source !== 'manual' || notes.length > 0 || (full && !task.done)) && (
+          {(task.source !== 'manual' || notes.length > 0 || (full && !task.done && !readOnly)) && (
             <span style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
               {task.source !== 'manual' && <Pill style={{ fontSize: 10, padding: '3px 8px' }}>{t(`future.source.${task.source}`)}</Pill>}
               {notes.length > 0 && (
@@ -65,9 +82,9 @@ export default function TaskRow({ task, full, onToggle, onRemove }: { task: Task
                   {open ? t('future.hideDetails') : t('future.showDetails', { count: notes.length })}
                 </button>
               )}
-              {full && !task.done && (
+              {full && !task.done && !readOnly && (
                 <Link
-                  href={settleHref(task)}
+                  href={settleHref(task, scope)}
                   style={{ fontSize: 12, fontWeight: 700, padding: '6px 12px', borderRadius: 999, background: 'var(--accent)', color: 'var(--accent-ink)' }}
                 >
                   {t('future.settle')}
@@ -76,9 +93,9 @@ export default function TaskRow({ task, full, onToggle, onRemove }: { task: Task
             </span>
           )}
         </div>
-        {!full && !task.done && (
+        {!full && !task.done && !readOnly && (
           <Link
-            href={settleHref(task)}
+            href={settleHref(task, scope)}
             aria-label={`${t('future.settle')}: ${task.title}`}
             title={t('future.settle')}
             style={{ flex: 'none', width: 26, height: 26, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--accent-deep)' }}
@@ -86,14 +103,16 @@ export default function TaskRow({ task, full, onToggle, onRemove }: { task: Task
             €
           </Link>
         )}
-        <button
-          type="button"
-          aria-label={`${t('common.remove')} ${task.title}`}
-          onClick={onRemove}
-          style={{ flex: 'none', width: full ? 32 : 26, height: full ? 32 : 26, borderRadius: 8, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
-        >
-          ×
-        </button>
+        {!readOnly && (
+          <button
+            type="button"
+            aria-label={`${t('common.remove')} ${task.title}`}
+            onClick={onRemove}
+            style={{ flex: 'none', width: full ? 32 : 26, height: full ? 32 : 26, borderRadius: 8, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
+          >
+            ×
+          </button>
+        )}
       </div>
       {open && notes.length > 0 && (
         <ul

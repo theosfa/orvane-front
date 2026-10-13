@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { recipesApi, RecipeListItem, ApiError } from '@/lib/api';
 import RequireAuth from '@/components/RequireAuth';
+import FamilySection from '@/components/FamilySection';
 import { useT } from '@/lib/i18n/context';
 import { Card, Btn, Chip, Grid, ErrorMsg, StateMsg, EmptyState } from '@/components/ui';
 import { LANGUAGES, LANGUAGE_NAMES, Language } from '@/lib/i18n/languages';
@@ -36,7 +37,6 @@ function ProfilePageContent() {
   const statLabels = [t('profile.statsRecipes'), t('profile.statsSaved'), t('profile.statsWeeks'), t('profile.statsWaste')];
   const statValues = list<string>('profile.statsSeed');
   const connections = list<{ pair: string; text: string; on: boolean }>('profile.connectionsSeed');
-  const household = list<{ initials: string; name: string; note: string }>('profile.householdSeed');
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40, width: '100%' }}>
@@ -92,19 +92,7 @@ function ProfilePageContent() {
           ))}
         </Card>
 
-        <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <h2 style={{ fontSize: 17, fontWeight: 800, marginBottom: 10 }}>{t('profile.householdTitle')}</h2>
-          {household.map((h) => (
-            <div key={h.name} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: 10 }}>
-              <div style={{ width: 38, height: 38, flex: '0 0 38px', borderRadius: 13, background: 'var(--glass-2)', border: '1px solid var(--stroke-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800 }}>{h.initials}</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 700 }}>{h.name}</div>
-                <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{h.note}</div>
-              </div>
-            </div>
-          ))}
-          <Btn style={{ alignSelf: 'flex-start', marginTop: 10 }}>{t('profile.invite')}</Btn>
-        </Card>
+        <FamilySection />
       </Grid>
 
       <section>

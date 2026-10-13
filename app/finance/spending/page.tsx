@@ -19,18 +19,23 @@ import {
 import { today, parseISODate } from '@/lib/dates';
 import { PERIOD_PRESETS, PeriodPreset, parseAmount, periodRange } from '@/lib/finance';
 import { SettlePreset, parseSettle, settleCategory } from '@/lib/settle';
+import { useFamily } from '@/lib/family-context';
+import ScopeSwitch from '@/components/ScopeSwitch';
+import type { Scope } from '@/lib/api';
 import { Card, Btn, Chip, GlassInput, GlassSelect, Grid, Pill, Kicker, ErrorMsg, StateMsg, EmptyState } from '@/components/ui';
 
 const TYPES: TransactionType[] = ['expense', 'income'];
 
 // settle: closing a Plans task — an expense prefilled from it, dated today; only the amount is left
 function EntryForm({
+  scope,
   wallets,
   categories,
   settle,
   onSaved,
   onCancelSettle,
 }: {
+  scope: Scope;
   wallets: Wallet[];
   categories: FinanceCategory[];
   settle: SettlePreset | null;
@@ -66,7 +71,7 @@ function EntryForm({
     setError(null);
     setSaving(true);
     try {
-      await financeApi.createTransaction({ type, amount: value, note, date, walletId: wallet, categoryId, ...(settle && { taskId: settle.taskId }) });
+      await financeApi.createTransaction({ type, amount: value, note, date, walletId: wallet, categoryId, ...(settle && { taskId: settle.taskId }) }, scope);
       setAmount('');
       setNote('');
       onSaved(!!settle);
@@ -155,6 +160,12 @@ function SpendingPageContent() {
   const searchParams = useSearchParams();
   // /finance/spending?task=… — came from Plans to settle a task
   const settle = useMemo(() => parseSettle(new URLSearchParams(searchParams?.toString() ?? '')), [searchParams]);
+  // whose budget: the user's own or the family's (members of a family only view it)
+  const { scope, setScope, canEdit } = useFamily();
+  // a family task is settled in the family budget
+  useEffect(() => {
+    if (settle?.scope === 'family') setScope('family');
+  }, [settle, setScope]);
   const [settledNote, setSettledNote] = useState(false);
   const [wallets, setWallets] = useState<Wallet[] | null>(null);
   const [categories, setCategories] = useState<FinanceCategory[]>([]);
@@ -172,6 +183,12 @@ function SpendingPageContent() {
 
   const [toDelete, setToDelete] = useState<FinanceTransaction | null>(null);
 
+  // wallet and category ids differ between personal and family budgets
+  useEffect(() => {
+    setCategoryFilter('');
+    setWalletFilter('');
+  }, [scope]);
+
   const filters = useMemo<TransactionFilters>(() => {
     const range = periodRange(preset, today(), { from: customFrom, to: customTo });
     return {
@@ -183,16 +200,16 @@ function SpendingPageContent() {
   }, [preset, customFrom, customTo, typeFilter, walletFilter, categoryFilter]);
 
   const loadRefs = useCallback(async () => {
-    const [w, c] = await Promise.all([financeApi.wallets(), financeApi.categories()]);
+    const [w, c] = await Promise.all([financeApi.wallets(scope), financeApi.categories(scope)]);
     setWallets(w);
     setCategories(c);
-  }, []);
+  }, [scope]);
 
   const loadOperations = useCallback(async () => {
-    const [list, sum] = await Promise.all([financeApi.transactions(filters), financeApi.summary(filters)]);
+    const [list, sum] = await Promise.all([financeApi.transactions(filters, scope), financeApi.summary(filters, scope)]);
     setTransactions(list);
     setSummary(sum);
-  }, [filters]);
+  }, [filters, scope]);
 
   // the first call also creates default categories in the current language
   useEffect(() => {
@@ -213,7 +230,7 @@ function SpendingPageContent() {
     const id = toDelete.id;
     setToDelete(null);
     try {
-      await financeApi.deleteTransaction(id);
+      await financeApi.deleteTransaction(id, scope);
     } catch (err) {
       if (!(err instanceof ApiError && err.status === 404)) setError(t('finance.saveError'));
     }
@@ -229,6 +246,7 @@ function SpendingPageContent() {
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
+      <ScopeSwitch />
       {settledNote && (
         <Card role="status" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '14px 18px' }}>
           <span style={{ fontSize: 14, fontWeight: 700 }}>{t('finance.settled')}</span>
@@ -237,8 +255,10 @@ function SpendingPageContent() {
           </Link>
         </Card>
       )}
+      {canEdit && (
       <EntryForm
-        key={settle?.taskId ?? 'new'}
+        key={`${scope}-${settle?.taskId ?? 'new'}`}
+        scope={scope}
         wallets={wallets}
         categories={categories}
         settle={settle}
@@ -251,6 +271,7 @@ function SpendingPageContent() {
         }}
         onCancelSettle={() => router.replace('/finance/spending')}
       />
+      )}
 
       <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <Kicker>{t('finance.filters')}</Kicker>
@@ -378,22 +399,27 @@ function SpendingPageContent() {
             <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span style={{ fontSize: 14, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.note || tx.categoryName || t('finance.noCategory')}</span>
               <span style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                <Pill>{tx.categoryName ?? t('finance.noCategory')}</Pill>
+                {tx.transfer ? <Pill accent>{t('finance.transferPill')}</Pill> : <Pill>{tx.categoryName ?? t('finance.noCategory')}</Pill>}
                 <Pill>{tx.walletName}</Pill>
+                {scope === 'family' && tx.author && <Pill>{tx.author}</Pill>}
               </span>
             </div>
             <span style={{ textAlign: 'right', fontSize: 15, fontWeight: 800, letterSpacing: '-0.02em', color: tx.type === 'income' ? 'var(--accent-deep)' : 'inherit' }}>
               {tx.type === 'income' ? '+' : '−'}
               {money(tx.amount)}
             </span>
-            <button
-              type="button"
-              aria-label={t('common.remove')}
-              onClick={() => setToDelete(tx)}
-              style={{ width: 32, height: 32, borderRadius: 10, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
-            >
-              ×
-            </button>
+            {canEdit ? (
+              <button
+                type="button"
+                aria-label={t('common.remove')}
+                onClick={() => setToDelete(tx)}
+                style={{ width: 32, height: 32, borderRadius: 10, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
+              >
+                ×
+              </button>
+            ) : (
+              <span />
+            )}
           </div>
         ))}
       </Card>

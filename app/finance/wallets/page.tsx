@@ -4,11 +4,14 @@ import { useCallback, useEffect, useState, FormEvent } from 'react';
 import RequireAuth from '@/components/RequireAuth';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { useT } from '@/lib/i18n/context';
-import { financeApi, ApiError, Wallet } from '@/lib/api';
+import { financeApi, ApiError, Wallet, Scope } from '@/lib/api';
+import { useFamily } from '@/lib/family-context';
+import ScopeSwitch from '@/components/ScopeSwitch';
+import TransferCard from '@/components/TransferCard';
 import { parseAmount } from '@/lib/finance';
 import { Card, Btn, GlassInput, Grid, Kicker, ErrorMsg, StateMsg } from '@/components/ui';
 
-function WalletCard({ wallet, onChanged, onDelete }: { wallet: Wallet; onChanged: () => void; onDelete: () => void }) {
+function WalletCard({ wallet, scope, canEdit, onChanged, onDelete }: { wallet: Wallet; scope: Scope; canEdit: boolean; onChanged: () => void; onDelete: () => void }) {
   const { t, money } = useT();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(wallet.name);
@@ -23,7 +26,7 @@ function WalletCard({ wallet, onChanged, onDelete }: { wallet: Wallet; onChanged
       return;
     }
     try {
-      await financeApi.updateWallet(wallet.id, { name: name.trim(), initialBalance });
+      await financeApi.updateWallet(wallet.id, { name: name.trim(), initialBalance }, scope);
       setEditing(false);
       setError(null);
       onChanged();
@@ -66,13 +69,17 @@ function WalletCard({ wallet, onChanged, onDelete }: { wallet: Wallet; onChanged
           <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>
             {t('finance.initialBalance')}: {money(wallet.initialBalance)}
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            <Btn onClick={() => setEditing(true)}>{t('finance.edit')}</Btn>
-            <Btn onClick={onDelete} disabled={!zero}>
-              {t('common.remove')}
-            </Btn>
-          </div>
-          {!zero && <div style={{ fontSize: 11, color: 'var(--ink-2)' }}>{t('finance.walletNotZero')}</div>}
+          {canEdit && (
+            <>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <Btn onClick={() => setEditing(true)}>{t('finance.edit')}</Btn>
+                <Btn onClick={onDelete} disabled={!zero}>
+                  {t('common.remove')}
+                </Btn>
+              </div>
+              {!zero && <div style={{ fontSize: 11, color: 'var(--ink-2)' }}>{t('finance.walletNotZero')}</div>}
+            </>
+          )}
         </>
       )}
       {error && <ErrorMsg>{error}</ErrorMsg>}
@@ -82,6 +89,7 @@ function WalletCard({ wallet, onChanged, onDelete }: { wallet: Wallet; onChanged
 
 function WalletsPageContent() {
   const { t, lang, money } = useT();
+  const { scope, canEdit } = useFamily();
   const [wallets, setWallets] = useState<Wallet[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState('');
@@ -89,7 +97,7 @@ function WalletsPageContent() {
   const [formError, setFormError] = useState<string | null>(null);
   const [toDelete, setToDelete] = useState<Wallet | null>(null);
 
-  const load = useCallback(() => financeApi.wallets().then(setWallets), []);
+  const load = useCallback(() => financeApi.wallets(scope).then(setWallets), [scope]);
 
   useEffect(() => {
     load().catch(() => setError(t('finance.loadError')));
@@ -104,7 +112,7 @@ function WalletsPageContent() {
     }
     setFormError(null);
     try {
-      await financeApi.createWallet({ name: name.trim(), initialBalance });
+      await financeApi.createWallet({ name: name.trim(), initialBalance }, scope);
       setName('');
       setInitial('');
       await load();
@@ -118,7 +126,7 @@ function WalletsPageContent() {
     const id = toDelete.id;
     setToDelete(null);
     try {
-      await financeApi.deleteWallet(id);
+      await financeApi.deleteWallet(id, scope);
     } catch (err) {
       setFormError(err instanceof ApiError && err.status === 409 ? t('finance.walletNotZero') : t('finance.saveError'));
     }
@@ -132,6 +140,7 @@ function WalletsPageContent() {
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
+      <ScopeSwitch />
       <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: 10 }}>
           <div>
@@ -142,6 +151,7 @@ function WalletsPageContent() {
             {t('finance.totalBalance')}: <strong style={{ fontSize: 18, color: 'var(--ink)' }}>{money(total)}</strong>
           </div>
         </div>
+        {canEdit && (
         <form onSubmit={create} style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
           <GlassInput aria-label={t('finance.walletName')} value={name} onChange={(e) => setName(e.target.value)} placeholder={t('finance.walletNamePh')} maxLength={60} style={{ flex: '1 1 200px' }} />
           <GlassInput
@@ -156,14 +166,24 @@ function WalletsPageContent() {
             {t('finance.addWallet')}
           </Btn>
         </form>
+        )}
         {formError && <ErrorMsg>{formError}</ErrorMsg>}
       </Card>
 
       <Grid min={240}>
         {wallets.map((w) => (
-          <WalletCard key={`${w.id}-${w.name}-${w.initialBalance}-${w.balance}`} wallet={w} onChanged={() => load()} onDelete={() => setToDelete(w)} />
+          <WalletCard
+            key={`${w.id}-${w.name}-${w.initialBalance}-${w.balance}`}
+            wallet={w}
+            scope={scope}
+            canEdit={canEdit}
+            onChanged={() => load()}
+            onDelete={() => setToDelete(w)}
+          />
         ))}
       </Grid>
+
+      <TransferCard reloadKey={wallets} onDone={() => load()} />
 
       <ConfirmDialog
         open={!!toDelete}

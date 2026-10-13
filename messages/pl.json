@@ -422,7 +422,8 @@
     "settleBanner": "Rozliczamy „{title}” — wpisz, ile wydano. Po zapisaniu zadanie zostanie oznaczone jako zrobione.",
     "settleCancel": "Nie teraz",
     "settled": "Zapisano — zadanie oznaczone jako zrobione.",
-    "backToPlans": "Wróć do Planów →"
+    "backToPlans": "Wróć do Planów →",
+    "transferPill": "⇄ Przelew"
   },
   "profile": {
     "title": "Profil",
@@ -465,24 +466,63 @@
         "on": false
       }
     ],
-    "householdTitle": "Domownicy",
-    "invite": "Zaproś",
-    "householdSeed": [
-      {
-        "initials": "TY",
-        "name": "Ty",
-        "note": "Właściciel · planuje i robi zakupy"
-      },
-      {
-        "initials": "P",
-        "name": "Partner",
-        "note": "Gotuje we wtorki i czwartki"
-      }
-    ],
     "likedTitle": "Polubione przepisy",
     "likedEmptyTitle": "Nic jeszcze nie polubiono",
     "likedEmptyBody": "Oznaczaj przepisy serduszkiem — pojawią się tutaj.",
     "logout": "Wyloguj się",
     "likedError": "Nie udało się wczytać przepisów"
+  },
+  "family": {
+    "scopeLabel": "Czyje dane",
+    "scopeMine": "Moje",
+    "scopeFamily": "Rodzina · {name}",
+    "viewOnly": "Tylko podgląd",
+    "familyBudget": "Budżet rodzinny",
+    "transferTitle": "Przelew między portfelami",
+    "transferFrom": "Skąd",
+    "transferTo": "Dokąd",
+    "transferBtn": "Przelej",
+    "transferHint": "Np. część swoich pieniędzy do budżetu rodzinnego. Przelew nie liczy się ani jako wydatek, ani jako przychód.",
+    "transferDone": "Przelano.",
+    "transferSame": "Wybierz dwa różne portfele",
+    "menuHint": "Menu rodzinne: kliknij dzień i dodaj danie ze swoich polubionych przepisów.",
+    "menuViewOnly": "Menu rodzinne możesz przeglądać; zmieniać je mogą tylko administratorzy rodziny.",
+    "plansViewOnly": "Plany rodzinne możesz przeglądać; zmieniać je mogą tylko administratorzy rodziny.",
+    "addedBy": "dodane przez {email}",
+    "title": "Rodzina",
+    "intro": "Do 5 osób ze wspólnym budżetem rodzinnym, planami i menu. Utwórz rodzinę i zaproś innych e-mailem.",
+    "nameLabel": "Nazwa rodziny",
+    "namePh": "np. Kowalscy",
+    "create": "Utwórz rodzinę",
+    "invitationsTitle": "Zaproszenia dla ciebie",
+    "invitationText": "„{family}” — zaprasza {by}",
+    "accept": "Dołącz",
+    "decline": "Odrzuć",
+    "role": {
+      "admin": "Administrator",
+      "member": "Członek"
+    },
+    "rolesHint": "Administratorzy zmieniają budżet rodzinny, plany i menu oraz zarządzają osobami. Członkowie tylko przeglądają.",
+    "you": "ty",
+    "roleOf": "Rola: {email}",
+    "removeMember": "Usunąć {email} z rodziny?",
+    "removeBody": "Własne dane zostaną, ale dostęp do rodzinnych zniknie.",
+    "pending": "Zaproszono",
+    "cancelInvite": "Anuluj zaproszenie dla {email}",
+    "inviteLabel": "E-mail do zaproszenia",
+    "invitePh": "jego@email.com",
+    "invite": "Zaproś",
+    "seatsLeft": "{count, plural, one {Może dołączyć jeszcze # osoba} few {Mogą dołączyć jeszcze # osoby} many {Może dołączyć jeszcze # osób} other {Może dołączyć jeszcze # osoby}}",
+    "leave": "Opuść rodzinę",
+    "leaveTitle": "Opuścić „{name}”?",
+    "leaveBody": "Własne dane zostaną, ale dostęp do rodzinnych zniknie.",
+    "leaveLastBody": "Jesteś ostatnią osobą: rodzina oraz cały jej wspólny budżet, plany i menu zostaną usunięte.",
+    "confirmYes": "Tak",
+    "error": "Coś poszło nie tak — spróbuj ponownie",
+    "errFull": "Rodzina może mieć najwyżej 5 osób (łącznie z oczekującymi zaproszeniami).",
+    "errInvited": "Ten e-mail jest już zaproszony",
+    "errMember": "Ta osoba jest już w rodzinie",
+    "errLastAdmin": "Rodzina potrzebuje co najmniej jednego administratora — najpierw nadaj tę rolę komuś innemu.",
+    "errInFamily": "Aby dołączyć do innej rodziny, najpierw opuść obecną."
   }
 }

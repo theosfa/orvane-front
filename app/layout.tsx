@@ -4,6 +4,7 @@ import { AuthProvider } from '@/lib/auth-context';
 import { ThemeProvider } from '@/lib/theme-context';
 import { LanguageProvider } from '@/lib/i18n/context';
 import { AppModeProvider } from '@/lib/app-mode-context';
+import { FamilyProvider } from '@/lib/family-context';
 import { FutureMockProvider } from '@/lib/mock/future-context';
 import { Bloom } from '@/components/ui';
 import Header from '@/components/Header';
@@ -26,6 +27,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <NextIntlClientProvider>
             <LanguageProvider>
               <AuthProvider>
+                <FamilyProvider>
                 <AppModeProvider>
                   <FutureMockProvider>
                       <Bloom />
@@ -36,6 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                       <Dock />
                   </FutureMockProvider>
                 </AppModeProvider>
+                </FamilyProvider>
               </AuthProvider>
             </LanguageProvider>
           </NextIntlClientProvider>

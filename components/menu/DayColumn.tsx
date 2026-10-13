@@ -29,6 +29,8 @@ type Props = {
   // another day is being edited: this one stays as it is (no hover, no click)
   locked: boolean;
   onStartEdit: () => void;
+  // family menu: who put each dish there
+  showAuthor?: boolean;
 };
 
 const selectStyle = { width: '100%', padding: '10px 12px', fontSize: 13 };
@@ -114,7 +116,7 @@ function EditForm({ edit }: { edit: EditProps }) {
   );
 }
 
-const DayColumn = forwardRef<HTMLDivElement, Props>(function DayColumn({ day, isToday, edit, locked, onStartEdit }, ref) {
+const DayColumn = forwardRef<HTMLDivElement, Props>(function DayColumn({ day, isToday, edit, locked, onStartEdit, showAuthor }, ref) {
   const { t, format } = useT();
   const date = parseISODate(day.date);
   const weekday = format.dateTime(date, { weekday: 'short' });
@@ -148,7 +150,7 @@ const DayColumn = forwardRef<HTMLDivElement, Props>(function DayColumn({ day, is
           display: 'flex',
           flexDirection: 'column',
           gap: 10,
-          cursor: editing ? 'default' : 'pointer',
+          cursor: editing || locked ? 'default' : 'pointer',
           border: isToday ? '1.5px solid var(--accent)' : '1px solid var(--stroke)',
           boxShadow: editing ? 'var(--shadow-lg)' : 'var(--shadow)',
         }}
@@ -173,6 +175,7 @@ const DayColumn = forwardRef<HTMLDivElement, Props>(function DayColumn({ day, is
               <span style={{ fontSize: 11, color: 'var(--ink-2)' }}>
                 {t('food.forPeople', { count: m.servings })} · {t('food.perPerson', { value: Math.round(m.calories) })}
               </span>
+              {showAuthor && m.addedBy && <span style={{ fontSize: 10, color: 'var(--ink-2)', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('family.addedBy', { email: m.addedBy })}</span>}
             </div>
           ))
         )}

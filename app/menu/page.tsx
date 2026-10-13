@@ -11,11 +11,15 @@ import { addDays, parseISODate, startOfWeek, today } from '@/lib/dates';
 import { DraftMeal, MealForm, dayToSave, emptyForm, isDayDirty, toDraft } from '@/lib/menu';
 import { Card, Btn, ErrorMsg, StateMsg, Pill } from '@/components/ui';
 import { useSlideDirection } from '@/lib/use-slide-direction';
+import { useFamily } from '@/lib/family-context';
+import ScopeSwitch from '@/components/ScopeSwitch';
 
 type Editing = { date: string; draft: DraftMeal[]; form: MealForm };
 
 function MenuPageContent() {
   const { t, lang, format } = useT();
+  // personal or family menu; family members who aren't admins only look
+  const { scope, canEdit } = useFamily();
   const [weekStart, setWeekStart] = useState(() => startOfWeek(today()));
   const [week, setWeek] = useState<WeekMenu | null>(null);
   const [liked, setLiked] = useState<RecipeListItem[]>([]);
@@ -32,12 +36,18 @@ function MenuPageContent() {
   const loadWeek = useCallback(() => {
     const id = ++requestId.current;
     return menuApi
-      .getWeek(weekStart)
+      .getWeek(weekStart, scope)
       .then((w) => {
         if (id === requestId.current) setWeek(w);
       })
       .catch((err) => setError(err instanceof ApiError ? err.message : t('food.menuError')));
-  }, [weekStart, t]);
+  }, [weekStart, scope, t]);
+
+  // another menu: whatever was being edited belongs to the old one
+  useEffect(() => {
+    setEditing(null);
+    setConfirmLeave(false);
+  }, [scope]);
 
   // recipe names come back in the current language, so reload when it changes
   useEffect(() => {
@@ -93,7 +103,7 @@ function MenuPageContent() {
     setSaving(true);
     setSaveError(null);
     try {
-      await menuApi.setDay(editing.date, dayToSave(editing.draft, editing.form));
+      await menuApi.setDay(editing.date, dayToSave(editing.draft, editing.form), scope);
       await loadWeek();
       stopEdit();
     } catch {
@@ -116,6 +126,7 @@ function MenuPageContent() {
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
+      <ScopeSwitch />
       <Card style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Btn onClick={() => setWeekStart(addDays(weekStart, -7))} aria-label={t('food.prevWeek')} style={{ padding: '9px 14px' }}>
@@ -143,7 +154,7 @@ function MenuPageContent() {
         </div>
       </Card>
 
-      <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{t('food.menuHint')}</div>
+      <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{canEdit ? (scope === 'family' ? t('family.menuHint') : t('food.menuHint')) : t('family.menuViewOnly')}</div>
 
       {/* while a day is edited this layer catches clicks and hovers everywhere else */}
       {editing && <div data-testid="edit-backdrop" className="menu-backdrop" onClick={requestLeave} />}
@@ -157,7 +168,8 @@ function MenuPageContent() {
               key={day.date}
               day={day}
               isToday={day.date === todayIso}
-              locked={!!editing && !isEdited}
+              locked={(!!editing && !isEdited) || !canEdit}
+              showAuthor={scope === 'family'}
               onStartEdit={() => startEdit(day.date)}
               edit={
                 isEdited && editing
@@ -193,7 +205,7 @@ function MenuPageContent() {
         {t('food.leaveBody')}
       </ConfirmDialog>
 
-      {shoppingOpen && <ShoppingListDialog initialWeek={weekStart} onClose={() => setShoppingOpen(false)} />}
+      {shoppingOpen && <ShoppingListDialog initialWeek={weekStart} scope={scope} canAddToPlan={canEdit} onClose={() => setShoppingOpen(false)} />}
     </main>
   );
 }

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useT } from '@/lib/i18n/context';
-import type { Task } from '@/lib/api';
+import type { Scope, Task } from '@/lib/api';
 import { parseISODate, today } from '@/lib/dates';
 import { useSlideDirection } from '@/lib/use-slide-direction';
 import TaskRow from './TaskRow';
@@ -12,6 +12,8 @@ import { StateMsg } from '@/components/ui';
 
 type Props = {
   date: string;
+  scope: Scope;
+  readOnly: boolean;
   tasks: Task[] | null; // null while that day's week is loading
   onClose: () => void;
   onPrev: () => void;
@@ -23,7 +25,7 @@ type Props = {
 
 // One day opened in a pop-up over the dimmed Plans page: every task readable at full size,
 // details shown. ←/→ move to the neighbouring day; Escape, × or a click on the dark area closes.
-export default function DayFocus({ date, tasks, onClose, onPrev, onNext, onAdd, onToggle, onRemove }: Props) {
+export default function DayFocus({ date, scope, readOnly, tasks, onClose, onPrev, onNext, onAdd, onToggle, onRemove }: Props) {
   const { t, format } = useT();
   const slide = useSlideDirection(date);
   const longLabel = format.dateTime(parseISODate(date), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -126,9 +128,9 @@ export default function DayFocus({ date, tasks, onClose, onPrev, onNext, onAdd, 
               <>
                 {tasks.length === 0 && <div style={{ fontSize: 15, color: 'var(--ink-2)', padding: '12px 0' }}>{t('future.nothingPlanned')}</div>}
                 {tasks.map((task) => (
-                  <TaskRow key={task.id} task={task} full onToggle={() => onToggle(task)} onRemove={() => onRemove(task)} />
+                  <TaskRow key={task.id} task={task} full scope={scope} readOnly={readOnly} onToggle={() => onToggle(task)} onRemove={() => onRemove(task)} />
                 ))}
-                <AddTask date={date} label={longLabel} big onAdd={onAdd} />
+                {!readOnly && <AddTask date={date} label={longLabel} big onAdd={onAdd} />}
               </>
             )}
           </div>

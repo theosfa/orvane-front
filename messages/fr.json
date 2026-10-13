@@ -422,7 +422,8 @@
     "settleBanner": "Bilan de « {title} » — indiquez combien vous avez dépensé. En enregistrant, la tâche sera marquée comme faite.",
     "settleCancel": "Pas maintenant",
     "settled": "Enregistré — la tâche est marquée comme faite.",
-    "backToPlans": "Retour aux Plans →"
+    "backToPlans": "Retour aux Plans →",
+    "transferPill": "⇄ Virement"
   },
   "profile": {
     "title": "Profil",
@@ -465,24 +466,63 @@
         "on": false
       }
     ],
-    "householdTitle": "Foyer",
-    "invite": "Inviter quelqu’un",
-    "householdSeed": [
-      {
-        "initials": "VOUS",
-        "name": "Vous",
-        "note": "Propriétaire · planifie et fait les courses"
-      },
-      {
-        "initials": "P",
-        "name": "Partenaire",
-        "note": "Cuisine le mardi et le jeudi"
-      }
-    ],
     "likedTitle": "Recettes favorites",
     "likedEmptyTitle": "Aucun favori pour l’instant",
     "likedEmptyBody": "Ajoutez un cœur à une recette et elle apparaîtra ici.",
     "logout": "Se déconnecter",
     "likedError": "Impossible de charger les recettes"
+  },
+  "family": {
+    "scopeLabel": "Quelles données",
+    "scopeMine": "Les miennes",
+    "scopeFamily": "Famille · {name}",
+    "viewOnly": "Lecture seule",
+    "familyBudget": "Budget familial",
+    "transferTitle": "Virement entre portefeuilles",
+    "transferFrom": "De",
+    "transferTo": "Vers",
+    "transferBtn": "Virer",
+    "transferHint": "Par ex. verser une partie de votre argent au budget familial. Un virement n’est compté ni comme dépense ni comme revenu.",
+    "transferDone": "Viré.",
+    "transferSame": "Choisissez deux portefeuilles différents",
+    "menuHint": "Menu familial : cliquez sur un jour et ajoutez un plat parmi vos recettes aimées.",
+    "menuViewOnly": "Vous pouvez consulter le menu familial ; seuls les administrateurs peuvent le modifier.",
+    "plansViewOnly": "Vous pouvez consulter les plans familiaux ; seuls les administrateurs peuvent les modifier.",
+    "addedBy": "ajouté par {email}",
+    "title": "Famille",
+    "intro": "Jusqu’à 5 personnes partagent un budget familial, des plans et un menu. Créez une famille et invitez les autres par e-mail.",
+    "nameLabel": "Nom de la famille",
+    "namePh": "ex. Les Martin",
+    "create": "Créer une famille",
+    "invitationsTitle": "Invitations pour vous",
+    "invitationText": "« {family} » — invitation de {by}",
+    "accept": "Rejoindre",
+    "decline": "Refuser",
+    "role": {
+      "admin": "Administrateur",
+      "member": "Membre"
+    },
+    "rolesHint": "Les administrateurs modifient le budget, les plans et le menu de la famille et gèrent les membres. Les membres consultent seulement.",
+    "you": "vous",
+    "roleOf": "Rôle de {email}",
+    "removeMember": "Retirer {email} de la famille ?",
+    "removeBody": "Ses propres données restent, mais l’accès à celles de la famille disparaît.",
+    "pending": "Invité",
+    "cancelInvite": "Annuler l’invitation de {email}",
+    "inviteLabel": "E-mail à inviter",
+    "invitePh": "son@email.com",
+    "invite": "Inviter",
+    "seatsLeft": "{count, plural, one {Encore # personne peut rejoindre} other {Encore # personnes peuvent rejoindre}}",
+    "leave": "Quitter la famille",
+    "leaveTitle": "Quitter « {name} » ?",
+    "leaveBody": "Vos propres données restent, mais vous perdez l’accès à celles de la famille.",
+    "leaveLastBody": "Vous êtes le dernier membre : la famille et tout son budget, ses plans et son menu seront supprimés.",
+    "confirmYes": "Oui",
+    "error": "Un problème est survenu — réessayez",
+    "errFull": "Une famille compte au plus 5 personnes (invitations en attente comprises).",
+    "errInvited": "Cet e-mail est déjà invité",
+    "errMember": "Cette personne est déjà dans la famille",
+    "errLastAdmin": "Une famille a besoin d’au moins un administrateur — nommez d’abord quelqu’un d’autre.",
+    "errInFamily": "Pour rejoindre une autre famille, quittez d’abord la vôtre."
   }
 }
