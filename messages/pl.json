@@ -1,10 +1,10 @@
 {
   "meta": {
-    "description": "Stół, Rachunek i Droga w jednej aplikacji"
+    "description": "Żywienie, Finanse i Plany w jednej aplikacji"
   },
   "brand": {
-    "name": "Ład",
-    "tagline": "Stół, Rachunek i Droga w jednym rytmie"
+    "name": "Nest & Nibble",
+    "tagline": "Żywienie, Finanse i Plany w jednym rytmie"
   },
   "common": {
     "day": "Dzień",
@@ -36,7 +36,7 @@
     "dashboard": "Dziś",
     "profile": "Profil",
     "food": {
-      "name": "Stół",
+      "name": "Żywienie",
       "tagline": "Przepisy i produkty",
       "recipes": "Przepisy",
       "feed": "Odkrywaj",
@@ -46,14 +46,14 @@
       "liked": "Polubione"
     },
     "finance": {
-      "name": "Rachunek",
+      "name": "Finanse",
       "tagline": "Wydatki i budżety",
       "spending": "Wydatki",
       "budgets": "Budżety"
     },
     "future": {
-      "name": "Droga",
-      "tagline": "Plany i zadania",
+      "name": "Plany",
+      "tagline": "Cele i zadania",
       "plan": "Plan",
       "goals": "Cele"
     },
@@ -64,35 +64,35 @@
   },
   "landing": {
     "heroTitle": "Jedzenie, pieniądze i przyszłość — wreszcie w jednym rytmie",
-    "heroSub": "Ład to nie kolejna aplikacja. To trzy, które i tak otwierasz codziennie, zebrane w jedną: co ugotować, ile zostało do wypłaty i co właściwie robić dalej.",
+    "heroSub": "Nest & Nibble to nie kolejna aplikacja. To trzy, które i tak otwierasz codziennie, zebrane w jedną: co ugotować, ile zostało do wypłaty i co właściwie robić dalej.",
     "ctaStart": "Zacznij za darmo",
     "ctaHow": "Zobacz, jak to działa",
-    "foodTag": "Stół",
+    "foodTag": "Żywienie",
     "foodTitle": "Kolacja bez piętnastu kart z przepisami",
-    "foodBody": "Ład.Stół sprawdza, co już leży w lodówce, i podpowiada, co z tego ugotować dziś. Kalorie i makroskładniki liczą się same.",
-    "foodNote": "W każdą niedzielę Ład układa menu na tydzień i od razu tworzy listę zakupów.",
-    "financeTag": "Rachunek",
+    "foodBody": "Dział „Żywienie” sprawdza, co już leży w lodówce, i podpowiada, co z tego ugotować dziś. Kalorie i makroskładniki liczą się same.",
+    "foodNote": "W każdą niedzielę Nest & Nibble układa menu na tydzień i od razu tworzy listę zakupów.",
+    "financeTag": "Finanse",
     "financeTitle": "Budżet, który liczy się sam — i mówi, gdy przesadzasz",
-    "financeBody": "Ład.Rachunek sam rozkłada wydatki na koperty i uczciwie mówi, ile możesz dziś wydać.",
+    "financeBody": "Dział „Finanse” sam rozkłada wydatki na koperty i uczciwie mówi, ile możesz dziś wydać.",
     "financeNote": "Duży nieplanowany wydatek — od razu widać, z którego miesiąca trzeba go odjąć.",
-    "futureTag": "Droga",
+    "futureTag": "Plany",
     "futureTitle": "Duże cele, które nie giną między terminami",
-    "futureBody": "Ład.Droga bierze to, co od dawna odkładasz, i zamienia w konkretne zadanie na dziś.",
-    "futureNote": "Zadania ze Stołu i Rachunku same trafiają do Drogi, bez ręcznego przepisywania.",
-    "closingTitle": "Jeden Ład zamiast trzech otwartych kart życia",
+    "futureBody": "Dział „Plany” bierze to, co od dawna odkładasz, i zamienia w konkretne zadanie na dziś.",
+    "futureNote": "Zadania z Żywienia i Finansów same trafiają do Planów, bez ręcznego przepisywania.",
+    "closingTitle": "Jedno Nest & Nibble zamiast trzech otwartych kart życia",
     "closingSub": "Zacznij od dowolnego modułu — pozostałe dołączą same, gdy będą potrzebne.",
     "freeTitle": "0 zł",
-    "freeBody": "Stół, Rachunek i Droga osobno, z limitem 20 zadań i przepisów miesięcznie.",
+    "freeBody": "Żywienie, Finanse i Plany osobno, z limitem 20 zadań i przepisów miesięcznie.",
     "proTitle": "39 zł",
     "proPer": "/ mies.",
     "proBody": "Pełny rytm: wszystko zsynchronizowane, bez limitów.",
-    "footer": "Ład · Stół, Rachunek i Droga w jednej aplikacji"
+    "footer": "Nest & Nibble · Żywienie, Finanse i Plany w jednej aplikacji"
   },
   "auth": {
-    "loginTitle": "Zaloguj się do Ładu",
-    "loginSub": "Stół, Rachunek i Droga czekają tam, gdzie je zostawiłeś.",
+    "loginTitle": "Zaloguj się do Nest & Nibble",
+    "loginSub": "Żywienie, Finanse i Plany czekają tam, gdzie je zostawiłeś.",
     "registerTitle": "Załóż konto",
-    "registerSub": "Mniej niż minuta — i Ład już trzyma twój rytm.",
+    "registerSub": "Mniej niż minuta — i Nest & Nibble już trzyma twój rytm.",
     "email": "E-mail",
     "password": "Hasło",
     "passwordHint": "Co najmniej 6 znaków",
@@ -111,7 +111,7 @@
     "kicker": "Wszystkie trzy aplikacje",
     "title": "Dziś",
     "greeting": "Witaj ponownie",
-    "subtitle": "Oto, co teraz działa w twoim Ładzie.",
+    "subtitle": "Oto, co teraz działa w twoim Nest & Nibble.",
     "addRecipe": "Dodaj przepis",
     "statusActive": "aktywny",
     "statusSoon": "wkrótce",
@@ -119,14 +119,14 @@
     "foodEmpty": "Nie ma jeszcze żadnego przepisu.",
     "viewRecipes": "Zobacz przepisy →",
     "financeSoon": "Budżety i koperty na wydatki pojawią się tu jako jedne z następnych.",
-    "futureSoon": "Długoterminowe cele i zadania podłączymy zaraz po Rachunku.",
+    "futureSoon": "Długoterminowe cele i zadania podłączymy zaraz po Finansach.",
     "recentTitle": "Ostatnie przepisy",
     "ingredientsLink": "Produkty",
     "emptyTitle": "Nie ma jeszcze przepisów",
     "emptyBody": "Dodaj pierwszy — od razu trafi do menu na ten tydzień.",
-    "spendCard": "Rachunek · wydatki",
-    "mealsCard": "Droga · zaplanowane dni",
-    "proteinCard": "Stół · przepisy",
+    "spendCard": "Finanse · wydatki",
+    "mealsCard": "Plany · zaplanowane dni",
+    "proteinCard": "Żywienie · przepisy",
     "shopCard": "Następne zakupy",
     "openList": "Otwórz listę",
     "weekPlanTitle": "Plan na tydzień",
@@ -265,43 +265,43 @@
       {
         "when": "today",
         "text": "Wybrać kolację na piątek przed zakupami",
-        "link": "Stół · 1 wolne miejsce",
+        "link": "Żywienie · 1 wolne miejsce",
         "done": false
       },
       {
         "when": "today",
         "text": "Wpisać sobotni paragon ze sklepu",
-        "link": "Rachunek · brakuje 23 €",
+        "link": "Finanse · brakuje 23 €",
         "done": false
       },
       {
         "when": "today",
         "text": "Rozmrozić przygotowane porcje",
-        "link": "Stół · zapasy",
+        "link": "Żywienie · zapasy",
         "done": true
       },
       {
         "when": "week",
         "text": "Zakupy w czwartek, 18:30",
-        "link": "Rachunek · ok. 64 €",
+        "link": "Finanse · ok. 64 €",
         "done": false
       },
       {
         "when": "week",
         "text": "Poprosić kogoś o gotowanie we wtorek",
-        "link": "Stół · rodzina",
+        "link": "Żywienie · rodzina",
         "done": false
       },
       {
         "when": "week",
         "text": "Sprawdzić budżet za ten miesiąc",
-        "link": "Rachunek · koniec miesiąca",
+        "link": "Finanse · koniec miesiąca",
         "done": false
       },
       {
         "when": "later",
         "text": "Zaplanować menu na urodziny",
-        "link": "Stół × Rachunek",
+        "link": "Żywienie × Finanse",
         "done": false
       }
     ],
@@ -415,7 +415,7 @@
   "profile": {
     "title": "Profil",
     "edit": "Edytuj profil",
-    "joined": "W Ładzie od",
+    "joined": "W Nest & Nibble od",
     "settingsTitle": "Ustawienia",
     "languageLabel": "Język aplikacji",
     "languageHint": "Interfejs, nazwy produktów i przepisów, przepisy od AI",
@@ -433,22 +433,22 @@
     "connectionsTitle": "Jak trzy aplikacje rozmawiają ze sobą",
     "connectionsSeed": [
       {
-        "pair": "Stół → Rachunek",
+        "pair": "Żywienie → Finanse",
         "text": "Każdy zapisany przepis dostaje cenę z twoich prawdziwych paragonów.",
         "on": true
       },
       {
-        "pair": "Droga → Stół",
+        "pair": "Plany → Żywienie",
         "text": "Wolne miejsca na kolację w niedziele wypełniają się polubionymi przepisami.",
         "on": true
       },
       {
-        "pair": "Rachunek → Droga",
+        "pair": "Finanse → Plany",
         "text": "Gdy budżet się kończy, plan na następny tydzień robi się tańszy.",
         "on": true
       },
       {
-        "pair": "Stół → Droga",
+        "pair": "Żywienie → Plany",
         "text": "Gotowanie na zapas samo rezerwuje wieczór na resztki.",
         "on": false
       }

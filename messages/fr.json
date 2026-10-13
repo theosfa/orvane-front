@@ -1,10 +1,10 @@
 {
   "meta": {
-    "description": "Table, Compte et Chemin dans une seule application"
+    "description": "Alimentation, Finances et Projets dans une seule application"
   },
   "brand": {
-    "name": "Lad",
-    "tagline": "Table, Compte et Chemin au même rythme"
+    "name": "Nest & Nibble",
+    "tagline": "Alimentation, Finances et Projets au même rythme"
   },
   "common": {
     "day": "Jour",
@@ -36,7 +36,7 @@
     "dashboard": "Aujourd’hui",
     "profile": "Profil",
     "food": {
-      "name": "Table",
+      "name": "Alimentation",
       "tagline": "Recettes et produits",
       "recipes": "Recettes",
       "feed": "Découvrir",
@@ -46,14 +46,14 @@
       "liked": "Favoris"
     },
     "finance": {
-      "name": "Compte",
+      "name": "Finances",
       "tagline": "Dépenses et budgets",
       "spending": "Dépenses",
       "budgets": "Budgets"
     },
     "future": {
-      "name": "Chemin",
-      "tagline": "Projets et tâches",
+      "name": "Projets",
+      "tagline": "Objectifs et tâches",
       "plan": "Plan",
       "goals": "Objectifs"
     },
@@ -64,35 +64,35 @@
   },
   "landing": {
     "heroTitle": "La cuisine, l’argent et l’avenir — enfin au même rythme",
-    "heroSub": "Lad n’est pas une appli de plus. Ce sont les trois que vous ouvrez déjà chaque jour, réunies en une seule : quoi cuisiner, combien il reste avant la paie et quoi faire ensuite.",
+    "heroSub": "Nest & Nibble n’est pas une appli de plus. Ce sont les trois que vous ouvrez déjà chaque jour, réunies en une seule : quoi cuisiner, combien il reste avant la paie et quoi faire ensuite.",
     "ctaStart": "Commencer gratuitement",
     "ctaHow": "Voir comment ça marche",
-    "foodTag": "Table",
+    "foodTag": "Alimentation",
     "foodTitle": "Le dîner sans quinze onglets de recettes",
-    "foodBody": "Lad.Table regarde ce qu’il y a déjà dans le frigo et propose quoi en cuisiner aujourd’hui. Les calories et les macros se calculent toutes seules.",
-    "foodNote": "Chaque dimanche, Lad compose le menu de la semaine et prépare la liste de courses qui va avec.",
-    "financeTag": "Compte",
+    "foodBody": "La section Alimentation regarde ce qu’il y a déjà dans le frigo et propose quoi en cuisiner aujourd’hui. Les calories et les macros se calculent toutes seules.",
+    "foodNote": "Chaque dimanche, Nest & Nibble compose le menu de la semaine et prépare la liste de courses qui va avec.",
+    "financeTag": "Finances",
     "financeTitle": "Un budget qui se calcule tout seul — et qui vous prévient",
-    "financeBody": "Lad.Compte range vos dépenses dans des enveloppes sans effort et vous dit honnêtement combien vous pouvez dépenser aujourd’hui.",
+    "financeBody": "La section Finances range vos dépenses dans des enveloppes sans effort et vous dit honnêtement combien vous pouvez dépenser aujourd’hui.",
     "financeNote": "Une grosse dépense imprévue ? Vous voyez tout de suite sur quel mois elle sera déduite.",
-    "futureTag": "Chemin",
+    "futureTag": "Projets",
     "futureTitle": "De grands objectifs qui ne se perdent pas entre deux échéances",
-    "futureBody": "Lad.Chemin prend ce que vous repoussez depuis longtemps et en fait une tâche concrète pour aujourd’hui.",
-    "futureNote": "Les tâches de Table et de Compte arrivent d’elles-mêmes dans Chemin, sans recopier à la main.",
-    "closingTitle": "Un seul Lad au lieu de trois onglets ouverts sur votre vie",
+    "futureBody": "La section Projets prend ce que vous repoussez depuis longtemps et en fait une tâche concrète pour aujourd’hui.",
+    "futureNote": "Les tâches d’Alimentation et de Finances arrivent d’elles-mêmes dans Projets, sans recopier à la main.",
+    "closingTitle": "Un seul Nest & Nibble au lieu de trois onglets ouverts sur votre vie",
     "closingSub": "Commencez par n’importe quel module — les autres se connecteront quand vous en aurez besoin.",
     "freeTitle": "0 €",
-    "freeBody": "Table, Compte et Chemin séparément, limités à 20 tâches et recettes par mois.",
+    "freeBody": "Alimentation, Finances et Projets séparément, limités à 20 tâches et recettes par mois.",
     "proTitle": "9 €",
     "proPer": "/ mois",
     "proBody": "Le rythme complet : tout est synchronisé, sans limites.",
-    "footer": "Lad · Table, Compte et Chemin dans une seule application"
+    "footer": "Nest & Nibble · Alimentation, Finances et Projets dans une seule application"
   },
   "auth": {
-    "loginTitle": "Se connecter à Lad",
-    "loginSub": "Table, Compte et Chemin vous attendent là où vous les avez laissés.",
+    "loginTitle": "Se connecter à Nest & Nibble",
+    "loginSub": "Alimentation, Finances et Projets vous attendent là où vous les avez laissés.",
     "registerTitle": "Créer un compte",
-    "registerSub": "Moins d’une minute, et Lad suit déjà votre rythme.",
+    "registerSub": "Moins d’une minute, et Nest & Nibble suit déjà votre rythme.",
     "email": "E-mail",
     "password": "Mot de passe",
     "passwordHint": "Au moins 6 caractères",
@@ -111,7 +111,7 @@
     "kicker": "Les trois applications",
     "title": "Aujourd’hui",
     "greeting": "Bon retour",
-    "subtitle": "Voici ce qui tourne en ce moment dans votre Lad.",
+    "subtitle": "Voici ce qui tourne en ce moment dans votre Nest & Nibble.",
     "addRecipe": "Ajouter une recette",
     "statusActive": "actif",
     "statusSoon": "bientôt",
@@ -119,14 +119,14 @@
     "foodEmpty": "Aucune recette pour l’instant.",
     "viewRecipes": "Voir les recettes →",
     "financeSoon": "Les budgets et enveloppes de dépenses arriveront ici prochainement.",
-    "futureSoon": "Les objectifs et tâches à long terme seront connectés juste après Compte.",
+    "futureSoon": "Les objectifs et tâches à long terme seront connectés juste après Finances.",
     "recentTitle": "Recettes récentes",
     "ingredientsLink": "Produits",
     "emptyTitle": "Aucune recette pour l’instant",
     "emptyBody": "Ajoutez la première — elle ira directement dans le menu de la semaine.",
-    "spendCard": "Compte · dépenses",
-    "mealsCard": "Chemin · jours planifiés",
-    "proteinCard": "Table · recettes",
+    "spendCard": "Finances · dépenses",
+    "mealsCard": "Projets · jours planifiés",
+    "proteinCard": "Alimentation · recettes",
     "shopCard": "Prochaines courses",
     "openList": "Ouvrir la liste",
     "weekPlanTitle": "Plan de la semaine",
@@ -265,43 +265,43 @@
       {
         "when": "today",
         "text": "Choisir le dîner de vendredi avant les courses",
-        "link": "Table · 1 créneau libre",
+        "link": "Alimentation · 1 créneau libre",
         "done": false
       },
       {
         "when": "today",
         "text": "Saisir le ticket de caisse de samedi",
-        "link": "Compte · 23 € manquants",
+        "link": "Finances · 23 € manquants",
         "done": false
       },
       {
         "when": "today",
         "text": "Décongeler les portions préparées",
-        "link": "Table · batch cooking",
+        "link": "Alimentation · batch cooking",
         "done": true
       },
       {
         "when": "week",
         "text": "Courses jeudi, 18 h 30",
-        "link": "Compte · env. 64 €",
+        "link": "Finances · env. 64 €",
         "done": false
       },
       {
         "when": "week",
         "text": "Demander à quelqu’un de cuisiner mardi",
-        "link": "Table · foyer",
+        "link": "Alimentation · foyer",
         "done": false
       },
       {
         "when": "week",
         "text": "Revoir le budget du mois",
-        "link": "Compte · fin du mois",
+        "link": "Finances · fin du mois",
         "done": false
       },
       {
         "when": "later",
         "text": "Prévoir le menu d’anniversaire",
-        "link": "Table × Compte",
+        "link": "Alimentation × Finances",
         "done": false
       }
     ],
@@ -415,7 +415,7 @@
   "profile": {
     "title": "Profil",
     "edit": "Modifier le profil",
-    "joined": "Sur Lad depuis le",
+    "joined": "Sur Nest & Nibble depuis le",
     "settingsTitle": "Paramètres",
     "languageLabel": "Langue de l’application",
     "languageHint": "Interface, noms des produits et des recettes, recettes de l’IA",
@@ -433,22 +433,22 @@
     "connectionsTitle": "Comment les trois applications communiquent",
     "connectionsSeed": [
       {
-        "pair": "Table → Compte",
+        "pair": "Alimentation → Finances",
         "text": "Chaque recette enregistrée est chiffrée d’après vos vrais tickets de caisse.",
         "on": true
       },
       {
-        "pair": "Chemin → Table",
+        "pair": "Projets → Alimentation",
         "text": "Le dimanche, les créneaux de dîner vides se remplissent avec vos recettes favorites.",
         "on": true
       },
       {
-        "pair": "Compte → Chemin",
+        "pair": "Finances → Projets",
         "text": "Quand le budget s’amenuise, la semaine suivante devient plus économique.",
         "on": true
       },
       {
-        "pair": "Table → Chemin",
+        "pair": "Alimentation → Projets",
         "text": "Les plats cuisinés à l’avance réservent eux-mêmes une soirée restes.",
         "on": false
       }

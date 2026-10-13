@@ -1,9 +1,10 @@
 // Every language the app ships. Adding one = add it here, add messages/<code>.json,
 // and add it to SUPPORTED_LANGUAGES in orvane-back/src/common/languages.ts.
-export const LANGUAGES = ['ru', 'en', 'pl', 'fr'] as const;
+export const LANGUAGES = ['ru', 'en', 'pl', 'fr', 'uk'] as const;
 export type Language = (typeof LANGUAGES)[number];
 
-export const DEFAULT_LANGUAGE: Language = 'ru';
+// used when none of the browser's languages is supported
+export const DEFAULT_LANGUAGE: Language = 'en';
 
 // shown in the language picker, each in its own language
 export const LANGUAGE_NAMES: Record<Language, string> = {
@@ -11,6 +12,7 @@ export const LANGUAGE_NAMES: Record<Language, string> = {
   en: 'English',
   pl: 'Polski',
   fr: 'Français',
+  uk: 'Українська',
 };
 
 // the chosen language lives in this cookie so the server renders the right one straight away

@@ -1,12 +1,13 @@
 {
-  "name": "lad-app",
+  "name": "nest-and-nibble",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "tunnel": "cloudflared tunnel --url http://localhost:3000"
   },
   "dependencies": {
     "next": "14.2.5",

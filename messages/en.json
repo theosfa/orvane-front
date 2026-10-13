@@ -1,10 +1,10 @@
 {
   "meta": {
-    "description": "Food, Finance and Future in one app"
+    "description": "Food, Finance and Plans in one app"
   },
   "brand": {
-    "name": "Lad",
-    "tagline": "Food, Finance and Future in one rhythm"
+    "name": "Nest & Nibble",
+    "tagline": "Food, Finance and Plans in one rhythm"
   },
   "common": {
     "day": "Day",
@@ -52,8 +52,8 @@
       "budgets": "Budgets"
     },
     "future": {
-      "name": "Future",
-      "tagline": "Plans & to-dos",
+      "name": "Plans",
+      "tagline": "Goals & to-dos",
       "plan": "Plan",
       "goals": "Goals"
     },
@@ -64,35 +64,35 @@
   },
   "landing": {
     "heroTitle": "Food, money and the future — finally in one rhythm",
-    "heroSub": "Lad isn’t another app. It’s the three you already open every day, brought into one: what to cook, how much is left until payday, and what to actually do next.",
+    "heroSub": "Nest & Nibble isn’t another app. It’s the three you already open every day, brought into one: what to cook, how much is left until payday, and what to actually do next.",
     "ctaStart": "Start for free",
     "ctaHow": "See how it works",
     "foodTag": "Food",
     "foodTitle": "Dinner without fifteen recipe tabs",
-    "foodBody": "Lad.Food looks at what’s already in the fridge and suggests what to cook today. Calories and macros are counted for you.",
-    "foodNote": "Every Sunday, Lad builds the week’s menu and a shopping list to go with it.",
+    "foodBody": "Food looks at what’s already in the fridge and suggests what to cook today. Calories and macros are counted for you.",
+    "foodNote": "Every Sunday, Nest & Nibble builds the week’s menu and a shopping list to go with it.",
     "financeTag": "Finance",
     "financeTitle": "A budget that counts itself — and speaks up",
-    "financeBody": "Lad.Finance sorts spending into envelopes for you and tells you, honestly, how much you can spend today.",
+    "financeBody": "Finance sorts spending into envelopes for you and tells you, honestly, how much you can spend today.",
     "financeNote": "A big unplanned expense shows exactly which month it comes out of — no surprise later.",
-    "futureTag": "Future",
+    "futureTag": "Plans",
     "futureTitle": "Big goals that don’t get lost between deadlines",
-    "futureBody": "Lad.Future takes what you’ve been putting off and turns it into a concrete task for today.",
-    "futureNote": "Tasks from Food and Finance land in Future by themselves, no manual copying.",
-    "closingTitle": "One Lad instead of three open tabs of your life",
+    "futureBody": "Plans takes what you’ve been putting off and turns it into a concrete task for today.",
+    "futureNote": "Tasks from Food and Finance land in Plans by themselves, no manual copying.",
+    "closingTitle": "One Nest & Nibble instead of three open tabs of your life",
     "closingSub": "Start with any module — the rest connect themselves when you need them.",
     "freeTitle": "€0",
-    "freeBody": "Food, Finance and Future separately, capped at 20 tasks and recipes a month.",
+    "freeBody": "Food, Finance and Plans separately, capped at 20 tasks and recipes a month.",
     "proTitle": "€9",
     "proPer": "/ mo",
     "proBody": "Full rhythm: everything synced, no limits.",
-    "footer": "Lad · Food, Finance and Future in one app"
+    "footer": "Nest & Nibble · Food, Finance and Plans in one app"
   },
   "auth": {
-    "loginTitle": "Sign in to Lad",
-    "loginSub": "Food, Finance and Future are right where you left them.",
+    "loginTitle": "Sign in to Nest & Nibble",
+    "loginSub": "Food, Finance and Plans are right where you left them.",
     "registerTitle": "Create an account",
-    "registerSub": "Less than a minute, and Lad already keeps your rhythm.",
+    "registerSub": "Less than a minute, and Nest & Nibble already keeps your rhythm.",
     "email": "Email",
     "password": "Password",
     "passwordHint": "At least 6 characters",
@@ -111,7 +111,7 @@
     "kicker": "All three apps",
     "title": "Dashboard",
     "greeting": "Welcome back",
-    "subtitle": "Here’s what’s running in your Lad right now.",
+    "subtitle": "Here’s what’s running in your Nest & Nibble right now.",
     "addRecipe": "Add a recipe",
     "statusActive": "active",
     "statusSoon": "soon",
@@ -125,7 +125,7 @@
     "emptyTitle": "No recipes yet",
     "emptyBody": "Add your first one — it’ll land straight in this week’s menu.",
     "spendCard": "Finance · spend",
-    "mealsCard": "Future · days planned",
+    "mealsCard": "Plans · days planned",
     "proteinCard": "Food · recipes",
     "shopCard": "Next shopping trip",
     "openList": "Open the list",
@@ -415,7 +415,7 @@
   "profile": {
     "title": "Profile",
     "edit": "Edit profile",
-    "joined": "On Lad since",
+    "joined": "On Nest & Nibble since",
     "settingsTitle": "Settings",
     "languageLabel": "App language",
     "languageHint": "Interface, ingredient and recipe names, AI recipes",
@@ -438,17 +438,17 @@
         "on": true
       },
       {
-        "pair": "Future → Food",
+        "pair": "Plans → Food",
         "text": "Empty dinner slots get filled from your liked recipes on Sundays.",
         "on": true
       },
       {
-        "pair": "Finance → Future",
+        "pair": "Finance → Plans",
         "text": "When the budget runs thin, next week leans cheaper.",
         "on": true
       },
       {
-        "pair": "Food → Future",
+        "pair": "Food → Plans",
         "text": "Batch meals book their own leftover night.",
         "on": false
       }

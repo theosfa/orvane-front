@@ -1,6 +1,16 @@
 import type { Language } from './i18n/languages';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
+// Without NEXT_PUBLIC_API_URL the browser calls the API on the same origin under /api, and Next
+// proxies it to port 3001 (see next.config.js). So only port 3000 has to be reachable: LAN,
+// a tunnel or a public domain all work without extra setup.
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ??
+  (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:3001');
+
+// new URL('/auth/x', base) would drop the base's path (/api), so join by hand
+function apiUrl(path: string) {
+  return new URL(API_URL.replace(/\/$/, '') + path);
+}
 
 export class ApiError extends Error {
   status: number;
@@ -23,7 +33,7 @@ export function setToken(token: string | null) {
 
 // Current UI language, added as ?lang= to every request so the API answers in it
 // (recipe/ingredient names, steps). Kept in sync by LanguageProvider.
-let apiLanguage = 'ru';
+let apiLanguage = 'en';
 
 export function setApiLanguage(language: string) {
   apiLanguage = language;
@@ -33,7 +43,7 @@ export function setApiLanguage(language: string) {
 let refreshing: Promise<boolean> | null = null;
 
 export function refreshAccessToken(): Promise<boolean> {
-  refreshing ??= fetch(new URL('/auth/refresh', API_URL).toString(), { method: 'POST', credentials: 'include' })
+  refreshing ??= fetch(apiUrl('/auth/refresh').toString(), { method: 'POST', credentials: 'include' })
     .then(async (res) => {
       if (!res.ok) {
         setToken(null);
@@ -62,7 +72,7 @@ type RequestOptions = {
 export async function apiFetch<T>(path: string, opts: RequestOptions = {}, retried = false): Promise<T> {
   const { method = 'GET', body, auth = true, query } = opts;
 
-  const url = new URL(path, API_URL);
+  const url = apiUrl(path);
   if (query) {
     Object.entries(query).forEach(([key, value]) => {
       if (value !== undefined) url.searchParams.set(key, String(value));
