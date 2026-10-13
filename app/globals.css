@@ -87,3 +87,37 @@ button { font-family: inherit; }
 @media (max-width: 680px) {
   .wrap { padding: 0 4px; }
 }
+
+/* Weekly menu: 7 day columns; the hovered (desktop) or edited day gets wider */
+.menu-week {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.menu-day {
+  flex: 1 1 0;
+  min-width: 0;
+  transition: flex-grow 0.25s ease;
+}
+.menu-day[data-expanded='1'] {
+  flex-grow: 2.6;
+}
+@media (hover: hover) {
+  .menu-week:not([data-editing='1']) .menu-day:hover {
+    flex-grow: 2.2;
+  }
+}
+/* covers the page while a day is edited, so other days don't react */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+}
+@media (max-width: 860px) {
+  .menu-week {
+    flex-direction: column;
+  }
+  .menu-day[data-expanded='1'] {
+    flex-grow: 1;
+  }
+}

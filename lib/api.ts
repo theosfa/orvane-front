@@ -194,29 +194,47 @@ export type CreateIngredientInput = {
 
 export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
 
+// calories/macros are per person; servings = how many people it's cooked for
 export type MenuMeal = {
   entryId: number;
   mealType: MealType;
   recipeId: number;
   recipeName: string;
+  servings: number;
 } & Totals;
 
 export type MenuDay = {
-  dayOfWeek: number; // 0 = Monday .. 6 = Sunday
+  date: string; // YYYY-MM-DD
   meals: MenuMeal[];
   total: Totals;
 };
 
 export type WeekMenu = {
-  days: MenuDay[];
+  weekStart: string; // the Monday, YYYY-MM-DD
+  days: MenuDay[]; // Monday..Sunday
   weekTotal: Totals;
 };
 
-export type AddMenuEntryInput = {
-  dayOfWeek: number;
+export const MAX_MENU_SERVINGS = 12;
+
+export type MenuMealInput = {
   mealType: MealType;
   recipeId: number;
+  servings: number; // 1..MAX_MENU_SERVINGS
 };
+
+export type TaskSource = 'manual' | 'food' | 'finance';
+
+export type Task = {
+  id: number;
+  title: string;
+  notes: string;
+  date: string; // YYYY-MM-DD
+  done: boolean;
+  source: TaskSource; // which app created it
+};
+
+export type CreateTaskInput = { title: string; notes?: string; date: string; source?: TaskSource };
 
 export type ShoppingListItem = {
   ingredientId: number;
@@ -311,11 +329,21 @@ export const ingredientsApi = {
   create: (dto: CreateIngredientInput) => apiFetch<Ingredient>('/ingredients', { method: 'POST', body: dto }),
 };
 
+// Only liked recipes can go on the menu (the API answers 400 otherwise).
 export const menuApi = {
-  getWeek: () => apiFetch<WeekMenu>('/menu'),
-  addEntry: (dto: AddMenuEntryInput) => apiFetch<{ id: number }>('/menu', { method: 'POST', body: dto }),
+  // the Monday..Sunday week containing `week` (any day); the current week without it
+  getWeek: (week?: string) => apiFetch<WeekMenu>('/menu', { query: { week } }),
+  // replaces everything planned for that day
+  setDay: (date: string, meals: MenuMealInput[]) => apiFetch<{ saved: number }>(`/menu/days/${date}`, { method: 'PUT', body: { meals } }),
   removeEntry: (entryId: number) => apiFetch<{ removed: boolean }>(`/menu/${entryId}`, { method: 'DELETE' }),
-  shoppingList: () => apiFetch<ShoppingListItem[]>('/menu/shopping-list'),
+  // ingredients of the chosen days, scaled to the people of each meal
+  shoppingList: (dates: string[]) => apiFetch<ShoppingListItem[]>('/menu/shopping-list', { query: { dates: dates.join(',') } }),
+};
+
+// Plans (to-dos per day); other apps send their tasks here too
+export const tasksApi = {
+  list: (from: string, to: string) => apiFetch<Task[]>('/tasks', { query: { from, to } }),
+  create: (dto: CreateTaskInput) => apiFetch<Task>('/tasks', { method: 'POST', body: dto }),
 };
 
 // The first finance call creates the default categories and a wallet in the UI language.
