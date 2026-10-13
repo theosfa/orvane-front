@@ -1,118 +1,140 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { recipesApi, Recipe } from '@/lib/api';
+import { recipesApi, menuApi, RecipeListItem, WeekMenu } from '@/lib/api';
+import RequireAuth from '@/components/RequireAuth';
+import { useT } from '@/lib/i18n/context';
+import { useFutureMock } from '@/lib/mock/future-context';
+import { useFinanceMock } from '@/lib/mock/finance-context';
+import { Card, Btn, Grid, EmptyState, StateMsg } from '@/components/ui';
 
-export default function DashboardPage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const [recipes, setRecipes] = useState<Recipe[] | null>(null);
+function DashboardPageContent() {
+  const { user } = useAuth();
+  const { t, lang, money, weekdays } = useT();
+  const [recipes, setRecipes] = useState<RecipeListItem[] | null>(null);
+  const [week, setWeek] = useState<WeekMenu | null>(null);
+  const { tasks } = useFutureMock();
+  const { spentTotal, monthlyCap, budgets } = useFinanceMock();
 
+  // recipe names come back in the current language, so reload when it changes
   useEffect(() => {
-    if (!loading && !user) router.replace('/login');
-  }, [loading, user, router]);
+    recipesApi.list().then(setRecipes).catch(() => setRecipes([]));
+    menuApi.getWeek().then(setWeek).catch(() => setWeek(null));
+  }, [lang]);
 
-  useEffect(() => {
-    if (user) recipesApi.list().then(setRecipes).catch(() => setRecipes([]));
-  }, [user]);
+  if (!user) return null;
 
-  if (loading || !user) {
-    return <main className="page wrap state-msg">Загрузка…</main>;
-  }
-
-  const recent = recipes?.slice(0, 3) ?? [];
+  const recent = recipes?.slice(0, 4) ?? [];
+  const openTasks = tasks.filter((tk) => !tk.done).length;
+  const plannedDays = week?.days.filter((d) => d.meals.length > 0).length ?? 0;
+  const spentPct = Math.min(100, Math.round((spentTotal / monthlyCap) * 100));
+  const DAY_SHORT = weekdays('short');
+  const biggest = budgets.reduce((max, b) => (b.spent > max.spent ? b : max), budgets[0]);
 
   return (
-    <main className="page wrap">
-      <div className="page-header">
-        <div>
-          <span className="eyebrow">С возвращением</span>
-          <h1>{user.email}</h1>
-          <p className="page-sub">Вот что сейчас работает в вашем Ладе.</p>
-        </div>
-        <Link className="btn btn-primary" href="/recipes/new">
-          Добавить рецепт
-        </Link>
-      </div>
-
-      <div className="module-status-row">
-        <div className="status-card">
-          <div className="status-card-top">
-            <span className="module-tag" style={{ background: 'var(--food-tint)', color: 'var(--food)' }}>
-              Стол
-            </span>
-            <span className="status-pill live">активен</span>
+    <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
+      <Card style={{ padding: '38px 36px', background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)', color: 'var(--accent-ink)', boxShadow: 'var(--shadow-lg)', overflow: 'hidden', position: 'relative' }}>
+        <div style={{ position: 'absolute', top: -90, right: -60, width: 320, height: 320, borderRadius: '50%', background: 'rgba(255,255,255,0.14)' }} />
+        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.85 }}>{t('dashboard.greeting')}</div>
+          <div style={{ fontSize: 'clamp(22px, 3vw, 34px)', fontWeight: 800, letterSpacing: '-0.03em', maxWidth: '30ch' }}>{user.email}</div>
+          <div style={{ fontSize: 14, opacity: 0.9, maxWidth: '48ch' }}>{t('dashboard.subtitle')}</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 6 }}>
+            <Link href="/recipes/new" style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '11px 18px', borderRadius: 999, background: 'rgba(255,255,255,0.18)', color: 'var(--accent-ink)', border: '1px solid rgba(255,255,255,0.35)' }}>
+              {t('dashboard.addRecipe')}
+            </Link>
+            <Link href="/menu" style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '11px 18px', borderRadius: 999, background: 'rgba(255,255,255,0.18)', color: 'var(--accent-ink)', border: '1px solid rgba(255,255,255,0.35)' }}>
+              {t('nav.food.menu')}
+            </Link>
           </div>
-          <p>
-            {recipes === null
-              ? 'Загружаем рецепты…'
-              : recipes.length > 0
-                ? `${recipes.length} ${pluralRecipes(recipes.length)} в вашей книге.`
-                : 'Пока нет ни одного рецепта.'}
-          </p>
-          <Link href="/recipes">Смотреть рецепты →</Link>
         </div>
+      </Card>
 
-        <div className="status-card">
-          <div className="status-card-top">
-            <span className="module-tag" style={{ background: 'var(--finance-tint)', color: 'var(--finance)' }}>
-              Счёт
-            </span>
-            <span className="status-pill">скоро</span>
+      <Grid min={220}>
+        <Card style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('dashboard.spendCard')}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.04em' }}>{money(spentTotal, 0)}</div>
+          <div style={{ height: 8, borderRadius: 999, background: 'var(--glass-2)', overflow: 'hidden' }}>
+            <div style={{ width: `${spentPct}%`, height: '100%', borderRadius: 999, background: 'var(--accent)' }} />
           </div>
-          <p>Бюджет и конверты трат появятся здесь одними из следующих.</p>
-        </div>
+          <Link href="/finance/spending" style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-deep)' }}>{t('nav.finance.name')} →</Link>
+        </Card>
 
-        <div className="status-card">
-          <div className="status-card-top">
-            <span className="module-tag" style={{ background: 'var(--future-tint)', color: 'var(--future)' }}>
-              Путь
-            </span>
-            <span className="status-pill">скоро</span>
-          </div>
-          <p>Долгосрочные цели и задачи подключим следом за Счётом.</p>
-        </div>
-      </div>
-
-      <div style={{ marginTop: 48 }}>
-        <div className="page-header" style={{ marginBottom: 18 }}>
-          <h2 style={{ fontSize: '1.4rem' }}>Недавние рецепты</h2>
-          <Link className="btn btn-ghost btn-sm" href="/ingredients">
-            Продукты
-          </Link>
-        </div>
-
-        {recipes === null && <p className="state-msg" style={{ padding: '24px 0' }}>Загрузка…</p>}
-
-        {recipes && recipes.length === 0 && (
-          <div className="empty-state">
-            <strong>Рецептов пока нет</strong>
-            Добавьте первый — он сразу попадёт в меню на неделю.
-          </div>
-        )}
-
-        {recent.length > 0 && (
-          <div className="card" style={{ padding: '8px 28px' }}>
-            {recent.map((r) => (
-              <Link key={r.id} href={`/recipes/${r.id}`} className="recipe-preview-row">
-                <strong>{r.name}</strong>
-                <span className="recipe-preview-arrow">→</span>
-              </Link>
+        <Card style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('dashboard.mealsCard')}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.04em' }}>{plannedDays}<span style={{ fontSize: 17, color: 'var(--ink-2)' }}> / 7</span></div>
+          <div style={{ display: 'flex', gap: 4 }}>
+            {DAY_SHORT.map((_, i) => (
+              <div key={i} style={{ flex: 1, height: 8, borderRadius: 999, background: (week?.days[i]?.meals.length ?? 0) > 0 ? 'var(--accent)' : 'var(--glass-2)' }} />
             ))}
           </div>
-        )}
-      </div>
+          <Link href="/future/plan" style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-deep)' }}>{t('dashboard.openTasks', { count: openTasks })} →</Link>
+        </Card>
+
+        <Card style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('dashboard.proteinCard')}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.04em' }}>{recipes?.length ?? 0}</div>
+          <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{recipes === null ? t('dashboard.foodLoading') : t('food.recipesTitle')}</div>
+          <Link href="/recipes" style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-deep)' }}>{t('dashboard.viewRecipes')}</Link>
+        </Card>
+
+        <Card style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('dashboard.shopCard')}</div>
+          <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.03em' }}>{biggest?.name ?? '—'}</div>
+          <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{money(biggest?.spent ?? 0, 0)} {t('finance.ofCap')} {money(biggest?.cap ?? 0, 0)}</div>
+          <Link href="/menu" style={{ marginTop: 'auto' }}>
+            <Btn variant="primary">{t('dashboard.openList')}</Btn>
+          </Link>
+        </Card>
+      </Grid>
+
+      <Grid min={320}>
+        <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <h2 style={{ fontSize: 17, fontWeight: 800, marginBottom: 10 }}>{t('dashboard.weekPlanTitle')}</h2>
+          {!week && <StateMsg>{t('common.loading')}</StateMsg>}
+          {week?.days.map((d, i) => {
+            const first = d.meals[0];
+            return (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '11px 10px' }}>
+                <div style={{ width: 42, flex: '0 0 42px', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{DAY_SHORT[i]}</div>
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ fontWeight: 700, fontSize: 14 }}>{first?.recipeName ?? '—'}</div>
+                  <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{d.meals.length > 1 ? t('dashboard.moreMeals', { count: d.meals.length - 1 }) : ''}</div>
+                </div>
+                <div style={{ fontSize: 13, fontWeight: 700 }}>{d.total.calories ? t('units.kcal', { value: d.total.calories }) : '—'}</div>
+              </div>
+            );
+          })}
+          <Link href="/menu" style={{ alignSelf: 'flex-start', marginTop: 8 }}>
+            <Btn>{t('nav.food.menu')}</Btn>
+          </Link>
+        </Card>
+
+        <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <h2 style={{ fontSize: 17, fontWeight: 800, marginBottom: 10 }}>{t('dashboard.recentTitle')}</h2>
+          {recipes === null && <StateMsg>{t('common.loading')}</StateMsg>}
+          {recipes && recipes.length === 0 && <EmptyState title={t('dashboard.emptyTitle')}>{t('dashboard.emptyBody')}</EmptyState>}
+          {recent.map((r) => (
+            <Link key={r.id} href={`/recipes/${r.id}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, padding: '13px 10px', borderBottom: '1px solid var(--stroke-2)', color: 'inherit' }}>
+              <strong>{r.name}</strong>
+              <span style={{ color: 'var(--ink-2)' }}>→</span>
+            </Link>
+          ))}
+          <Link href="/ingredients" style={{ alignSelf: 'flex-start', marginTop: 8, fontSize: 12, fontWeight: 700, color: 'var(--accent-deep)' }}>
+            {t('dashboard.ingredientsLink')} →
+          </Link>
+        </Card>
+      </Grid>
     </main>
   );
 }
 
-function pluralRecipes(n: number) {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return 'рецепт';
-  if ([2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100)) return 'рецепта';
-  return 'рецептов';
+export default function DashboardPage() {
+  return (
+    <RequireAuth>
+      <DashboardPageContent />
+    </RequireAuth>
+  );
 }

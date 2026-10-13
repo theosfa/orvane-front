@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { ApiError } from '@/lib/api';
+import { useT } from '@/lib/i18n/context';
+import { Card, Btn, GlassInput, Field, ErrorMsg } from '@/components/ui';
 
 export default function RegisterPage() {
   const { register } = useAuth();
   const router = useRouter();
+  const { t } = useT();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -22,60 +25,39 @@ export default function RegisterPage() {
       await register(email, password);
       router.push('/dashboard');
     } catch (err) {
-      setError(
-        err instanceof ApiError && err.status === 409
-          ? 'Такой email уже зарегистрирован'
-          : 'Пароль должен быть не короче 6 символов'
-      );
+      setError(err instanceof ApiError && err.status === 409 ? t('auth.errEmailTaken') : t('auth.errWeakPassword'));
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <main className="auth-shell">
-      <div className="auth-card">
-        <h1>Создать аккаунт</h1>
-        <p className="auth-sub">Меньше минуты — и Лад уже держит ваш ритм.</p>
+    <main style={{ display: 'flex', justifyContent: 'center', padding: '40px 0 100px' }}>
+      <Card style={{ width: '100%', maxWidth: 400, padding: '36px 32px', display: 'flex', flexDirection: 'column', gap: 22 }}>
+        <div>
+          <h1 style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.03em' }}>{t('auth.registerTitle')}</h1>
+          <p style={{ color: 'var(--ink-2)', fontSize: 13, marginTop: 8 }}>{t('auth.registerSub')}</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="field">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              placeholder="email@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
-          </div>
-          <div className="field">
-            <label htmlFor="password">Пароль</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Минимум 6 символов"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="new-password"
-              minLength={6}
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <Field label={t('auth.email')}>
+            <GlassInput type="email" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
+          </Field>
+          <Field label={t('auth.password')}>
+            <GlassInput type="password" placeholder={t('auth.passwordHint')} value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" minLength={6} required />
+          </Field>
 
-          {error && <p className="error-msg">{error}</p>}
+          {error && <ErrorMsg>{error}</ErrorMsg>}
 
-          <button className="btn btn-primary btn-block" type="submit" disabled={submitting}>
-            {submitting ? 'Создаём…' : 'Зарегистрироваться'}
-          </button>
+          <Btn variant="primary" type="submit" disabled={submitting} style={{ width: '100%', textAlign: 'center' }}>
+            {submitting ? t('auth.registering') : t('auth.submitRegister')}
+          </Btn>
         </form>
 
-        <p className="auth-foot">
-          Уже есть аккаунт? <Link href="/login">Войти</Link>
+        <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--ink-2)' }}>
+          {t('auth.haveAccount')} <Link href="/login" style={{ fontWeight: 700, color: 'var(--accent-deep)' }}>{t('nav.login')}</Link>
         </p>
-      </div>
+      </Card>
     </main>
   );
 }
