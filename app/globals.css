@@ -88,49 +88,41 @@ button { font-family: inherit; }
   .wrap { padding: 0 4px; }
 }
 
-/* A week of 7 days (menu, Plans), laid out by the width the week actually gets:
-   - wide (a full desktop window): 7 columns in one row; the hovered or edited day widens
-   - medium (half a screen, tablets): days wrap into rows of 4+3, 3+3+1… and lift on hover
-   - narrow (phones): one day under another
-   The one-row layout is the base on purpose: container queries resolve after the first
-   style pass, and starting from a grid would animate the columns' flex-grow up from 0. */
+/* A week of 7 days (menu, Plans) as tiles in rows, by the width the week actually gets:
+   4 + 3 from about half a desktop screen up, 3 + 3 + 1 below that, 2 per row on small
+   tablets, one under another on phones. The hovered day lifts a little. */
 .week-slide-frame {
   container-type: inline-size;
 }
 .week-columns {
-  display: flex;
-  align-items: stretch;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
 }
 .week-column {
-  flex: 1 1 0;
   min-width: 0;
-  transition: flex-grow 0.25s ease, transform 0.2s ease;
-}
-.week-column[data-expanded='1'] {
-  flex-grow: 2.6;
+  transition: transform 0.2s ease;
 }
 @media (hover: hover) {
   .week-columns:not([data-editing='1']) .week-column:hover {
-    flex-grow: 2.2;
+    transform: translateY(-3px) scale(1.015);
+    position: relative;
+    z-index: 2;
   }
 }
-@container (max-width: 1039px) {
+@container (max-width: 879px) {
   .week-columns {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  @media (hover: hover) {
-    .week-columns:not([data-editing='1']) .week-column:hover {
-      transform: translateY(-3px) scale(1.02);
-      position: relative;
-      z-index: 2;
-    }
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-@container (max-width: 559px) {
+@container (max-width: 619px) {
   .week-columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@container (max-width: 459px) {
+  .week-columns {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 /* covers the page while a day is edited, so other days don't react */
