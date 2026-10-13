@@ -89,8 +89,8 @@ button { font-family: inherit; }
 }
 
 /* A week of 7 days (menu, Plans) as tiles in rows, by the width the week actually gets:
-   4 + 3 from about half a desktop screen up, 3 + 3 + 1 below that, 2 per row on small
-   tablets, one under another on phones. The hovered day lifts a little. */
+   4 + 3 from about half a desktop screen up, 3 + 3 + 1 below that, and on phones and
+   other narrow screens a plain list, one day under another. The hovered day lifts a little. */
 .week-slide-frame {
   container-type: inline-size;
 }
@@ -116,11 +116,6 @@ button { font-family: inherit; }
   }
 }
 @container (max-width: 619px) {
-  .week-columns {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@container (max-width: 459px) {
   .week-columns {
     grid-template-columns: minmax(0, 1fr);
   }
