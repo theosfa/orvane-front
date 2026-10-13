@@ -66,14 +66,19 @@ describe('menu week', () => {
     expect(menu.getWeek).toHaveBeenCalledWith('2026-10-12');
     expect(within(day('2026-10-12')).getByText('Pasta')).toBeInTheDocument();
     expect(within(day('2026-10-12')).getByText(/for 2 people/)).toBeInTheDocument();
+    // no slide on the first load
+    expect(screen.getByTestId('week-slide')).not.toHaveAttribute('data-dir');
 
     await user.click(screen.getByRole('button', { name: 'Next week' }));
     await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-19'));
     expect(await screen.findByTestId('day-2026-10-25')).toBeInTheDocument();
+    expect(screen.getByTestId('week-slide')).toHaveAttribute('data-dir', 'next');
 
     await user.click(screen.getByRole('button', { name: 'Previous week' }));
     await user.click(screen.getByRole('button', { name: 'Previous week' }));
     await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-05'));
+    expect(await screen.findByTestId('day-2026-10-05')).toBeInTheDocument();
+    expect(screen.getByTestId('week-slide')).toHaveAttribute('data-dir', 'prev');
 
     await user.click(screen.getByRole('button', { name: 'This week' }));
     await waitFor(() => expect(menu.getWeek).toHaveBeenLastCalledWith('2026-10-12'));

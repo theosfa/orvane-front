@@ -7,6 +7,7 @@ import { menuApi, tasksApi, ShoppingListItem, WeekMenu } from '@/lib/api';
 import { addDays, parseISODate, today } from '@/lib/dates';
 import { printShoppingList, shoppingLines, shoppingText } from '@/lib/shopping';
 import { Btn, Card, GlassInput, ErrorMsg, StateMsg } from '@/components/ui';
+import { useSlideDirection } from '@/lib/use-slide-direction';
 
 type Status = { kind: 'ok' | 'error'; text: string; planLink?: boolean } | null;
 
@@ -22,13 +23,20 @@ export default function ShoppingListDialog({ initialWeek, onClose }: { initialWe
   const [planDate, setPlanDate] = useState(today());
   const [status, setStatus] = useState<Status>(null);
 
+  // the shown week stays until the next one has loaded, then slides in
   useEffect(() => {
-    setWeek(null);
+    let current = true;
     menuApi
       .getWeek(weekStart)
-      .then(setWeek)
+      .then((w) => {
+        if (current) setWeek(w);
+      })
       .catch(() => setError(t('food.menuError')));
+    return () => {
+      current = false;
+    };
   }, [weekStart, t]);
+  const slide = useSlideDirection(week?.weekStart);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -128,7 +136,8 @@ export default function ShoppingListDialog({ initialWeek, onClose }: { initialWe
             </div>
             {!week && <StateMsg>{t('common.loading')}</StateMsg>}
             {week && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div className="week-slide-frame">
+              <div key={week.weekStart} className="week-slide" data-dir={slide} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {week.days.map((d) => (
                   <label
                     key={d.date}
@@ -139,6 +148,7 @@ export default function ShoppingListDialog({ initialWeek, onClose }: { initialWe
                     <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>{d.meals.length ? t('food.mealsCount', { count: d.meals.length }) : t('food.noMealsShort')}</span>
                   </label>
                 ))}
+              </div>
               </div>
             )}
             <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{t('food.daysSelected', { count: selected.size })}</div>

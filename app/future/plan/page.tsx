@@ -7,6 +7,7 @@ import { useT } from '@/lib/i18n/context';
 import { tasksApi, Task } from '@/lib/api';
 import { addDays, parseISODate, startOfWeek, today, weekDates } from '@/lib/dates';
 import { Card, Btn, GlassInput, Pill, ErrorMsg, StateMsg } from '@/components/ui';
+import { useSlideDirection } from '@/lib/use-slide-direction';
 
 function TaskRow({ task, onToggle, onRemove }: { task: Task; onToggle: () => void; onRemove: () => void }) {
   const { t } = useT();
@@ -104,21 +105,27 @@ function PlanPageContent() {
   const { t, format } = useT();
   const [weekStart, setWeekStart] = useState(() => startOfWeek(today()));
   const [tasks, setTasks] = useState<Task[] | null>(null);
+  // the week whose tasks are on screen; it changes only once the next week has loaded
+  const [shownWeek, setShownWeek] = useState<string | null>(null);
+  const slide = useSlideDirection(shownWeek ?? undefined);
   const [error, setError] = useState<string | null>(null);
 
-  const load = useCallback(
-    () =>
-      tasksApi
-        .list(weekStart, addDays(weekStart, 6))
-        .then(setTasks)
-        .catch(() => setError(t('future.loadError'))),
-    [weekStart, t],
-  );
+  const load = useCallback(() => {
+    let current = true;
+    tasksApi
+      .list(weekStart, addDays(weekStart, 6))
+      .then((list) => {
+        if (!current) return;
+        setTasks(list);
+        setShownWeek(weekStart);
+      })
+      .catch(() => setError(t('future.loadError')));
+    return () => {
+      current = false;
+    };
+  }, [weekStart, t]);
 
-  useEffect(() => {
-    setTasks(null);
-    load();
-  }, [load]);
+  useEffect(load, [load]);
 
   const add = async (date: string, title: string) => {
     try {
@@ -151,7 +158,7 @@ function PlanPageContent() {
   if (error) return <ErrorMsg>{error}</ErrorMsg>;
 
   const todayIso = today();
-  const days = weekDates(weekStart);
+  const days = weekDates(shownWeek ?? weekStart);
   const short = (iso: string, opts: DateTimeFormatOptions) => format.dateTime(parseISODate(iso), opts);
   const openCount = tasks?.filter((x) => !x.done).length ?? 0;
   const isCurrentWeek = weekStart === startOfWeek(todayIso);
@@ -181,7 +188,14 @@ function PlanPageContent() {
       {!tasks ? (
         <StateMsg>{t('common.loading')}</StateMsg>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 12, alignItems: 'stretch' }}>
+        <div className="week-slide-frame">
+        <div
+          key={shownWeek}
+          className="week-slide"
+          data-testid="week-slide"
+          data-dir={slide}
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: 12, alignItems: 'stretch' }}
+        >
           {days.map((date) => {
             const dayTasks = tasks.filter((x) => x.date === date);
             const isToday = date === todayIso;
@@ -215,6 +229,7 @@ function PlanPageContent() {
               </Card>
             );
           })}
+        </div>
         </div>
       )}
     </main>

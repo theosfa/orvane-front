@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { menuApi, recipesApi, WeekMenu, RecipeListItem, ApiError } from '@/lib/api';
 import RequireAuth from '@/components/RequireAuth';
 import ConfirmDialog from '@/components/ConfirmDialog';
@@ -10,6 +10,7 @@ import { useT } from '@/lib/i18n/context';
 import { addDays, parseISODate, startOfWeek, today } from '@/lib/dates';
 import { DraftMeal, MealForm, dayToSave, emptyForm, isDayDirty, toDraft } from '@/lib/menu';
 import { Card, Btn, ErrorMsg, StateMsg, Pill } from '@/components/ui';
+import { useSlideDirection } from '@/lib/use-slide-direction';
 
 type Editing = { date: string; draft: DraftMeal[]; form: MealForm };
 
@@ -26,14 +27,17 @@ function MenuPageContent() {
   const [confirmLeave, setConfirmLeave] = useState(false);
   const [shoppingOpen, setShoppingOpen] = useState(false);
 
-  const loadWeek = useCallback(
-    () =>
-      menuApi
-        .getWeek(weekStart)
-        .then(setWeek)
-        .catch((err) => setError(err instanceof ApiError ? err.message : t('food.menuError'))),
-    [weekStart, t],
-  );
+  // quick clicks through weeks: only the latest request may update the page
+  const requestId = useRef(0);
+  const loadWeek = useCallback(() => {
+    const id = ++requestId.current;
+    return menuApi
+      .getWeek(weekStart)
+      .then((w) => {
+        if (id === requestId.current) setWeek(w);
+      })
+      .catch((err) => setError(err instanceof ApiError ? err.message : t('food.menuError')));
+  }, [weekStart, t]);
 
   // recipe names come back in the current language, so reload when it changes
   useEffect(() => {
@@ -47,6 +51,9 @@ function MenuPageContent() {
       .then(setLiked)
       .catch(() => setLiked([]));
   }, [lang]);
+
+  // the old week stays on screen until the new one arrives, then slides in
+  const slide = useSlideDirection(week?.weekStart);
 
   const editedDay = editing && week?.days.find((d) => d.date === editing.date);
   const dirty = !!(editing && editedDay && isDayDirty(editedDay.meals, editing.draft, editing.form));
@@ -141,7 +148,8 @@ function MenuPageContent() {
       {/* while a day is edited this layer catches clicks and hovers everywhere else */}
       {editing && <div data-testid="edit-backdrop" className="menu-backdrop" onClick={requestLeave} />}
 
-      <div className="menu-week" data-editing={editing ? '1' : '0'}>
+      <div className="week-slide-frame">
+      <div key={week.weekStart} className="menu-week week-slide" data-testid="week-slide" data-dir={slide} data-editing={editing ? '1' : '0'}>
         {week.days.map((day) => {
           const isEdited = editing?.date === day.date;
           return (
@@ -170,6 +178,7 @@ function MenuPageContent() {
             />
           );
         })}
+      </div>
       </div>
 
       <ConfirmDialog

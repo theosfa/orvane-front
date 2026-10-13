@@ -96,12 +96,18 @@ describe('Plans week', () => {
   it('browses previous and next weeks', async () => {
     const user = userEvent.setup();
     renderWithIntl(<PlanPage />);
-    await screen.findByTestId('week-range');
+    await screen.findByTestId('plan-day-2026-10-12');
+    expect(screen.getByTestId('week-slide')).not.toHaveAttribute('data-dir');
     await user.click(screen.getByRole('button', { name: 'Next week' }));
     await waitFor(() => expect(api.list).toHaveBeenLastCalledWith('2026-10-19', '2026-10-25'));
     expect(await screen.findByTestId('plan-day-2026-10-25')).toBeInTheDocument();
+    expect(screen.getByTestId('week-slide')).toHaveAttribute('data-dir', 'next');
+    // the old week's tasks never show under the new dates
+    expect(screen.queryByText('Call the bank')).not.toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Previous week' }));
     await user.click(screen.getByRole('button', { name: 'Previous week' }));
     await waitFor(() => expect(api.list).toHaveBeenLastCalledWith('2026-10-05', '2026-10-11'));
+    expect(await screen.findByTestId('plan-day-2026-10-05')).toBeInTheDocument();
+    expect(screen.getByTestId('week-slide')).toHaveAttribute('data-dir', 'prev');
   });
 });

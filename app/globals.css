@@ -121,3 +121,29 @@ button { font-family: inherit; }
     flex-grow: 1;
   }
 }
+
+/* Week change: the new week slides in from the side it came from.
+   Keyed by the week, so the element remounts and the animation replays. */
+@keyframes week-in-from-right {
+  from { transform: translateX(48px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes week-in-from-left {
+  from { transform: translateX(-48px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.week-slide-frame {
+  overflow-x: clip;
+  overflow-clip-margin: 32px; /* keep the cards' shadows */
+}
+.week-slide[data-dir='next'] {
+  animation: week-in-from-right 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.week-slide[data-dir='prev'] {
+  animation: week-in-from-left 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .week-slide[data-dir] {
+    animation: none;
+  }
+}
