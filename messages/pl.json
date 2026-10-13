@@ -296,57 +296,11 @@
     "retry": "Spróbuj ponownie"
   },
   "future": {
-    "planKicker": "Otwarte teraz",
-    "addPlaceholder": "Dodaj coś na dziś…",
+    "addPlaceholder": "Dodaj zadanie…",
     "add": "Dodaj",
     "today": "Dziś",
     "thisWeek": "W tym tygodniu",
-    "later": "Później",
     "goalsTitle": "Cele",
-    "tasksSeed": [
-      {
-        "when": "today",
-        "text": "Wybrać kolację na piątek przed zakupami",
-        "link": "Żywienie · 1 wolne miejsce",
-        "done": false
-      },
-      {
-        "when": "today",
-        "text": "Wpisać sobotni paragon ze sklepu",
-        "link": "Finanse · brakuje 23 €",
-        "done": false
-      },
-      {
-        "when": "today",
-        "text": "Rozmrozić przygotowane porcje",
-        "link": "Żywienie · zapasy",
-        "done": true
-      },
-      {
-        "when": "week",
-        "text": "Zakupy w czwartek, 18:30",
-        "link": "Finanse · ok. 64 €",
-        "done": false
-      },
-      {
-        "when": "week",
-        "text": "Poprosić kogoś o gotowanie we wtorek",
-        "link": "Żywienie · rodzina",
-        "done": false
-      },
-      {
-        "when": "week",
-        "text": "Sprawdzić budżet za ten miesiąc",
-        "link": "Finanse · koniec miesiąca",
-        "done": false
-      },
-      {
-        "when": "later",
-        "text": "Zaplanować menu na urodziny",
-        "link": "Żywienie × Finanse",
-        "done": false
-      }
-    ],
     "goalsSeed": [
       {
         "name": "Ugotować 20 nowych przepisów w tym roku",
@@ -372,7 +326,21 @@
         "pct": 40,
         "note": "Najlepszy miesiąc od początku śledzenia"
       }
-    ]
+    ],
+    "hideDetails": "Ukryj",
+    "showDetails": "{count, plural, one {Pokaż # wiersz} few {Pokaż # wiersze} many {Pokaż # wierszy} other {Pokaż # wiersza}}",
+    "addFor": "Dodaj zadanie na {day}",
+    "loadError": "Nie udało się wczytać planów",
+    "saveError": "Nie udało się zapisać zadania",
+    "prevWeek": "Poprzedni tydzień",
+    "nextWeek": "Następny tydzień",
+    "openCount": "{count, plural, =0 {W tym tygodniu wszystko zrobione} one {# otwarte zadanie w tym tygodniu} few {# otwarte zadania w tym tygodniu} many {# otwartych zadań w tym tygodniu} other {# otwartego zadania w tym tygodniu}}",
+    "nothingPlanned": "Nic nie zaplanowano",
+    "source": {
+      "manual": "Plany",
+      "food": "Z Żywienia",
+      "finance": "Z Finansów"
+    }
   },
   "finance": {
     "kicker": "Nowy wpis",

@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { recipesApi, menuApi, financeApi, RecipeListItem, WeekMenu, FinanceSummary } from '@/lib/api';
-import { monthRange, today } from '@/lib/dates';
+import { recipesApi, menuApi, financeApi, tasksApi, RecipeListItem, WeekMenu, FinanceSummary, Task } from '@/lib/api';
+import { addDays, monthRange, startOfWeek, today } from '@/lib/dates';
 import RequireAuth from '@/components/RequireAuth';
 import { useT } from '@/lib/i18n/context';
-import { useFutureMock } from '@/lib/mock/future-context';
 import { Card, Btn, Grid, EmptyState, StateMsg } from '@/components/ui';
 
 function DashboardPageContent() {
@@ -15,7 +14,7 @@ function DashboardPageContent() {
   const { t, lang, money, weekdays } = useT();
   const [recipes, setRecipes] = useState<RecipeListItem[] | null>(null);
   const [week, setWeek] = useState<WeekMenu | null>(null);
-  const { tasks } = useFutureMock();
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [month, setMonth] = useState<FinanceSummary | null>(null);
 
   // recipe names come back in the current language, so reload when it changes
@@ -23,6 +22,8 @@ function DashboardPageContent() {
     recipesApi.list().then(setRecipes).catch(() => setRecipes([]));
     menuApi.getWeek().then(setWeek).catch(() => setWeek(null));
     financeApi.summary(monthRange(today())).then(setMonth).catch(() => setMonth(null));
+    const monday = startOfWeek(today());
+    tasksApi.list(monday, addDays(monday, 6)).then(setTasks).catch(() => setTasks([]));
   }, [lang]);
 
   if (!user) return null;

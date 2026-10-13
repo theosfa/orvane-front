@@ -344,6 +344,9 @@ export const menuApi = {
 export const tasksApi = {
   list: (from: string, to: string) => apiFetch<Task[]>('/tasks', { query: { from, to } }),
   create: (dto: CreateTaskInput) => apiFetch<Task>('/tasks', { method: 'POST', body: dto }),
+  update: (id: number, dto: Partial<Pick<Task, 'title' | 'notes' | 'date' | 'done'>>) =>
+    apiFetch<Task>(`/tasks/${id}`, { method: 'PATCH', body: dto }),
+  remove: (id: number) => apiFetch<{ removed: boolean }>(`/tasks/${id}`, { method: 'DELETE' }),
 };
 
 // The first finance call creates the default categories and a wallet in the UI language.

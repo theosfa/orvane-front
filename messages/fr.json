@@ -296,57 +296,11 @@
     "retry": "Réessayer"
   },
   "future": {
-    "planKicker": "Ouvert maintenant",
-    "addPlaceholder": "Ajouter quelque chose pour aujourd’hui…",
+    "addPlaceholder": "Ajouter une tâche…",
     "add": "Ajouter",
     "today": "Aujourd’hui",
     "thisWeek": "Cette semaine",
-    "later": "Plus tard",
     "goalsTitle": "Objectifs",
-    "tasksSeed": [
-      {
-        "when": "today",
-        "text": "Choisir le dîner de vendredi avant les courses",
-        "link": "Alimentation · 1 créneau libre",
-        "done": false
-      },
-      {
-        "when": "today",
-        "text": "Saisir le ticket de caisse de samedi",
-        "link": "Finances · 23 € manquants",
-        "done": false
-      },
-      {
-        "when": "today",
-        "text": "Décongeler les portions préparées",
-        "link": "Alimentation · batch cooking",
-        "done": true
-      },
-      {
-        "when": "week",
-        "text": "Courses jeudi, 18 h 30",
-        "link": "Finances · env. 64 €",
-        "done": false
-      },
-      {
-        "when": "week",
-        "text": "Demander à quelqu’un de cuisiner mardi",
-        "link": "Alimentation · foyer",
-        "done": false
-      },
-      {
-        "when": "week",
-        "text": "Revoir le budget du mois",
-        "link": "Finances · fin du mois",
-        "done": false
-      },
-      {
-        "when": "later",
-        "text": "Prévoir le menu d’anniversaire",
-        "link": "Alimentation × Finances",
-        "done": false
-      }
-    ],
     "goalsSeed": [
       {
         "name": "Cuisiner 20 nouvelles recettes cette année",
@@ -372,7 +326,21 @@
         "pct": 40,
         "note": "Meilleur mois depuis le début du suivi"
       }
-    ]
+    ],
+    "hideDetails": "Masquer",
+    "showDetails": "{count, plural, one {Afficher # ligne} other {Afficher # lignes}}",
+    "addFor": "Ajouter une tâche pour {day}",
+    "loadError": "Impossible de charger vos plans",
+    "saveError": "Impossible d’enregistrer la tâche",
+    "prevWeek": "Semaine précédente",
+    "nextWeek": "Semaine suivante",
+    "openCount": "{count, plural, =0 {Rien en attente cette semaine} one {# tâche en attente cette semaine} other {# tâches en attente cette semaine}}",
+    "nothingPlanned": "Rien de prévu",
+    "source": {
+      "manual": "Plans",
+      "food": "Depuis Alimentation",
+      "finance": "Depuis Finances"
+    }
   },
   "finance": {
     "kicker": "Nouvelle entrée",

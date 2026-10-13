@@ -296,57 +296,11 @@
     "retry": "Try again"
   },
   "future": {
-    "planKicker": "Open right now",
-    "addPlaceholder": "Add something for today…",
+    "addPlaceholder": "Add a task…",
     "add": "Add",
     "today": "Today",
     "thisWeek": "This week",
-    "later": "Later",
     "goalsTitle": "Goals",
-    "tasksSeed": [
-      {
-        "when": "today",
-        "text": "Pick Friday dinner before the shop",
-        "link": "Food · 1 open slot",
-        "done": false
-      },
-      {
-        "when": "today",
-        "text": "Log Saturday’s grocery receipt",
-        "link": "Finance · €23 missing",
-        "done": false
-      },
-      {
-        "when": "today",
-        "text": "Defrost the batch-cooked portions",
-        "link": "Food · batch cook",
-        "done": true
-      },
-      {
-        "when": "week",
-        "text": "Thursday grocery run, 18:30",
-        "link": "Finance · est. €64",
-        "done": false
-      },
-      {
-        "when": "week",
-        "text": "Ask someone to cook Tuesday",
-        "link": "Food · household",
-        "done": false
-      },
-      {
-        "when": "week",
-        "text": "Review this month’s budget",
-        "link": "Finance · month end",
-        "done": false
-      },
-      {
-        "when": "later",
-        "text": "Plan the birthday menu",
-        "link": "Food × Finance",
-        "done": false
-      }
-    ],
     "goalsSeed": [
       {
         "name": "Cook 20 new recipes this year",
@@ -372,7 +326,21 @@
         "pct": 40,
         "note": "Best month since you started"
       }
-    ]
+    ],
+    "hideDetails": "Hide details",
+    "showDetails": "{count, plural, one {Show # line} other {Show # lines}}",
+    "addFor": "Add a task for {day}",
+    "loadError": "Couldn’t load your plans",
+    "saveError": "Couldn’t save the task",
+    "prevWeek": "Previous week",
+    "nextWeek": "Next week",
+    "openCount": "{count, plural, =0 {Nothing open this week} one {# open task this week} other {# open tasks this week}}",
+    "nothingPlanned": "Nothing planned",
+    "source": {
+      "manual": "Plans",
+      "food": "From Food",
+      "finance": "From Finance"
+    }
   },
   "finance": {
     "kicker": "New entry",
