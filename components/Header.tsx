@@ -20,6 +20,7 @@ function usePageMeta() {
   if (pathname === '/dashboard') return { kicker: t('dashboard.kicker'), title: t('dashboard.title') };
   if (pathname === '/recipes/new') return { kicker: food, title: t('nav.food.newRecipe') };
   if (pathname === '/recipes/liked') return { kicker: food, title: t('nav.food.liked') };
+  if (pathname === '/recipes/feed') return { kicker: food, title: t('nav.food.feed') };
   if (pathname?.startsWith('/recipes/')) return { kicker: food, title: t('nav.food.recipes') };
   if (pathname === '/recipes') return { kicker: food, title: t('nav.food.recipes') };
   if (pathname === '/ingredients') return { kicker: `${food} × ${finance}`, title: t('nav.food.ingredients') };

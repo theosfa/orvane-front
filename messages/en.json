@@ -39,6 +39,7 @@
       "name": "Food",
       "tagline": "Recipes & pantry",
       "recipes": "Recipes",
+      "feed": "Feed",
       "newRecipe": "New recipe",
       "menu": "Menu",
       "ingredients": "Ingredients",
@@ -239,6 +240,18 @@
     "autoTranslated": "Translated automatically",
     "showOriginal": "Show original",
     "showTranslation": "Show translation"
+  },
+  "feed": {
+    "hint": "Scroll down for the next recipe",
+    "openRecipe": "Open recipe",
+    "ingredients": "Ingredients",
+    "steps": "How to cook",
+    "moreIngredients": "{count, plural, one {+# more} other {+# more}}",
+    "moreSteps": "{count, plural, one {# more step} other {# more steps}}",
+    "emptyTitle": "No public recipes yet",
+    "emptyBody": "When someone shares a recipe publicly, it will show up here.",
+    "error": "Couldn’t load recipes",
+    "retry": "Try again"
   },
   "future": {
     "planKicker": "Open right now",

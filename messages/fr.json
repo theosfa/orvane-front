@@ -39,6 +39,7 @@
       "name": "Table",
       "tagline": "Recettes et produits",
       "recipes": "Recettes",
+      "feed": "Découvrir",
       "newRecipe": "Nouvelle recette",
       "menu": "Menu",
       "ingredients": "Produits",
@@ -240,6 +241,18 @@
     "showOriginal": "Voir l’original",
     "showTranslation": "Voir la traduction"
   },
+  "feed": {
+    "hint": "Faites défiler vers le bas pour la recette suivante",
+    "openRecipe": "Voir la recette",
+    "ingredients": "Ingrédients",
+    "steps": "Préparation",
+    "moreIngredients": "{count, plural, one {+# autre} other {+# autres}}",
+    "moreSteps": "{count, plural, one {# autre étape} other {# autres étapes}}",
+    "emptyTitle": "Aucune recette publique pour l’instant",
+    "emptyBody": "Quand quelqu’un publiera une recette, elle apparaîtra ici.",
+    "error": "Impossible de charger les recettes",
+    "retry": "Réessayer"
+  },
   "future": {
     "planKicker": "Ouvert maintenant",
     "addPlaceholder": "Ajouter quelque chose pour aujourd’hui…",
@@ -249,19 +262,74 @@
     "later": "Plus tard",
     "goalsTitle": "Objectifs",
     "tasksSeed": [
-      { "when": "today", "text": "Choisir le dîner de vendredi avant les courses", "link": "Table · 1 créneau libre", "done": false },
-      { "when": "today", "text": "Saisir le ticket de caisse de samedi", "link": "Compte · 23 € manquants", "done": false },
-      { "when": "today", "text": "Décongeler les portions préparées", "link": "Table · batch cooking", "done": true },
-      { "when": "week", "text": "Courses jeudi, 18 h 30", "link": "Compte · env. 64 €", "done": false },
-      { "when": "week", "text": "Demander à quelqu’un de cuisiner mardi", "link": "Table · foyer", "done": false },
-      { "when": "week", "text": "Revoir le budget du mois", "link": "Compte · fin du mois", "done": false },
-      { "when": "later", "text": "Prévoir le menu d’anniversaire", "link": "Table × Compte", "done": false }
+      {
+        "when": "today",
+        "text": "Choisir le dîner de vendredi avant les courses",
+        "link": "Table · 1 créneau libre",
+        "done": false
+      },
+      {
+        "when": "today",
+        "text": "Saisir le ticket de caisse de samedi",
+        "link": "Compte · 23 € manquants",
+        "done": false
+      },
+      {
+        "when": "today",
+        "text": "Décongeler les portions préparées",
+        "link": "Table · batch cooking",
+        "done": true
+      },
+      {
+        "when": "week",
+        "text": "Courses jeudi, 18 h 30",
+        "link": "Compte · env. 64 €",
+        "done": false
+      },
+      {
+        "when": "week",
+        "text": "Demander à quelqu’un de cuisiner mardi",
+        "link": "Table · foyer",
+        "done": false
+      },
+      {
+        "when": "week",
+        "text": "Revoir le budget du mois",
+        "link": "Compte · fin du mois",
+        "done": false
+      },
+      {
+        "when": "later",
+        "text": "Prévoir le menu d’anniversaire",
+        "link": "Table × Compte",
+        "done": false
+      }
     ],
     "goalsSeed": [
-      { "name": "Cuisiner 20 nouvelles recettes cette année", "now": "14 / 20", "pct": 70, "note": "Plus que six — trois déjà en favoris" },
-      { "name": "Rester sous 450 € de courses par mois", "now": "312 € pour l’instant", "pct": 69, "note": "Onze jours avant la fin du cycle" },
-      { "name": "Cuisiner à l’avance chaque dimanche", "now": "7 semaines d’affilée", "pct": 88, "note": "Un dimanche manqué en août" },
-      { "name": "Réduire le gaspillage à moins de 2 kg par mois", "now": "1,4 kg", "pct": 40, "note": "Meilleur mois depuis le début du suivi" }
+      {
+        "name": "Cuisiner 20 nouvelles recettes cette année",
+        "now": "14 / 20",
+        "pct": 70,
+        "note": "Plus que six — trois déjà en favoris"
+      },
+      {
+        "name": "Rester sous 450 € de courses par mois",
+        "now": "312 € pour l’instant",
+        "pct": 69,
+        "note": "Onze jours avant la fin du cycle"
+      },
+      {
+        "name": "Cuisiner à l’avance chaque dimanche",
+        "now": "7 semaines d’affilée",
+        "pct": 88,
+        "note": "Un dimanche manqué en août"
+      },
+      {
+        "name": "Réduire le gaspillage à moins de 2 kg par mois",
+        "now": "1,4 kg",
+        "pct": 40,
+        "note": "Meilleur mois depuis le début du suivi"
+      }
     ]
   },
   "finance": {
@@ -278,19 +346,70 @@
     "ofCap": "sur",
     "nudge": "Une enveloppe est presque vide. Transférez un peu depuis une autre — personne n’en saura rien.",
     "move": "Transférer",
-    "cats": ["Courses", "Restaurants", "Maison", "Café"],
+    "cats": [
+      "Courses",
+      "Restaurants",
+      "Maison",
+      "Café"
+    ],
     "expensesSeed": [
-      { "day": "19 sept.", "who": "Supermarché", "cat": "Courses", "amt": 48.2, "link": "Associé à 11 produits" },
-      { "day": "18 sept.", "who": "Café du coin", "cat": "Restaurants", "amt": 9.4, "link": "" },
-      { "day": "17 sept.", "who": "Marché", "cat": "Courses", "amt": 23.1, "link": "Courge, noix, citrons" },
-      { "day": "15 sept.", "who": "Quincaillerie", "cat": "Maison", "amt": 16.75, "link": "" },
-      { "day": "14 sept.", "who": "Boulangerie", "cat": "Courses", "amt": 6.8, "link": "Pain, deux fois par semaine" }
+      {
+        "day": "19 sept.",
+        "who": "Supermarché",
+        "cat": "Courses",
+        "amt": 48.2,
+        "link": "Associé à 11 produits"
+      },
+      {
+        "day": "18 sept.",
+        "who": "Café du coin",
+        "cat": "Restaurants",
+        "amt": 9.4,
+        "link": ""
+      },
+      {
+        "day": "17 sept.",
+        "who": "Marché",
+        "cat": "Courses",
+        "amt": 23.1,
+        "link": "Courge, noix, citrons"
+      },
+      {
+        "day": "15 sept.",
+        "who": "Quincaillerie",
+        "cat": "Maison",
+        "amt": 16.75,
+        "link": ""
+      },
+      {
+        "day": "14 sept.",
+        "who": "Boulangerie",
+        "cat": "Courses",
+        "amt": 6.8,
+        "link": "Pain, deux fois par semaine"
+      }
     ],
     "budgetsSeed": [
-      { "name": "Courses", "spent": 312, "cap": 450 },
-      { "name": "Restaurants", "spent": 78, "cap": 90 },
-      { "name": "Maison", "spent": 41, "cap": 80 },
-      { "name": "Café", "spent": 26, "cap": 25 }
+      {
+        "name": "Courses",
+        "spent": 312,
+        "cap": 450
+      },
+      {
+        "name": "Restaurants",
+        "spent": 78,
+        "cap": 90
+      },
+      {
+        "name": "Maison",
+        "spent": 41,
+        "cap": 80
+      },
+      {
+        "name": "Café",
+        "spent": 26,
+        "cap": 25
+      }
     ]
   },
   "profile": {
@@ -305,19 +424,48 @@
     "statsSaved": "Économisé cette année",
     "statsWeeks": "Semaines planifiées",
     "statsWaste": "Gaspillage évité",
-    "statsSeed": ["186", "1 240 €", "31", "12 kg"],
+    "statsSeed": [
+      "186",
+      "1 240 €",
+      "31",
+      "12 kg"
+    ],
     "connectionsTitle": "Comment les trois applications communiquent",
     "connectionsSeed": [
-      { "pair": "Table → Compte", "text": "Chaque recette enregistrée est chiffrée d’après vos vrais tickets de caisse.", "on": true },
-      { "pair": "Chemin → Table", "text": "Le dimanche, les créneaux de dîner vides se remplissent avec vos recettes favorites.", "on": true },
-      { "pair": "Compte → Chemin", "text": "Quand le budget s’amenuise, la semaine suivante devient plus économique.", "on": true },
-      { "pair": "Table → Chemin", "text": "Les plats cuisinés à l’avance réservent eux-mêmes une soirée restes.", "on": false }
+      {
+        "pair": "Table → Compte",
+        "text": "Chaque recette enregistrée est chiffrée d’après vos vrais tickets de caisse.",
+        "on": true
+      },
+      {
+        "pair": "Chemin → Table",
+        "text": "Le dimanche, les créneaux de dîner vides se remplissent avec vos recettes favorites.",
+        "on": true
+      },
+      {
+        "pair": "Compte → Chemin",
+        "text": "Quand le budget s’amenuise, la semaine suivante devient plus économique.",
+        "on": true
+      },
+      {
+        "pair": "Table → Chemin",
+        "text": "Les plats cuisinés à l’avance réservent eux-mêmes une soirée restes.",
+        "on": false
+      }
     ],
     "householdTitle": "Foyer",
     "invite": "Inviter quelqu’un",
     "householdSeed": [
-      { "initials": "VOUS", "name": "Vous", "note": "Propriétaire · planifie et fait les courses" },
-      { "initials": "P", "name": "Partenaire", "note": "Cuisine le mardi et le jeudi" }
+      {
+        "initials": "VOUS",
+        "name": "Vous",
+        "note": "Propriétaire · planifie et fait les courses"
+      },
+      {
+        "initials": "P",
+        "name": "Partenaire",
+        "note": "Cuisine le mardi et le jeudi"
+      }
     ],
     "likedTitle": "Recettes favorites",
     "likedEmptyTitle": "Aucun favori pour l’instant",

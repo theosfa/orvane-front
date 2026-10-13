@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { ApiError } from '@/lib/api';
 import { useT } from '@/lib/i18n/context';
+import { APP_HOME } from '@/lib/app-mode-context';
 import { Card, Btn, GlassInput, Field, ErrorMsg } from '@/components/ui';
 
 export default function RegisterPage() {
@@ -23,7 +24,7 @@ export default function RegisterPage() {
     setSubmitting(true);
     try {
       await register(email, password);
-      router.push('/dashboard');
+      router.push(APP_HOME.food);
     } catch (err) {
       setError(err instanceof ApiError && err.status === 409 ? t('auth.errEmailTaken') : t('auth.errWeakPassword'));
     } finally {

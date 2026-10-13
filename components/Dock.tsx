@@ -60,6 +60,7 @@ export default function Dock() {
 
   const dockByApp: Record<AppId, DockDef[]> = {
     food: [
+      { href: '/recipes/feed', label: t('nav.food.feed'), glyph: '▶' },
       { href: '/recipes', label: t('nav.food.recipes'), glyph: '▤' },
       { href: '/menu', label: t('nav.food.menu'), glyph: '⊞' },
     ],

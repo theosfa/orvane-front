@@ -39,6 +39,7 @@
       "name": "Stół",
       "tagline": "Przepisy i produkty",
       "recipes": "Przepisy",
+      "feed": "Odkrywaj",
       "newRecipe": "Nowy przepis",
       "menu": "Menu",
       "ingredients": "Produkty",
@@ -240,6 +241,18 @@
     "showOriginal": "Pokaż oryginał",
     "showTranslation": "Pokaż tłumaczenie"
   },
+  "feed": {
+    "hint": "Przewiń w dół, aby zobaczyć kolejny przepis",
+    "openRecipe": "Otwórz przepis",
+    "ingredients": "Składniki",
+    "steps": "Jak przygotować",
+    "moreIngredients": "{count, plural, one {jeszcze # produkt} few {jeszcze # produkty} many {jeszcze # produktów} other {jeszcze # produktu}}",
+    "moreSteps": "{count, plural, one {jeszcze # krok} few {jeszcze # kroki} many {jeszcze # kroków} other {jeszcze # kroku}}",
+    "emptyTitle": "Nie ma jeszcze publicznych przepisów",
+    "emptyBody": "Gdy ktoś opublikuje przepis, pojawi się tutaj.",
+    "error": "Nie udało się wczytać przepisów",
+    "retry": "Spróbuj ponownie"
+  },
   "future": {
     "planKicker": "Otwarte teraz",
     "addPlaceholder": "Dodaj coś na dziś…",
@@ -249,19 +262,74 @@
     "later": "Później",
     "goalsTitle": "Cele",
     "tasksSeed": [
-      { "when": "today", "text": "Wybrać kolację na piątek przed zakupami", "link": "Stół · 1 wolne miejsce", "done": false },
-      { "when": "today", "text": "Wpisać sobotni paragon ze sklepu", "link": "Rachunek · brakuje 23 €", "done": false },
-      { "when": "today", "text": "Rozmrozić przygotowane porcje", "link": "Stół · zapasy", "done": true },
-      { "when": "week", "text": "Zakupy w czwartek, 18:30", "link": "Rachunek · ok. 64 €", "done": false },
-      { "when": "week", "text": "Poprosić kogoś o gotowanie we wtorek", "link": "Stół · rodzina", "done": false },
-      { "when": "week", "text": "Sprawdzić budżet za ten miesiąc", "link": "Rachunek · koniec miesiąca", "done": false },
-      { "when": "later", "text": "Zaplanować menu na urodziny", "link": "Stół × Rachunek", "done": false }
+      {
+        "when": "today",
+        "text": "Wybrać kolację na piątek przed zakupami",
+        "link": "Stół · 1 wolne miejsce",
+        "done": false
+      },
+      {
+        "when": "today",
+        "text": "Wpisać sobotni paragon ze sklepu",
+        "link": "Rachunek · brakuje 23 €",
+        "done": false
+      },
+      {
+        "when": "today",
+        "text": "Rozmrozić przygotowane porcje",
+        "link": "Stół · zapasy",
+        "done": true
+      },
+      {
+        "when": "week",
+        "text": "Zakupy w czwartek, 18:30",
+        "link": "Rachunek · ok. 64 €",
+        "done": false
+      },
+      {
+        "when": "week",
+        "text": "Poprosić kogoś o gotowanie we wtorek",
+        "link": "Stół · rodzina",
+        "done": false
+      },
+      {
+        "when": "week",
+        "text": "Sprawdzić budżet za ten miesiąc",
+        "link": "Rachunek · koniec miesiąca",
+        "done": false
+      },
+      {
+        "when": "later",
+        "text": "Zaplanować menu na urodziny",
+        "link": "Stół × Rachunek",
+        "done": false
+      }
     ],
     "goalsSeed": [
-      { "name": "Ugotować 20 nowych przepisów w tym roku", "now": "14 / 20", "pct": 70, "note": "Zostało sześć — trzy już polubione" },
-      { "name": "Zmieścić się w 450 € na jedzenie miesięcznie", "now": "Na razie 312 €", "pct": 69, "note": "Do końca cyklu — 11 dni" },
-      { "name": "Gotować zapasy w każdą niedzielę", "now": "7 tygodni z rzędu", "pct": 88, "note": "Pominięta jedna niedziela w sierpniu" },
-      { "name": "Ograniczyć marnowanie jedzenia do 2 kg miesięcznie", "now": "1,4 kg", "pct": 40, "note": "Najlepszy miesiąc od początku śledzenia" }
+      {
+        "name": "Ugotować 20 nowych przepisów w tym roku",
+        "now": "14 / 20",
+        "pct": 70,
+        "note": "Zostało sześć — trzy już polubione"
+      },
+      {
+        "name": "Zmieścić się w 450 € na jedzenie miesięcznie",
+        "now": "Na razie 312 €",
+        "pct": 69,
+        "note": "Do końca cyklu — 11 dni"
+      },
+      {
+        "name": "Gotować zapasy w każdą niedzielę",
+        "now": "7 tygodni z rzędu",
+        "pct": 88,
+        "note": "Pominięta jedna niedziela w sierpniu"
+      },
+      {
+        "name": "Ograniczyć marnowanie jedzenia do 2 kg miesięcznie",
+        "now": "1,4 kg",
+        "pct": 40,
+        "note": "Najlepszy miesiąc od początku śledzenia"
+      }
     ]
   },
   "finance": {
@@ -278,19 +346,70 @@
     "ofCap": "z",
     "nudge": "Jedna z kopert jest prawie pusta. Możesz przerzucić trochę z innej — nikt się nie dowie.",
     "move": "Przerzuć",
-    "cats": ["Jedzenie", "Kawiarnie", "Dom", "Kawa"],
+    "cats": [
+      "Jedzenie",
+      "Kawiarnie",
+      "Dom",
+      "Kawa"
+    ],
     "expensesSeed": [
-      { "day": "19 wrz", "who": "Sklep spożywczy", "cat": "Jedzenie", "amt": 48.2, "link": "Dopasowano do 11 produktów" },
-      { "day": "18 wrz", "who": "Kawiarnia na rogu", "cat": "Kawiarnie", "amt": 9.4, "link": "" },
-      { "day": "17 wrz", "who": "Targ", "cat": "Jedzenie", "amt": 23.1, "link": "Dynia, orzechy, cytryny" },
-      { "day": "15 wrz", "who": "Sklep osiedlowy", "cat": "Dom", "amt": 16.75, "link": "" },
-      { "day": "14 wrz", "who": "Piekarnia", "cat": "Jedzenie", "amt": 6.8, "link": "Chleb, dwa razy w tygodniu" }
+      {
+        "day": "19 wrz",
+        "who": "Sklep spożywczy",
+        "cat": "Jedzenie",
+        "amt": 48.2,
+        "link": "Dopasowano do 11 produktów"
+      },
+      {
+        "day": "18 wrz",
+        "who": "Kawiarnia na rogu",
+        "cat": "Kawiarnie",
+        "amt": 9.4,
+        "link": ""
+      },
+      {
+        "day": "17 wrz",
+        "who": "Targ",
+        "cat": "Jedzenie",
+        "amt": 23.1,
+        "link": "Dynia, orzechy, cytryny"
+      },
+      {
+        "day": "15 wrz",
+        "who": "Sklep osiedlowy",
+        "cat": "Dom",
+        "amt": 16.75,
+        "link": ""
+      },
+      {
+        "day": "14 wrz",
+        "who": "Piekarnia",
+        "cat": "Jedzenie",
+        "amt": 6.8,
+        "link": "Chleb, dwa razy w tygodniu"
+      }
     ],
     "budgetsSeed": [
-      { "name": "Jedzenie", "spent": 312, "cap": 450 },
-      { "name": "Kawiarnie", "spent": 78, "cap": 90 },
-      { "name": "Dom", "spent": 41, "cap": 80 },
-      { "name": "Kawa", "spent": 26, "cap": 25 }
+      {
+        "name": "Jedzenie",
+        "spent": 312,
+        "cap": 450
+      },
+      {
+        "name": "Kawiarnie",
+        "spent": 78,
+        "cap": 90
+      },
+      {
+        "name": "Dom",
+        "spent": 41,
+        "cap": 80
+      },
+      {
+        "name": "Kawa",
+        "spent": 26,
+        "cap": 25
+      }
     ]
   },
   "profile": {
@@ -305,19 +424,48 @@
     "statsSaved": "Zaoszczędzone w tym roku",
     "statsWeeks": "Zaplanowane tygodnie",
     "statsWaste": "Uniknięte odpady",
-    "statsSeed": ["186", "1240 €", "31", "12 kg"],
+    "statsSeed": [
+      "186",
+      "1240 €",
+      "31",
+      "12 kg"
+    ],
     "connectionsTitle": "Jak trzy aplikacje rozmawiają ze sobą",
     "connectionsSeed": [
-      { "pair": "Stół → Rachunek", "text": "Każdy zapisany przepis dostaje cenę z twoich prawdziwych paragonów.", "on": true },
-      { "pair": "Droga → Stół", "text": "Wolne miejsca na kolację w niedziele wypełniają się polubionymi przepisami.", "on": true },
-      { "pair": "Rachunek → Droga", "text": "Gdy budżet się kończy, plan na następny tydzień robi się tańszy.", "on": true },
-      { "pair": "Stół → Droga", "text": "Gotowanie na zapas samo rezerwuje wieczór na resztki.", "on": false }
+      {
+        "pair": "Stół → Rachunek",
+        "text": "Każdy zapisany przepis dostaje cenę z twoich prawdziwych paragonów.",
+        "on": true
+      },
+      {
+        "pair": "Droga → Stół",
+        "text": "Wolne miejsca na kolację w niedziele wypełniają się polubionymi przepisami.",
+        "on": true
+      },
+      {
+        "pair": "Rachunek → Droga",
+        "text": "Gdy budżet się kończy, plan na następny tydzień robi się tańszy.",
+        "on": true
+      },
+      {
+        "pair": "Stół → Droga",
+        "text": "Gotowanie na zapas samo rezerwuje wieczór na resztki.",
+        "on": false
+      }
     ],
     "householdTitle": "Domownicy",
     "invite": "Zaproś",
     "householdSeed": [
-      { "initials": "TY", "name": "Ty", "note": "Właściciel · planuje i robi zakupy" },
-      { "initials": "P", "name": "Partner", "note": "Gotuje we wtorki i czwartki" }
+      {
+        "initials": "TY",
+        "name": "Ty",
+        "note": "Właściciel · planuje i robi zakupy"
+      },
+      {
+        "initials": "P",
+        "name": "Partner",
+        "note": "Gotuje we wtorki i czwartki"
+      }
     ],
     "likedTitle": "Polubione przepisy",
     "likedEmptyTitle": "Nic jeszcze nie polubiono",

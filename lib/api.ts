@@ -231,6 +231,9 @@ export const recipesApi = {
   usedIngredients: () => apiFetch<{ id: number; name: string }[]>('/recipes/ingredients'),
   // lang: another language than the UI's, e.g. the original to show an untranslated recipe
   get: (id: number, lang?: Language) => apiFetch<Recipe>(`/recipes/${id}`, { query: { lang } }),
+  // random public recipes in full, skipping the ids already shown (the reels-style feed)
+  feed: (exclude: number[], limit = 5) =>
+    apiFetch<Recipe[]>('/recipes/feed', { query: { exclude: exclude.length ? exclude.join(',') : undefined, limit } }),
   create: (dto: CreateRecipeInput) => apiFetch<Recipe>('/recipes', { method: 'POST', body: dto }),
   liked: () => apiFetch<RecipeListItem[]>('/recipes/liked'),
   like: (id: number) => apiFetch<{ liked: boolean }>(`/recipes/${id}/like`, { method: 'POST' }),

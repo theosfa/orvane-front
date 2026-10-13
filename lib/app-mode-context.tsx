@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 export type AppId = 'food' | 'finance' | 'future';
 
 export const APP_HOME: Record<AppId, string> = {
-  food: '/recipes',
+  food: '/recipes/feed', // the food app opens on the reels-style feed
   finance: '/finance/spending',
   future: '/future/plan',
 };
