@@ -70,7 +70,8 @@ export default function Dock() {
     ],
     finance: [
       { href: '/finance/spending', label: t('nav.finance.spending'), glyph: '€' },
-      { href: '/finance/budgets', label: t('nav.finance.budgets'), glyph: '◑' },
+      { href: '/finance/wallets', label: t('nav.finance.wallets'), glyph: '◫' },
+      { href: '/finance/categories', label: t('nav.finance.categories'), glyph: '#' },
     ],
   };
 

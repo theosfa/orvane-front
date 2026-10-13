@@ -47,9 +47,10 @@
     },
     "finance": {
       "name": "Finances",
-      "tagline": "Dépenses et budgets",
-      "spending": "Dépenses",
-      "budgets": "Budgets"
+      "tagline": "Revenus, dépenses et portefeuilles",
+      "spending": "Entrées",
+      "wallets": "Portefeuilles",
+      "categories": "Catégories"
     },
     "future": {
       "name": "Projets",
@@ -333,84 +334,77 @@
     ]
   },
   "finance": {
-    "spendKicker": "Notez ce que vous avez dépensé",
+    "kicker": "Nouvelle entrée",
+    "typeLabel": "Type",
+    "expense": "Dépense",
+    "income": "Revenu",
+    "amount": "Montant",
     "amountPh": "0,00 €",
-    "wherePh": "Où ? Par ex. courses",
-    "logIt": "Enregistrer",
-    "spentMonth": "Dépensé ce mois-ci",
-    "stillYours": "Reste à dépenser",
-    "avgDay": "Moyenne par jour",
-    "biggest": "Plus gros poste",
-    "recent": "Récent",
-    "budgetsTitle": "Budgets",
-    "ofCap": "sur",
-    "nudge": "Une enveloppe est presque vide. Transférez un peu depuis une autre — personne n’en saura rien.",
-    "move": "Transférer",
-    "cats": [
-      "Courses",
-      "Restaurants",
-      "Maison",
-      "Café"
-    ],
-    "expensesSeed": [
-      {
-        "day": "19 sept.",
-        "who": "Supermarché",
-        "cat": "Courses",
-        "amt": 48.2,
-        "link": "Associé à 11 produits"
-      },
-      {
-        "day": "18 sept.",
-        "who": "Café du coin",
-        "cat": "Restaurants",
-        "amt": 9.4,
-        "link": ""
-      },
-      {
-        "day": "17 sept.",
-        "who": "Marché",
-        "cat": "Courses",
-        "amt": 23.1,
-        "link": "Courge, noix, citrons"
-      },
-      {
-        "day": "15 sept.",
-        "who": "Quincaillerie",
-        "cat": "Maison",
-        "amt": 16.75,
-        "link": ""
-      },
-      {
-        "day": "14 sept.",
-        "who": "Boulangerie",
-        "cat": "Courses",
-        "amt": 6.8,
-        "link": "Pain, deux fois par semaine"
-      }
-    ],
-    "budgetsSeed": [
-      {
-        "name": "Courses",
-        "spent": 312,
-        "cap": 450
-      },
-      {
-        "name": "Restaurants",
-        "spent": 78,
-        "cap": 90
-      },
-      {
-        "name": "Maison",
-        "spent": 41,
-        "cap": 80
-      },
-      {
-        "name": "Café",
-        "spent": 26,
-        "cap": 25
-      }
-    ]
+    "amountInvalid": "Saisissez un montant, ex. 12,50",
+    "note": "Note",
+    "notePh": "Note, ex. déjeuner avec Anna",
+    "date": "Date",
+    "wallet": "Portefeuille",
+    "category": "Catégorie",
+    "noCategory": "Sans catégorie",
+    "addExpense": "Ajouter la dépense",
+    "addIncome": "Ajouter le revenu",
+    "saving": "Enregistrement…",
+    "saveError": "Échec de l’enregistrement",
+    "loadError": "Impossible de charger vos finances",
+    "manageCategories": "Gérer les catégories →",
+    "noWallets": "Créez d’abord un portefeuille pour noter vos entrées et sorties.",
+    "filters": "Filtres",
+    "allTypes": "Revenus et dépenses",
+    "allCategories": "Toutes les catégories",
+    "allWallets": "Tous les portefeuilles",
+    "resetFilters": "Réinitialiser",
+    "from": "Du",
+    "to": "Au",
+    "incomeTotal": "Revenus",
+    "expenseTotal": "Dépensé",
+    "net": "Solde",
+    "byCategory": "Par catégorie",
+    "count": "{count, plural, one {# entrée} other {# entrées}}",
+    "operations": "Entrées",
+    "emptyTitle": "Rien pour l’instant",
+    "emptyBody": "Ajoutez une dépense ou un revenu ci-dessus.",
+    "noMatches": "Aucune entrée ne correspond à ces filtres.",
+    "confirmDeleteTx": "Supprimer cette entrée ?",
+    "topCategory": "Catégorie principale du mois",
+    "walletsTitle": "Portefeuilles",
+    "walletsSub": "Cartes, espèces, comptes — chacun avec son solde.",
+    "walletName": "Nom du portefeuille",
+    "walletNamePh": "ex. Carte",
+    "initialBalance": "Solde initial",
+    "initialBalancePh": "Solde initial, ex. 250",
+    "addWallet": "Ajouter un portefeuille",
+    "totalBalance": "Total",
+    "edit": "Modifier",
+    "walletInvalid": "Saisissez un nom et un montant valide",
+    "walletNotZero": "Seul un portefeuille au solde nul peut être supprimé",
+    "confirmDeleteWallet": "Supprimer le portefeuille « {name} » ?",
+    "deleteWalletHint": "Ses entrées seront aussi supprimées.",
+    "categoriesTitle": "Catégories",
+    "categoriesSub": "Renommez, supprimez ou ajoutez les vôtres — pour les dépenses et les revenus.",
+    "expenseCats": "Catégories de dépenses",
+    "incomeCats": "Catégories de revenus",
+    "newExpenseCat": "Nouvelle catégorie de dépenses",
+    "newIncomeCat": "Nouvelle catégorie de revenus",
+    "newCategoryPh": "Nouvelle catégorie…",
+    "addCategory": "Ajouter",
+    "rename": "Renommer",
+    "duplicateName": "Ce nom est déjà pris",
+    "noCategories": "Aucune catégorie",
+    "confirmDeleteCategory": "Supprimer la catégorie « {name} » ?",
+    "deleteCategoryHint": "Ses entrées restent, simplement sans catégorie.",
+    "period": {
+      "thisMonth": "Ce mois-ci",
+      "lastMonth": "Le mois dernier",
+      "thisYear": "Cette année",
+      "all": "Depuis le début",
+      "custom": "Personnalisé"
+    }
   },
   "profile": {
     "title": "Profil",

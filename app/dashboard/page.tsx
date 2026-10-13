@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { recipesApi, menuApi, RecipeListItem, WeekMenu } from '@/lib/api';
+import { recipesApi, menuApi, financeApi, RecipeListItem, WeekMenu, FinanceSummary } from '@/lib/api';
+import { monthRange, today } from '@/lib/dates';
 import RequireAuth from '@/components/RequireAuth';
 import { useT } from '@/lib/i18n/context';
 import { useFutureMock } from '@/lib/mock/future-context';
-import { useFinanceMock } from '@/lib/mock/finance-context';
 import { Card, Btn, Grid, EmptyState, StateMsg } from '@/components/ui';
 
 function DashboardPageContent() {
@@ -16,12 +16,13 @@ function DashboardPageContent() {
   const [recipes, setRecipes] = useState<RecipeListItem[] | null>(null);
   const [week, setWeek] = useState<WeekMenu | null>(null);
   const { tasks } = useFutureMock();
-  const { spentTotal, monthlyCap, budgets } = useFinanceMock();
+  const [month, setMonth] = useState<FinanceSummary | null>(null);
 
   // recipe names come back in the current language, so reload when it changes
   useEffect(() => {
     recipesApi.list().then(setRecipes).catch(() => setRecipes([]));
     menuApi.getWeek().then(setWeek).catch(() => setWeek(null));
+    financeApi.summary(monthRange(today())).then(setMonth).catch(() => setMonth(null));
   }, [lang]);
 
   if (!user) return null;
@@ -29,9 +30,11 @@ function DashboardPageContent() {
   const recent = recipes?.slice(0, 4) ?? [];
   const openTasks = tasks.filter((tk) => !tk.done).length;
   const plannedDays = week?.days.filter((d) => d.meals.length > 0).length ?? 0;
-  const spentPct = Math.min(100, Math.round((spentTotal / monthlyCap) * 100));
+  const spentTotal = month?.expense ?? 0;
+  // share of this month's income already spent
+  const spentPct = month?.income ? Math.min(100, Math.round((spentTotal / month.income) * 100)) : 0;
   const DAY_SHORT = weekdays('short');
-  const biggest = budgets.reduce((max, b) => (b.spent > max.spent ? b : max), budgets[0]);
+  const biggest = month?.byCategory.find((c) => c.type === 'expense');
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
@@ -81,11 +84,11 @@ function DashboardPageContent() {
         </Card>
 
         <Card style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('dashboard.shopCard')}</div>
-          <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.03em' }}>{biggest?.name ?? '—'}</div>
-          <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{money(biggest?.spent ?? 0, 0)} {t('finance.ofCap')} {money(biggest?.cap ?? 0, 0)}</div>
-          <Link href="/menu" style={{ marginTop: 'auto' }}>
-            <Btn variant="primary">{t('dashboard.openList')}</Btn>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('finance.topCategory')}</div>
+          <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.03em' }}>{biggest ? (biggest.name ?? t('finance.noCategory')) : '—'}</div>
+          <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{money(biggest?.total ?? 0, 0)}</div>
+          <Link href="/finance/spending" style={{ marginTop: 'auto' }}>
+            <Btn variant="primary">{t('nav.finance.spending')}</Btn>
           </Link>
         </Card>
       </Grid>

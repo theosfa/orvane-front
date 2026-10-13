@@ -47,9 +47,10 @@
     },
     "finance": {
       "name": "Finance",
-      "tagline": "Spending & budgets",
-      "spending": "Spending",
-      "budgets": "Budgets"
+      "tagline": "Income, spending & wallets",
+      "spending": "Entries",
+      "wallets": "Wallets",
+      "categories": "Categories"
     },
     "future": {
       "name": "Plans",
@@ -333,84 +334,77 @@
     ]
   },
   "finance": {
-    "spendKicker": "Write down what you spent",
+    "kicker": "New entry",
+    "typeLabel": "Type",
+    "expense": "Expense",
+    "income": "Income",
+    "amount": "Amount",
     "amountPh": "€ 0.00",
-    "wherePh": "Where? e.g. groceries",
-    "logIt": "Log it",
-    "spentMonth": "Spent this month",
-    "stillYours": "Still yours",
-    "avgDay": "Average per day",
-    "biggest": "Biggest slice",
-    "recent": "Recent",
-    "budgetsTitle": "Budgets",
-    "ofCap": "of",
-    "nudge": "One envelope is almost empty. Move a bit over from another — nobody has to know.",
-    "move": "Move",
-    "cats": [
-      "Groceries",
-      "Eating out",
-      "Household",
-      "Coffee"
-    ],
-    "expensesSeed": [
-      {
-        "day": "19 Sep",
-        "who": "Grocery store",
-        "cat": "Groceries",
-        "amt": 48.2,
-        "link": "Matched to 11 pantry items"
-      },
-      {
-        "day": "18 Sep",
-        "who": "Corner café",
-        "cat": "Eating out",
-        "amt": 9.4,
-        "link": ""
-      },
-      {
-        "day": "17 Sep",
-        "who": "Farmers market",
-        "cat": "Groceries",
-        "amt": 23.1,
-        "link": "Squash, walnuts, lemons"
-      },
-      {
-        "day": "15 Sep",
-        "who": "Household store",
-        "cat": "Household",
-        "amt": 16.75,
-        "link": ""
-      },
-      {
-        "day": "14 Sep",
-        "who": "Bakery",
-        "cat": "Groceries",
-        "amt": 6.8,
-        "link": "Bread, twice weekly"
-      }
-    ],
-    "budgetsSeed": [
-      {
-        "name": "Groceries",
-        "spent": 312,
-        "cap": 450
-      },
-      {
-        "name": "Eating out",
-        "spent": 78,
-        "cap": 90
-      },
-      {
-        "name": "Household",
-        "spent": 41,
-        "cap": 80
-      },
-      {
-        "name": "Coffee",
-        "spent": 26,
-        "cap": 25
-      }
-    ]
+    "amountInvalid": "Enter an amount, e.g. 12.50",
+    "note": "Note",
+    "notePh": "Note, e.g. lunch with Anna",
+    "date": "Date",
+    "wallet": "Wallet",
+    "category": "Category",
+    "noCategory": "No category",
+    "addExpense": "Add expense",
+    "addIncome": "Add income",
+    "saving": "Saving…",
+    "saveError": "Couldn’t save",
+    "loadError": "Couldn’t load your finances",
+    "manageCategories": "Manage categories →",
+    "noWallets": "Create a wallet first to log money in or out.",
+    "filters": "Filters",
+    "allTypes": "Income & expenses",
+    "allCategories": "All categories",
+    "allWallets": "All wallets",
+    "resetFilters": "Reset",
+    "from": "From",
+    "to": "To",
+    "incomeTotal": "Income",
+    "expenseTotal": "Spent",
+    "net": "Net",
+    "byCategory": "By category",
+    "count": "{count, plural, one {# entry} other {# entries}}",
+    "operations": "Entries",
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "Add an expense or an income above.",
+    "noMatches": "No entries match these filters.",
+    "confirmDeleteTx": "Delete this entry?",
+    "topCategory": "Top category this month",
+    "walletsTitle": "Wallets",
+    "walletsSub": "Cards, cash, accounts — each with its own balance.",
+    "walletName": "Wallet name",
+    "walletNamePh": "e.g. Card",
+    "initialBalance": "Starting balance",
+    "initialBalancePh": "Starting balance, e.g. 250",
+    "addWallet": "Add wallet",
+    "totalBalance": "Total",
+    "edit": "Edit",
+    "walletInvalid": "Enter a name and a valid amount",
+    "walletNotZero": "Only a wallet with a zero balance can be deleted",
+    "confirmDeleteWallet": "Delete wallet “{name}”?",
+    "deleteWalletHint": "Its entries will be deleted too.",
+    "categoriesTitle": "Categories",
+    "categoriesSub": "Rename, remove or add your own — for spending and for income.",
+    "expenseCats": "Expense categories",
+    "incomeCats": "Income categories",
+    "newExpenseCat": "New expense category",
+    "newIncomeCat": "New income category",
+    "newCategoryPh": "New category…",
+    "addCategory": "Add",
+    "rename": "Rename",
+    "duplicateName": "That name is already taken",
+    "noCategories": "No categories yet",
+    "confirmDeleteCategory": "Delete category “{name}”?",
+    "deleteCategoryHint": "Its entries stay, just without a category.",
+    "period": {
+      "thisMonth": "This month",
+      "lastMonth": "Last month",
+      "thisYear": "This year",
+      "all": "All time",
+      "custom": "Custom"
+    }
   },
   "profile": {
     "title": "Profile",

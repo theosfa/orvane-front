@@ -220,6 +220,50 @@ export type ShoppingListItem = {
   amount: number;
 };
 
+export type TransactionType = 'expense' | 'income';
+
+// balance = initialBalance + income − expenses; can be negative
+export type Wallet = { id: number; name: string; initialBalance: number; balance: number };
+
+export type FinanceCategory = { id: number; name: string; type: TransactionType };
+
+export type FinanceTransaction = {
+  id: number;
+  type: TransactionType;
+  amount: number;
+  note: string;
+  date: string; // YYYY-MM-DD
+  walletId: number;
+  walletName: string | null;
+  categoryId: number | null; // null: no category (or it was deleted)
+  categoryName: string | null;
+};
+
+export type TransactionInput = {
+  type: TransactionType;
+  walletId: number;
+  categoryId: number | null;
+  amount: number;
+  note?: string;
+  date: string;
+};
+
+// categoryId 'none': only operations without a category
+export type TransactionFilters = {
+  type?: TransactionType;
+  walletId?: number;
+  categoryId?: number | 'none';
+  from?: string;
+  to?: string;
+};
+
+export type FinanceSummary = {
+  income: number;
+  expense: number;
+  net: number;
+  byCategory: { type: TransactionType; categoryId: number | null; name: string | null; total: number; count: number }[];
+};
+
 // ---- Endpoint helpers ----
 
 // Endpoints below get ?lang=<UI language> automatically (see apiFetch).
@@ -268,4 +312,28 @@ export const menuApi = {
   addEntry: (dto: AddMenuEntryInput) => apiFetch<{ id: number }>('/menu', { method: 'POST', body: dto }),
   removeEntry: (entryId: number) => apiFetch<{ removed: boolean }>(`/menu/${entryId}`, { method: 'DELETE' }),
   shoppingList: () => apiFetch<ShoppingListItem[]>('/menu/shopping-list'),
+};
+
+// The first finance call creates the default categories and a wallet in the UI language.
+export const financeApi = {
+  wallets: () => apiFetch<Wallet[]>('/finance/wallets'),
+  createWallet: (dto: { name: string; initialBalance?: number }) => apiFetch<Wallet>('/finance/wallets', { method: 'POST', body: dto }),
+  updateWallet: (id: number, dto: { name?: string; initialBalance?: number }) =>
+    apiFetch<Wallet>(`/finance/wallets/${id}`, { method: 'PATCH', body: dto }),
+  // 409 unless the balance is exactly zero
+  deleteWallet: (id: number) => apiFetch<{ removed: boolean }>(`/finance/wallets/${id}`, { method: 'DELETE' }),
+
+  categories: (type?: TransactionType) => apiFetch<FinanceCategory[]>('/finance/categories', { query: { type } }),
+  createCategory: (dto: { name: string; type: TransactionType }) =>
+    apiFetch<FinanceCategory>('/finance/categories', { method: 'POST', body: dto }),
+  renameCategory: (id: number, name: string) =>
+    apiFetch<FinanceCategory>(`/finance/categories/${id}`, { method: 'PATCH', body: { name } }),
+  deleteCategory: (id: number) => apiFetch<{ removed: boolean }>(`/finance/categories/${id}`, { method: 'DELETE' }),
+
+  transactions: (filters: TransactionFilters = {}) => apiFetch<FinanceTransaction[]>('/finance/transactions', { query: filters }),
+  createTransaction: (dto: TransactionInput) => apiFetch<FinanceTransaction>('/finance/transactions', { method: 'POST', body: dto }),
+  updateTransaction: (id: number, dto: Partial<TransactionInput>) =>
+    apiFetch<FinanceTransaction>(`/finance/transactions/${id}`, { method: 'PATCH', body: dto }),
+  deleteTransaction: (id: number) => apiFetch<{ removed: boolean }>(`/finance/transactions/${id}`, { method: 'DELETE' }),
+  summary: (filters: TransactionFilters = {}) => apiFetch<FinanceSummary>('/finance/summary', { query: filters }),
 };

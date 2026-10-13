@@ -28,7 +28,8 @@ function usePageMeta() {
   if (pathname === '/future/plan') return { kicker: future, title: t('nav.future.plan') };
   if (pathname === '/future/goals') return { kicker: future, title: t('nav.future.goals') };
   if (pathname === '/finance/spending') return { kicker: finance, title: t('nav.finance.spending') };
-  if (pathname === '/finance/budgets') return { kicker: finance, title: t('nav.finance.budgets') };
+  if (pathname === '/finance/wallets') return { kicker: finance, title: t('nav.finance.wallets') };
+  if (pathname === '/finance/categories') return { kicker: finance, title: t('nav.finance.categories') };
   if (pathname === '/profile') return { kicker: t('brand.name'), title: t('nav.profile') };
   return { kicker: t('brand.name'), title: '' };
 }

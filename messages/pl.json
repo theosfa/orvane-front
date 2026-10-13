@@ -47,9 +47,10 @@
     },
     "finance": {
       "name": "Finanse",
-      "tagline": "Wydatki i budżety",
-      "spending": "Wydatki",
-      "budgets": "Budżety"
+      "tagline": "Przychody, wydatki i portfele",
+      "spending": "Wpisy",
+      "wallets": "Portfele",
+      "categories": "Kategorie"
     },
     "future": {
       "name": "Plany",
@@ -333,84 +334,77 @@
     ]
   },
   "finance": {
-    "spendKicker": "Zapisz, ile wydałeś",
+    "kicker": "Nowy wpis",
+    "typeLabel": "Typ",
+    "expense": "Wydatek",
+    "income": "Przychód",
+    "amount": "Kwota",
     "amountPh": "0,00 €",
-    "wherePh": "Na co? Np. jedzenie",
-    "logIt": "Zapisz",
-    "spentMonth": "Wydano w tym miesiącu",
-    "stillYours": "Zostało",
-    "avgDay": "Średnio dziennie",
-    "biggest": "Najwięcej",
-    "recent": "Ostatnie",
-    "budgetsTitle": "Budżety",
-    "ofCap": "z",
-    "nudge": "Jedna z kopert jest prawie pusta. Możesz przerzucić trochę z innej — nikt się nie dowie.",
-    "move": "Przerzuć",
-    "cats": [
-      "Jedzenie",
-      "Kawiarnie",
-      "Dom",
-      "Kawa"
-    ],
-    "expensesSeed": [
-      {
-        "day": "19 wrz",
-        "who": "Sklep spożywczy",
-        "cat": "Jedzenie",
-        "amt": 48.2,
-        "link": "Dopasowano do 11 produktów"
-      },
-      {
-        "day": "18 wrz",
-        "who": "Kawiarnia na rogu",
-        "cat": "Kawiarnie",
-        "amt": 9.4,
-        "link": ""
-      },
-      {
-        "day": "17 wrz",
-        "who": "Targ",
-        "cat": "Jedzenie",
-        "amt": 23.1,
-        "link": "Dynia, orzechy, cytryny"
-      },
-      {
-        "day": "15 wrz",
-        "who": "Sklep osiedlowy",
-        "cat": "Dom",
-        "amt": 16.75,
-        "link": ""
-      },
-      {
-        "day": "14 wrz",
-        "who": "Piekarnia",
-        "cat": "Jedzenie",
-        "amt": 6.8,
-        "link": "Chleb, dwa razy w tygodniu"
-      }
-    ],
-    "budgetsSeed": [
-      {
-        "name": "Jedzenie",
-        "spent": 312,
-        "cap": 450
-      },
-      {
-        "name": "Kawiarnie",
-        "spent": 78,
-        "cap": 90
-      },
-      {
-        "name": "Dom",
-        "spent": 41,
-        "cap": 80
-      },
-      {
-        "name": "Kawa",
-        "spent": 26,
-        "cap": 25
-      }
-    ]
+    "amountInvalid": "Podaj kwotę, np. 12,50",
+    "note": "Notatka",
+    "notePh": "Notatka, np. obiad z Anią",
+    "date": "Data",
+    "wallet": "Portfel",
+    "category": "Kategoria",
+    "noCategory": "Bez kategorii",
+    "addExpense": "Dodaj wydatek",
+    "addIncome": "Dodaj przychód",
+    "saving": "Zapisywanie…",
+    "saveError": "Nie udało się zapisać",
+    "loadError": "Nie udało się wczytać finansów",
+    "manageCategories": "Zarządzaj kategoriami →",
+    "noWallets": "Najpierw utwórz portfel, aby zapisywać wpływy i wydatki.",
+    "filters": "Filtry",
+    "allTypes": "Przychody i wydatki",
+    "allCategories": "Wszystkie kategorie",
+    "allWallets": "Wszystkie portfele",
+    "resetFilters": "Wyczyść",
+    "from": "Od",
+    "to": "Do",
+    "incomeTotal": "Przychody",
+    "expenseTotal": "Wydano",
+    "net": "Bilans",
+    "byCategory": "Według kategorii",
+    "count": "{count, plural, one {# wpis} few {# wpisy} many {# wpisów} other {# wpisu}}",
+    "operations": "Wpisy",
+    "emptyTitle": "Na razie pusto",
+    "emptyBody": "Dodaj wydatek lub przychód powyżej.",
+    "noMatches": "Żaden wpis nie pasuje do filtrów.",
+    "confirmDeleteTx": "Usunąć ten wpis?",
+    "topCategory": "Główna kategoria miesiąca",
+    "walletsTitle": "Portfele",
+    "walletsSub": "Karty, gotówka, konta — każde z własnym saldem.",
+    "walletName": "Nazwa portfela",
+    "walletNamePh": "np. Karta",
+    "initialBalance": "Saldo początkowe",
+    "initialBalancePh": "Saldo początkowe, np. 250",
+    "addWallet": "Dodaj portfel",
+    "totalBalance": "Razem",
+    "edit": "Edytuj",
+    "walletInvalid": "Podaj nazwę i poprawną kwotę",
+    "walletNotZero": "Usunąć można tylko portfel z zerowym saldem",
+    "confirmDeleteWallet": "Usunąć portfel „{name}”?",
+    "deleteWalletHint": "Jego wpisy również zostaną usunięte.",
+    "categoriesTitle": "Kategorie",
+    "categoriesSub": "Zmieniaj nazwy, usuwaj i dodawaj własne — dla wydatków i przychodów.",
+    "expenseCats": "Kategorie wydatków",
+    "incomeCats": "Kategorie przychodów",
+    "newExpenseCat": "Nowa kategoria wydatków",
+    "newIncomeCat": "Nowa kategoria przychodów",
+    "newCategoryPh": "Nowa kategoria…",
+    "addCategory": "Dodaj",
+    "rename": "Zmień nazwę",
+    "duplicateName": "Ta nazwa jest już zajęta",
+    "noCategories": "Brak kategorii",
+    "confirmDeleteCategory": "Usunąć kategorię „{name}”?",
+    "deleteCategoryHint": "Wpisy zostaną, tylko bez kategorii.",
+    "period": {
+      "thisMonth": "Ten miesiąc",
+      "lastMonth": "Poprzedni miesiąc",
+      "thisYear": "Ten rok",
+      "all": "Cały okres",
+      "custom": "Własny zakres"
+    }
   },
   "profile": {
     "title": "Profil",

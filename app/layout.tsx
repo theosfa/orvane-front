@@ -5,7 +5,6 @@ import { ThemeProvider } from '@/lib/theme-context';
 import { LanguageProvider } from '@/lib/i18n/context';
 import { AppModeProvider } from '@/lib/app-mode-context';
 import { FutureMockProvider } from '@/lib/mock/future-context';
-import { FinanceMockProvider } from '@/lib/mock/finance-context';
 import { Bloom } from '@/components/ui';
 import Header from '@/components/Header';
 import Dock from '@/components/Dock';
@@ -29,14 +28,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <AuthProvider>
                 <AppModeProvider>
                   <FutureMockProvider>
-                    <FinanceMockProvider>
                       <Bloom />
                       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 16px 180px', minHeight: '100vh' }}>
                         <Header />
                         <div style={{ width: '100%', maxWidth: 1180, marginTop: 18 }}>{children}</div>
                       </div>
                       <Dock />
-                    </FinanceMockProvider>
                   </FutureMockProvider>
                 </AppModeProvider>
               </AuthProvider>

@@ -1,6 +1,6 @@
 'use client';
 
-import { CSSProperties, ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import { CSSProperties, ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes } from 'react';
 
 // Shared visual primitives for the "glass" design system (bloom background,
 // frosted panels, pill controls) — ported from the FFF design mockup's
@@ -122,6 +122,27 @@ export function GlassInput({ style, ...rest }: { style?: CSSProperties } & Input
       }}
       {...rest}
     />
+  );
+}
+
+export function GlassSelect({ style, children, ...rest }: { style?: CSSProperties; children: ReactNode } & SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <select
+      style={{
+        fontFamily: 'inherit',
+        fontSize: 14,
+        padding: '12px 14px',
+        borderRadius: 14,
+        background: 'var(--glass-3)',
+        color: 'var(--ink)',
+        border: '1px solid var(--stroke-2)',
+        outline: 'none',
+        ...style,
+      }}
+      {...rest}
+    >
+      {children}
+    </select>
   );
 }
 
