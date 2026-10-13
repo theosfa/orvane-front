@@ -54,7 +54,9 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
 
       {recipe.ingredients.length > 0 && (
         <section style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.75 }}>{t('feed.ingredients')}</div>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.75 }}>
+            {t('feed.ingredients')} · {t('food.forPeople', { count: recipe.servings })}
+          </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {recipe.ingredients.slice(0, MAX_INGREDIENTS).map((ri) => (
               <span key={ri.ingredientId} style={{ ...glass, padding: '5px 10px', borderRadius: 999, fontSize: 12, fontWeight: 600, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

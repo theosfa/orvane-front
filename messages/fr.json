@@ -194,7 +194,7 @@
     "saveError": "Impossible d’enregistrer la recette",
     "detailBack": "← Toutes les recettes",
     "notFound": "Recette introuvable",
-    "calTitle": "Calories pour toute la recette",
+    "calTitle": "{count, plural, one {Calories pour # personne} other {Calories pour # personnes}}",
     "ingredientsTitle": "Ingrédients",
     "stepsTitle": "Étapes",
     "ingPageTitle": "Produits",
@@ -240,7 +240,16 @@
     "likedError": "Impossible de charger les recettes",
     "autoTranslated": "Traduit automatiquement",
     "showOriginal": "Voir l’original",
-    "showTranslation": "Voir la traduction"
+    "showTranslation": "Voir la traduction",
+    "servingsLabel": "Portions",
+    "servingsHint": "Pour combien de personnes sont les quantités ci-dessous",
+    "fewerServings": "Moins de personnes",
+    "moreServings": "Plus de personnes",
+    "cookFor": "On cuisine pour",
+    "originalServings": "{count, plural, one {La recette est prévue pour # personne} other {La recette est prévue pour # personnes}}",
+    "ingredientsFor": "{count, plural, one {Ingrédients pour # personne} other {Ingrédients pour # personnes}}",
+    "forPeople": "{count, plural, one {pour # personne} other {pour # personnes}}",
+    "perPerson": "{value, number} kcal par personne"
   },
   "feed": {
     "hint": "Faites défiler vers le bas pour la recette suivante",

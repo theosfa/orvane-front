@@ -194,7 +194,7 @@
     "saveError": "Nie udało się zapisać przepisu",
     "detailBack": "← Do wszystkich przepisów",
     "notFound": "Nie znaleziono przepisu",
-    "calTitle": "Kaloryczność całego przepisu",
+    "calTitle": "{count, plural, one {Kalorie dla # osoby} other {Kalorie dla # osób}}",
     "ingredientsTitle": "Składniki",
     "stepsTitle": "Kroki",
     "ingPageTitle": "Produkty",
@@ -240,7 +240,16 @@
     "likedError": "Nie udało się wczytać przepisów",
     "autoTranslated": "Przetłumaczono automatycznie",
     "showOriginal": "Pokaż oryginał",
-    "showTranslation": "Pokaż tłumaczenie"
+    "showTranslation": "Pokaż tłumaczenie",
+    "servingsLabel": "Porcje",
+    "servingsHint": "Dla ilu osób są podane ilości poniżej",
+    "fewerServings": "Mniej osób",
+    "moreServings": "Więcej osób",
+    "cookFor": "Gotujemy dla",
+    "originalServings": "{count, plural, one {Przepis jest dla # osoby} other {Przepis jest dla # osób}}",
+    "ingredientsFor": "{count, plural, one {Składniki dla # osoby} other {Składniki dla # osób}}",
+    "forPeople": "{count, plural, one {dla # osoby} other {dla # osób}}",
+    "perPerson": "{value, number} kcal na osobę"
   },
   "feed": {
     "hint": "Przewiń w dół, aby zobaczyć kolejny przepis",

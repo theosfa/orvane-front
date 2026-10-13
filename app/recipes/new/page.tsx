@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { recipesApi, aiApi, CreateRecipeInput, ApiError } from '@/lib/api';
 import RequireAuth from '@/components/RequireAuth';
 import IngredientPicker from '@/components/IngredientPicker';
+import ServingsStepper from '@/components/ServingsStepper';
 import { useT } from '@/lib/i18n/context';
 import { Card, Btn, Chip, GlassInput, GlassTextarea, Field, ErrorMsg, Kicker } from '@/components/ui';
 
@@ -17,6 +18,7 @@ function NewRecipePageContent() {
   const { t, lang } = useT();
   const [name, setName] = useState('');
   const [isPublic, setIsPublic] = useState(true);
+  const [servings, setServings] = useState(2);
   const [importUrl, setImportUrl] = useState('');
   const [ingredients, setIngredients] = useState<IngredientRow[]>([{ ingredientId: '', name: '', amount: '' }]);
   const [steps, setSteps] = useState<StepRow[]>([{ stepText: '' }]);
@@ -35,6 +37,7 @@ function NewRecipePageContent() {
     try {
       const suggestion = await aiApi.generateRecipe(aiPrompt, lang);
       setName(suggestion.name);
+      setServings(suggestion.servings);
       const rows = suggestion.ingredients.map((i) => ({
         ingredientId: i.ingredientId ? String(i.ingredientId) : '',
         name: i.name,
@@ -78,6 +81,7 @@ function NewRecipePageContent() {
       const dto: CreateRecipeInput = {
         name,
         isPublic,
+        servings,
         ingredients: ingredients
           .filter((r) => r.ingredientId && r.amount)
           .map((r) => ({
@@ -139,6 +143,12 @@ function NewRecipePageContent() {
         <Field label={t('food.nameLabel')}>
           <GlassInput placeholder={t('food.namePlaceholder')} value={name} onChange={(e) => setName(e.target.value)} required style={{ fontSize: 19, fontWeight: 800 }} />
         </Field>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('food.servingsLabel')}</span>
+          <ServingsStepper value={servings} onChange={setServings} />
+          <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>{t('food.servingsHint')}</span>
+        </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
           <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('food.visibilityLabel')}</span>

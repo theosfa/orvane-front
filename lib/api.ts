@@ -136,7 +136,8 @@ export type Totals = { calories: number; protein: number; fat: number; carbs: nu
 // GET /recipes and GET /recipes/liked: { id, name, liked } per item, no ingredients/steps
 // isPublic = false: private, only its author sees it; isMine: the current user wrote it
 // autoTranslated: the name was machine-translated from the author's language
-export type RecipeListItem = { id: number; name: string; autoTranslated: boolean; liked: boolean; isPublic: boolean; isMine: boolean; calories: number };
+// servings: how many people the ingredient amounts are for
+export type RecipeListItem = { id: number; name: string; autoTranslated: boolean; liked: boolean; isPublic: boolean; isMine: boolean; servings: number; calories: number };
 
 export type RecipeFilters = { q?: string; minCalories?: number; maxCalories?: number; ingredientIds?: number[] };
 
@@ -156,6 +157,7 @@ export type Recipe = {
   name: string;
   originalLanguage: Language; // the language the author wrote it in
   autoTranslated: boolean; // name or steps were machine-translated into the requested language
+  servings: number; // ingredient amounts and total are for this many people
   ingredients: RecipeIngredientDetail[];
   steps: RecipeStep[];
   liked: boolean;
@@ -169,6 +171,7 @@ export type RecipeIngredientInput = { ingredientId: number; amount: number };
 export type CreateRecipeInput = {
   name: string;
   isPublic: boolean;
+  servings: number;
   ingredients: RecipeIngredientInput[];
   steps: RecipeStep[];
 };
@@ -176,6 +179,7 @@ export type CreateRecipeInput = {
 // ingredientId = null: the AI suggested something that isn't in the DB yet
 export type GeneratedRecipe = {
   name: string;
+  servings: number;
   ingredients: { ingredientId: number | null; name: string; amount: number }[];
   steps: RecipeStep[];
 };

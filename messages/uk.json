@@ -194,7 +194,7 @@
     "saveError": "Не вдалося зберегти рецепт",
     "detailBack": "← До всіх рецептів",
     "notFound": "Рецепт не знайдено",
-    "calTitle": "Калорійність на весь рецепт",
+    "calTitle": "{count, plural, one {Калорії на # особу} few {Калорії на # особи} many {Калорії на # осіб} other {Калорії на # особи}}",
     "ingredientsTitle": "Інгредієнти",
     "stepsTitle": "Кроки",
     "ingPageTitle": "Продукти",
@@ -240,7 +240,16 @@
     "likedError": "Не вдалося завантажити рецепти",
     "autoTranslated": "Перекладено автоматично",
     "showOriginal": "Показати оригінал",
-    "showTranslation": "Показати переклад"
+    "showTranslation": "Показати переклад",
+    "servingsLabel": "Порції",
+    "servingsHint": "На скільки людей розраховано кількості нижче",
+    "fewerServings": "Менше людей",
+    "moreServings": "Більше людей",
+    "cookFor": "Готуємо на",
+    "originalServings": "{count, plural, one {Рецепт розраховано на # особу} few {Рецепт розраховано на # особи} many {Рецепт розраховано на # осіб} other {Рецепт розраховано на # особи}}",
+    "ingredientsFor": "{count, plural, one {Інгредієнти на # особу} few {Інгредієнти на # особи} many {Інгредієнти на # осіб} other {Інгредієнти на # особи}}",
+    "forPeople": "{count, plural, one {на # особу} few {на # особи} many {на # осіб} other {на # особи}}",
+    "perPerson": "{value, number} ккал на особу"
   },
   "feed": {
     "hint": "Гортайте вниз — наступний рецепт",

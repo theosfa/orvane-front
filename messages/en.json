@@ -194,7 +194,7 @@
     "saveError": "Couldn’t save the recipe",
     "detailBack": "← Back to recipes",
     "notFound": "Recipe not found",
-    "calTitle": "Calories for the whole recipe",
+    "calTitle": "{count, plural, one {Calories for # person} other {Calories for # people}}",
     "ingredientsTitle": "Ingredients",
     "stepsTitle": "Steps",
     "ingPageTitle": "Ingredients",
@@ -240,7 +240,16 @@
     "likedError": "Couldn’t load recipes",
     "autoTranslated": "Translated automatically",
     "showOriginal": "Show original",
-    "showTranslation": "Show translation"
+    "showTranslation": "Show translation",
+    "servingsLabel": "Servings",
+    "servingsHint": "How many people the amounts below are for",
+    "fewerServings": "Fewer people",
+    "moreServings": "More people",
+    "cookFor": "Cooking for",
+    "originalServings": "{count, plural, one {The recipe is written for # person} other {The recipe is written for # people}}",
+    "ingredientsFor": "{count, plural, one {Ingredients for # person} other {Ingredients for # people}}",
+    "forPeople": "{count, plural, one {for # person} other {for # people}}",
+    "perPerson": "{value, number} kcal per person"
   },
   "feed": {
     "hint": "Scroll down for the next recipe",

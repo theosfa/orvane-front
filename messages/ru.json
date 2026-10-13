@@ -194,7 +194,7 @@
     "saveError": "Не удалось сохранить рецепт",
     "detailBack": "← Ко всем рецептам",
     "notFound": "Рецепт не найден",
-    "calTitle": "Калорийность на весь рецепт",
+    "calTitle": "{count, plural, one {Калории на # человека} few {Калории на # человек} many {Калории на # человек} other {Калории на # человека}}",
     "ingredientsTitle": "Ингредиенты",
     "stepsTitle": "Шаги",
     "ingPageTitle": "Продукты",
@@ -240,7 +240,16 @@
     "likedError": "Не удалось загрузить рецепты",
     "autoTranslated": "Переведено автоматически",
     "showOriginal": "Показать оригинал",
-    "showTranslation": "Показать перевод"
+    "showTranslation": "Показать перевод",
+    "servingsLabel": "Порции",
+    "servingsHint": "На сколько человек рассчитаны количества ниже",
+    "fewerServings": "Меньше человек",
+    "moreServings": "Больше человек",
+    "cookFor": "Готовим на",
+    "originalServings": "{count, plural, one {Рецепт рассчитан на # человека} few {Рецепт рассчитан на # человек} many {Рецепт рассчитан на # человек} other {Рецепт рассчитан на # человека}}",
+    "ingredientsFor": "{count, plural, one {Ингредиенты на # человека} few {Ингредиенты на # человек} many {Ингредиенты на # человек} other {Ингредиенты на # человека}}",
+    "forPeople": "{count, plural, one {на # человека} few {на # человек} many {на # человек} other {на # человека}}",
+    "perPerson": "{value, number} ккал на человека"
   },
   "feed": {
     "hint": "Листайте вниз — следующий рецепт",

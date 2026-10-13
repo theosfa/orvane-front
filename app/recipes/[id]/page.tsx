@@ -7,6 +7,8 @@ import { recipesApi, Recipe, ApiError } from '@/lib/api';
 import type { Language } from '@/lib/i18n/languages';
 import RequireAuth from '@/components/RequireAuth';
 import LikeButton from '@/components/LikeButton';
+import ServingsStepper from '@/components/ServingsStepper';
+import { roundGrams, scaleAmount } from '@/lib/servings';
 import { useT } from '@/lib/i18n/context';
 import { Card, Btn, Pill, ErrorMsg, StateMsg } from '@/components/ui';
 
@@ -17,12 +19,17 @@ function RecipeDetailContent() {
   const [error, setError] = useState<string | null>(null);
   // set: show the recipe in the author's language instead of the auto-translation
   const [originalLang, setOriginalLang] = useState<Language | undefined>();
+  // how many people to cook for; null until the recipe loads (then the author's count)
+  const [servings, setServings] = useState<number | null>(null);
 
   // t changes with the language, so this also reloads the recipe in the new language
   useEffect(() => {
     recipesApi
       .get(Number(params.id), originalLang)
-      .then(setRecipe)
+      .then((r) => {
+        setRecipe(r);
+        setServings((prev) => prev ?? r.servings);
+      })
       .catch((err) => setError(err instanceof ApiError ? err.message : t('food.notFound')));
   }, [params.id, originalLang, t]);
 
@@ -38,6 +45,10 @@ function RecipeDetailContent() {
   }
 
   if (!recipe) return <StateMsg>{t('common.loading')}</StateMsg>;
+
+  const people = servings ?? recipe.servings;
+  const scale = (v: number | string) => scaleAmount(v, recipe.servings, people);
+  const round1 = (v: number) => Math.round(v * 10) / 10;
 
   return (
     <main style={{ maxWidth: 960, width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 32, paddingBottom: 40 }}>
@@ -66,24 +77,33 @@ function RecipeDetailContent() {
         </div>
       )}
 
+      <Card as="section" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <strong style={{ fontSize: 15 }}>{t('food.cookFor')}</strong>
+          <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>{t('food.originalServings', { count: recipe.servings })}</span>
+        </div>
+        <ServingsStepper value={people} onChange={setServings} />
+      </Card>
+
       <section>
-        <h2 style={{ fontSize: 15, fontWeight: 800, marginBottom: 12 }}>{t('food.calTitle')}</h2>
+        <h2 style={{ fontSize: 15, fontWeight: 800, marginBottom: 12 }}>{t('food.calTitle', { count: people })}</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          <Pill accent>{t('units.kcal', { value: recipe.total.calories })}</Pill>
-          <Pill>{t('units.protein', { value: recipe.total.protein })}</Pill>
-          <Pill>{t('units.fat', { value: recipe.total.fat })}</Pill>
-          <Pill>{t('units.carbs', { value: recipe.total.carbs })}</Pill>
+          <Pill accent>{t('units.kcal', { value: Math.round(scale(recipe.total.calories)) })}</Pill>
+          <Pill>{t('units.protein', { value: round1(scale(recipe.total.protein)) })}</Pill>
+          <Pill>{t('units.fat', { value: round1(scale(recipe.total.fat)) })}</Pill>
+          <Pill>{t('units.carbs', { value: round1(scale(recipe.total.carbs)) })}</Pill>
+          <Pill>{t('food.perPerson', { value: Math.round(recipe.total.calories / recipe.servings) })}</Pill>
         </div>
       </section>
 
       <section>
-        <h2 style={{ fontSize: 15, fontWeight: 800, marginBottom: 12 }}>{t('food.ingredientsTitle')}</h2>
+        <h2 style={{ fontSize: 15, fontWeight: 800, marginBottom: 12 }}>{t('food.ingredientsFor', { count: people })}</h2>
         <Card style={{ padding: '4px 20px' }}>
           {recipe.ingredients.map((ri) => (
-            <div key={ri.ingredientId} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '13px 0', borderBottom: '1px dashed var(--stroke-2)' }}>
+            <div key={ri.ingredientId} data-testid="ingredient-row" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '13px 0', borderBottom: '1px dashed var(--stroke-2)' }}>
               <span>{ri.name}</span>
               <span style={{ color: 'var(--ink-2)' }}>
-                {t('units.grams', { value: Number(ri.amount) })} · {t('units.kcal', { value: ri.calories })}
+                {t('units.grams', { value: roundGrams(scale(ri.amount)) })} · {t('units.kcal', { value: Math.round(scale(ri.calories)) })}
               </span>
             </div>
           ))}
