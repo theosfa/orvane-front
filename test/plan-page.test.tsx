@@ -129,14 +129,26 @@ describe('Plans week', () => {
 
     await user.click(thursday);
     const focus = screen.getByRole('dialog', { name: 'Thursday, October 15, 2026' });
-    // rendered at the top of the page, not inside the week
-    expect(focus.parentElement).toBe(document.body);
+    // a pop-up over the page (rendered at the top of the document), not a new page
+    expect(screen.getByTestId('day-focus-backdrop').parentElement).toBe(document.body);
     expect(within(focus).getByText('Pasta — 500 g')).toBeInTheDocument(); // details open
     expect(document.body.style.overflow).toBe('hidden');
 
     await user.keyboard('{Escape}');
     expect(screen.queryByTestId('day-focus')).not.toBeInTheDocument();
     expect(document.body.style.overflow).toBe('');
+  });
+
+  it('closes the pop-up with a click on the dark area, but not inside it', async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<PlanPage />);
+    await user.click(await screen.findByTestId('plan-day-2026-10-15'));
+
+    await user.click(within(screen.getByTestId('day-focus')).getByText('Pasta — 500 g'));
+    expect(screen.getByTestId('day-focus')).toBeInTheDocument();
+
+    await user.click(screen.getByTestId('day-focus-backdrop'));
+    expect(screen.queryByTestId('day-focus')).not.toBeInTheDocument();
   });
 
   it('steps through days in the opened view, into the next week', async () => {
