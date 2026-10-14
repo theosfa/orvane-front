@@ -18,8 +18,8 @@ function GoalsPageContent() {
               <span style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.035em' }}>{g.now}</span>
               <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink-2)' }}>{g.pct}%</span>
             </div>
-            <div style={{ height: 9, borderRadius: 999, background: 'var(--glass-2)', overflow: 'hidden' }}>
-              <div style={{ width: `${g.pct}%`, height: '100%', borderRadius: 999, background: 'var(--accent)' }} />
+            <div style={{ height: 9, borderRadius: 4, background: 'var(--glass-2)', overflow: 'hidden' }}>
+              <div style={{ width: `${g.pct}%`, height: '100%', borderRadius: 4, background: 'var(--accent)' }} />
             </div>
             <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{g.note}</div>
           </Card>

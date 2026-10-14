@@ -6,6 +6,7 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import { useT } from '@/lib/i18n/context';
 import { financeApi, ApiError, FinanceCategory, TransactionType, Scope } from '@/lib/api';
 import { useFamily } from '@/lib/family-context';
+import { useFamilyLive } from '@/lib/family-live';
 import ScopeSwitch from '@/components/ScopeSwitch';
 import { Card, Btn, GlassInput, Grid, ErrorMsg, StateMsg } from '@/components/ui';
 
@@ -133,6 +134,8 @@ function CategoriesPageContent() {
   }, [t, scope]);
 
   useEffect(load, [load, lang]);
+  // another family member changed the family's categories
+  useFamilyLive('finance', () => scope === 'family' && load());
 
   const confirmDelete = async () => {
     if (!toDelete) return;

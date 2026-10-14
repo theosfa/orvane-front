@@ -12,6 +12,7 @@ import { addDays, parseISODate, startOfWeek, today, weekDates } from '@/lib/date
 import { Card, Btn, ErrorMsg, StateMsg } from '@/components/ui';
 import { useSlideDirection } from '@/lib/use-slide-direction';
 import { useFamily } from '@/lib/family-context';
+import { useFamilyLive } from '@/lib/family-live';
 import ScopeSwitch from '@/components/ScopeSwitch';
 
 // clicks on the task controls inside a day shouldn't open the day
@@ -46,6 +47,8 @@ function PlanPageContent() {
   }, [weekStart, scope, t]);
 
   useEffect(load, [load]);
+  // another family member changed the shared plans
+  useFamilyLive('tasks', () => scope === 'family' && load());
 
   const add = async (date: string, title: string) => {
     try {
@@ -169,7 +172,7 @@ function PlanPageContent() {
                           aria-label={t('future.openDay', { day: longLabel })}
                           title={t('future.openDay', { day: longLabel })}
                           onClick={() => setFocusDate(date)}
-                          style={{ width: 26, height: 26, borderRadius: 8, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer', fontSize: 13 }}
+                          style={{ width: 26, height: 26, borderRadius: 4, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer', fontSize: 13 }}
                         >
                           ⤢
                         </button>

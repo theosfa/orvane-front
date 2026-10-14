@@ -45,7 +45,7 @@ export default function TaskRow({
             marginTop: 1,
             width: box,
             height: box,
-            borderRadius: 7,
+            borderRadius: 3,
             padding: 0,
             cursor: readOnly ? 'default' : 'pointer',
             fontSize: full ? 14 : 12,
@@ -85,7 +85,7 @@ export default function TaskRow({
               {full && !task.done && !readOnly && (
                 <Link
                   href={settleHref(task, scope)}
-                  style={{ fontSize: 12, fontWeight: 700, padding: '6px 12px', borderRadius: 999, background: 'var(--accent)', color: 'var(--accent-ink)' }}
+                  style={{ fontSize: 12, fontWeight: 700, padding: '6px 12px', borderRadius: 6, background: 'var(--accent)', color: 'var(--accent-ink)' }}
                 >
                   {t('future.settle')}
                 </Link>
@@ -98,7 +98,7 @@ export default function TaskRow({
             href={settleHref(task, scope)}
             aria-label={`${t('future.settle')}: ${task.title}`}
             title={t('future.settle')}
-            style={{ flex: 'none', width: 26, height: 26, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--accent-deep)' }}
+            style={{ flex: 'none', width: 26, height: 26, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--accent-deep)' }}
           >
             €
           </Link>
@@ -108,7 +108,7 @@ export default function TaskRow({
             type="button"
             aria-label={`${t('common.remove')} ${task.title}`}
             onClick={onRemove}
-            style={{ flex: 'none', width: full ? 32 : 26, height: full ? 32 : 26, borderRadius: 8, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
+            style={{ flex: 'none', width: full ? 32 : 26, height: full ? 32 : 26, borderRadius: 4, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
           >
             ×
           </button>

@@ -15,7 +15,7 @@ let user: { id: number } | null = { id: 1 };
 vi.mock('@/lib/auth-context', () => ({ useAuth: () => ({ user }) }));
 vi.mock('@/lib/api', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/api')>();
-  return { ...actual, familyApi: { overview: vi.fn() } };
+  return { ...actual, familyApi: { overview: vi.fn() }, subscribeFamilyEvents: vi.fn() };
 });
 const overview = vi.mocked(familyApi.overview);
 

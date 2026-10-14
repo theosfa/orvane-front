@@ -16,7 +16,7 @@ function Tile({ active, glyph, tip, href, onClick, big }: { active: boolean; gly
         data-tip
         style={{
           position: 'absolute', bottom: 'calc(100% + 12px)', left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap',
-          fontSize: 11, fontWeight: 700, padding: '6px 11px', borderRadius: 999, background: 'var(--glass-3)',
+          fontSize: 11, fontWeight: 700, padding: '6px 11px', borderRadius: 4, background: 'var(--glass-3)',
           WebkitBackdropFilter: 'blur(20px)', backdropFilter: 'blur(20px)', border: '1px solid var(--stroke-2)', boxShadow: 'var(--shadow)',
         }}
       >
@@ -24,7 +24,7 @@ function Tile({ active, glyph, tip, href, onClick, big }: { active: boolean; gly
       </div>
       <div
         style={{
-          width: 50, height: 50, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 50, height: 50, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: big ? 17 : 19, fontWeight: 800,
           background: active ? 'var(--accent)' : 'var(--glass-3)',
           color: active ? 'var(--accent-ink)' : 'var(--ink)',
@@ -93,7 +93,7 @@ export default function Dock() {
     <nav
       style={{
         position: 'fixed', left: '50%', bottom: 22, transform: 'translateX(-50%)', zIndex: 40,
-        display: 'flex', flexDirection: 'column', padding: '10px 12px', borderRadius: 28,
+        display: 'flex', flexDirection: 'column', padding: '10px 12px', borderRadius: 10,
         background: 'var(--glass)', WebkitBackdropFilter: 'blur(30px) saturate(190%)', backdropFilter: 'blur(30px) saturate(190%)',
         border: '1px solid var(--stroke)', boxShadow: 'var(--shadow-lg)', maxWidth: 'calc(100vw - 24px)',
       }}
@@ -112,13 +112,13 @@ export default function Dock() {
                 }}
                 style={{
                   width: '100%', fontFamily: 'inherit', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 11,
-                  padding: '11px 14px', borderRadius: 18, cursor: 'pointer',
+                  padding: '11px 14px', borderRadius: 6, cursor: 'pointer',
                   background: app === a.id ? 'var(--accent-tint)' : 'var(--glass-2)',
                   border: `1px solid ${app === a.id ? 'var(--accent)' : 'var(--stroke-2)'}`,
                   color: 'var(--ink)',
                 }}
               >
-                <span style={{ flex: '0 0 34px', width: 34, height: 34, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800, background: 'var(--accent)', color: 'var(--accent-ink)' }}>
+                <span style={{ flex: '0 0 34px', width: 34, height: 34, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800, background: 'var(--accent)', color: 'var(--accent-ink)' }}>
                   {a.mark}
                 </span>
                 <span style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>

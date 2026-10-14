@@ -264,3 +264,25 @@ describe('shopping list', () => {
     expect(within(dialog).getByRole('status')).toHaveTextContent('Added to Plans for Fri, Oct 16.');
   });
 });
+
+describe('menu live updates', () => {
+  it('reloads the family menu when another member changes it, but not the personal one', async () => {
+    const { familyMock, familyOf } = await import('./family-mock');
+    const { announceFamilyChange } = await import('@/lib/family-live');
+    renderWithIntl(<MenuPage />);
+    await screen.findByTestId('week-range');
+    menu.getWeek.mockClear();
+
+    act(() => announceFamilyChange('menu'));
+    expect(menu.getWeek).not.toHaveBeenCalled();
+
+    act(() => familyMock.set({ overview: familyOf('member'), chosen: 'family' }));
+    await waitFor(() => expect(menu.getWeek).toHaveBeenCalledWith('2026-10-12', 'family'));
+    menu.getWeek.mockClear();
+
+    act(() => announceFamilyChange('menu'));
+    expect(menu.getWeek).toHaveBeenCalledWith('2026-10-12', 'family');
+    act(() => announceFamilyChange('finance'));
+    expect(menu.getWeek).toHaveBeenCalledTimes(1);
+  });
+});

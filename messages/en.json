@@ -427,45 +427,36 @@
   },
   "profile": {
     "title": "Profile",
-    "edit": "Edit profile",
     "joined": "On Nest & Nibble since",
+    "familyLine": "Family “{name}” · {role}",
     "settingsTitle": "Settings",
     "languageLabel": "App language",
     "languageHint": "Interface, ingredient and recipe names, AI recipes",
     "languageSaveError": "Couldn’t save the language",
-    "statsRecipes": "Recipes cooked",
-    "statsSaved": "Saved vs. last year",
+    "statsRecipes": "Recipes written",
+    "statsLiked": "Liked recipes",
     "statsWeeks": "Weeks planned",
-    "statsWaste": "Waste avoided",
-    "statsSeed": [
-      "186",
-      "€1,240",
-      "31",
-      "12 kg"
-    ],
+    "statsTasks": "Tasks done",
+    "statsError": "Couldn’t load your numbers",
     "connectionsTitle": "How the three apps talk to each other",
-    "connectionsSeed": [
-      {
-        "pair": "Food → Finance",
-        "text": "Every recipe you save prices itself from your real receipts.",
-        "on": true
-      },
-      {
-        "pair": "Plans → Food",
-        "text": "Empty dinner slots get filled from your liked recipes on Sundays.",
-        "on": true
-      },
-      {
-        "pair": "Finance → Plans",
-        "text": "When the budget runs thin, next week leans cheaper.",
-        "on": true
-      },
-      {
+    "connections": {
+      "menuPlans": {
         "pair": "Food → Plans",
-        "text": "Batch meals book their own leftover night.",
-        "on": false
+        "text": "Turn the planned days of the menu into a shopping list and add it to Plans as a task."
+      },
+      "plansFinance": {
+        "pair": "Plans → Finance",
+        "text": "Settle a shopping task in Finance: the spending is logged and the task is marked done."
+      },
+      "financeFamily": {
+        "pair": "Finance ↔ Family",
+        "text": "Move money between your wallet and the family budget; transfers don’t count as spending."
+      },
+      "family": {
+        "pair": "Family",
+        "text": "Share the menu, plans and budget with up to 5 people. Changes show up for everyone right away."
       }
-    ],
+    },
     "likedTitle": "Liked recipes",
     "likedEmptyTitle": "Nothing liked yet",
     "likedEmptyBody": "Heart a recipe and it’ll show up here.",
@@ -496,6 +487,8 @@
     "create": "Create a family",
     "invitationsTitle": "Invitations for you",
     "invitationText": "“{family}” — invited by {by}",
+    "inviteToastTitle": "You’re invited to a family",
+    "inviteToastOpen": "Open invitation",
     "accept": "Join",
     "decline": "Decline",
     "role": {

@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import { recipesApi, RecipeListItem, ApiError } from '@/lib/api';
+import { recipesApi, statsApi, RecipeListItem, UserStats, ApiError } from '@/lib/api';
 import RequireAuth from '@/components/RequireAuth';
 import FamilySection from '@/components/FamilySection';
+import { useFamily } from '@/lib/family-context';
+import { useFamilyLive } from '@/lib/family-live';
 import { useT } from '@/lib/i18n/context';
 import { Card, Btn, Chip, Grid, ErrorMsg, StateMsg, EmptyState } from '@/components/ui';
 import { LANGUAGES, LANGUAGE_NAMES, Language } from '@/lib/i18n/languages';
@@ -14,9 +16,12 @@ import { LANGUAGES, LANGUAGE_NAMES, Language } from '@/lib/i18n/languages';
 function ProfilePageContent() {
   const { user, logout, updateLanguage } = useAuth();
   const router = useRouter();
-  const { t, lang, list, format } = useT();
+  const { t, lang, format } = useT();
+  const { overview } = useFamily();
   const [liked, setLiked] = useState<RecipeListItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState<UserStats | null>(null);
+  const [statsError, setStatsError] = useState(false);
   const [langError, setLangError] = useState<string | null>(null);
 
   const changeLanguage = (next: Language) => {
@@ -29,26 +34,52 @@ function ProfilePageContent() {
     recipesApi.liked().then(setLiked).catch((err) => setError(err instanceof ApiError ? err.message : t('profile.likedError')));
   }, [t]);
 
+  const loadStats = useCallback(() => {
+    statsApi
+      .mine()
+      .then((s) => {
+        setStats(s);
+        setStatsError(false);
+      })
+      .catch(() => setStatsError(true));
+  }, []);
+  useEffect(loadStats, [loadStats]);
+  // family menu or plans changed — the user may have been the one who planned or finished something
+  useFamilyLive('menu', loadStats);
+  useFamilyLive('tasks', loadStats);
+
   if (!user) return null;
 
   const initial = user.email[0]?.toUpperCase() ?? '?';
   const joined = format.dateTime(new Date(user.createdAt), { year: 'numeric', month: 'long', day: 'numeric' });
 
-  const statLabels = [t('profile.statsRecipes'), t('profile.statsSaved'), t('profile.statsWeeks'), t('profile.statsWaste')];
-  const statValues = list<string>('profile.statsSeed');
-  const connections = list<{ pair: string; text: string; on: boolean }>('profile.connectionsSeed');
+  const family = overview?.family ?? null;
+
+  const statCards: { label: string; value: number | undefined; href: string }[] = [
+    { label: t('profile.statsRecipes'), value: stats?.recipesWritten, href: '/recipes' },
+    { label: t('profile.statsLiked'), value: stats?.recipesLiked, href: '/recipes/liked' },
+    { label: t('profile.statsWeeks'), value: stats?.weeksPlanned, href: '/menu' },
+    { label: t('profile.statsTasks'), value: stats?.tasksDone, href: '/future/plan' },
+  ];
+
+  // features that really link the apps
+  const connections = ['menuPlans', 'plansFinance', 'financeFamily', 'family'] as const;
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40, width: '100%' }}>
       <Card style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 22, padding: 28 }}>
-        <div style={{ width: 76, height: 76, flex: '0 0 76px', borderRadius: 24, background: 'linear-gradient(135deg, var(--accent), var(--accent-deep))', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, fontWeight: 800 }}>
+        <div style={{ width: 76, height: 76, flex: '0 0 76px', borderRadius: 8, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, fontWeight: 800 }}>
           {initial}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 0 }}>
           <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.03em', wordBreak: 'break-all' }}>{user.email}</div>
           <div style={{ fontSize: 13, color: 'var(--ink-2)' }}>{t('profile.joined')} {joined}</div>
+          {family && (
+            <a href="#family" data-testid="profile-family" style={{ fontSize: 13, fontWeight: 700 }}>
+              {t('profile.familyLine', { name: family.name, role: t(`family.role.${family.myRole}`) })}
+            </a>
+          )}
         </div>
-        <Btn style={{ marginLeft: 'auto' }}>{t('profile.edit')}</Btn>
       </Card>
 
       <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -69,12 +100,17 @@ function ProfilePageContent() {
         {langError && <ErrorMsg>{langError}</ErrorMsg>}
       </Card>
 
+      {statsError && <ErrorMsg>{t('profile.statsError')}</ErrorMsg>}
       <Grid min={160}>
-        {statLabels.map((label, i) => (
-          <Card key={label}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{label}</div>
-            <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.04em' }}>{statValues[i] ?? '—'}</div>
-          </Card>
+        {statCards.map((c) => (
+          <Link key={c.href} href={c.href} style={{ color: 'inherit' }}>
+            <Card style={{ height: '100%' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{c.label}</div>
+              <div data-testid="profile-stat" style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.04em' }}>
+                {c.value === undefined ? '—' : format.number(c.value)}
+              </div>
+            </Card>
+          </Link>
         ))}
       </Grid>
 
@@ -82,12 +118,11 @@ function ProfilePageContent() {
         <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <h2 style={{ fontSize: 17, fontWeight: 800, marginBottom: 10 }}>{t('profile.connectionsTitle')}</h2>
           {connections.map((c) => (
-            <div key={c.pair} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '12px 10px' }}>
-              <div style={{ flex: '0 0 auto', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '5px 10px', borderRadius: 999, background: 'var(--glass-2)', border: '1px solid var(--stroke-2)' }}>{c.pair}</div>
-              <div style={{ flex: 1, minWidth: 0, fontSize: 13 }}>{c.text}</div>
-              <div style={{ flex: '0 0 auto', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: c.on ? 'var(--accent)' : 'var(--ink-2)' }}>
-                {c.on ? t('common.on') : t('common.off')}
+            <div key={c} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '12px 10px' }}>
+              <div style={{ flex: '0 0 auto', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '5px 10px', borderRadius: 4, background: 'var(--glass-2)', border: '1px solid var(--stroke-2)' }}>
+                {t(`profile.connections.${c}.pair`)}
               </div>
+              <div style={{ flex: 1, minWidth: 0, fontSize: 13 }}>{t(`profile.connections.${c}.text`)}</div>
             </div>
           ))}
         </Card>

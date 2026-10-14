@@ -6,6 +6,7 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import { useT } from '@/lib/i18n/context';
 import { financeApi, ApiError, Wallet, Scope } from '@/lib/api';
 import { useFamily } from '@/lib/family-context';
+import { useFamilyLive } from '@/lib/family-live';
 import ScopeSwitch from '@/components/ScopeSwitch';
 import TransferCard from '@/components/TransferCard';
 import { parseAmount } from '@/lib/finance';
@@ -102,6 +103,9 @@ function WalletsPageContent() {
   useEffect(() => {
     load().catch(() => setError(t('finance.loadError')));
   }, [load, lang, t]);
+
+  // another family member changed the family budget
+  useFamilyLive('finance', () => scope === 'family' && load().catch(() => setError(t('finance.loadError'))));
 
   const create = async (e: FormEvent) => {
     e.preventDefault();

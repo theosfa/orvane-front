@@ -60,6 +60,10 @@ export function refreshAccessToken(): Promise<boolean> {
   return refreshing;
 }
 
+// This tab's id, sent with every request: live family updates that this tab caused itself
+// come back with it as origin and are skipped (the tab already has the change).
+export const CLIENT_ID = Math.random().toString(36).slice(2) + Date.now().toString(36);
+
 type RequestOptions = {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: unknown;
@@ -82,6 +86,7 @@ export async function apiFetch<T>(path: string, opts: RequestOptions = {}, retri
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    'X-Client-Id': CLIENT_ID,
   };
 
   if (auth && accessToken) headers.Authorization = `Bearer ${accessToken}`;
@@ -379,6 +384,13 @@ export const tasksApi = {
 };
 
 // every call answers with the current state, like overview()
+// GET /stats: what the user has done in the app, for the profile
+export type UserStats = { recipesWritten: number; recipesLiked: number; weeksPlanned: number; tasksDone: number };
+
+export const statsApi = {
+  mine: () => apiFetch<UserStats>('/stats'),
+};
+
 export const familyApi = {
   overview: () => apiFetch<FamilyOverview>('/family'),
   create: (name: string) => apiFetch<FamilyOverview>('/family', { method: 'POST', body: { name } }),
@@ -426,3 +438,69 @@ export const financeApi = {
   summary: (filters: TransactionFilters = {}, scope?: Scope) =>
     apiFetch<FinanceSummary>('/finance/summary', { query: { ...filters, ...scopeQuery(scope) } }),
 };
+
+// ---- Live family updates: GET /family/events (server-sent events) ----
+
+export type FamilyTopic = 'menu' | 'tasks' | 'finance' | 'family';
+type LiveEvent = { topic: FamilyTopic | 'ping'; origin?: string | null };
+
+const RETRY_MS = [1_000, 3_000, 10_000, 30_000];
+
+// Keeps a stream of "this changed in your family" events open until the signal aborts,
+// reconnecting after drops. Read with fetch rather than EventSource, which can't send the
+// Authorization header. onReconnect: events may have been missed while it was down.
+export function subscribeFamilyEvents(
+  onEvent: (topic: FamilyTopic) => void,
+  { signal, onReconnect }: { signal: AbortSignal; onReconnect?: () => void },
+) {
+  let attempt = 0;
+
+  const connect = async (): Promise<void> => {
+    const headers: Record<string, string> = { Accept: 'text/event-stream' };
+    if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+    const res = await fetch(apiUrl('/family/events').toString(), { headers, cache: 'no-store', credentials: 'include', signal });
+    if (res.status === 401 && (await refreshAccessToken())) return connect();
+    if (!res.ok || !res.body) throw new Error(`events: ${res.status}`);
+
+    if (attempt > 0) onReconnect?.();
+    attempt = 0;
+
+    const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+    let buffer = '';
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) return;
+      buffer += value;
+      // events are separated by a blank line; each has "data: {json}" lines
+      const parts = buffer.split(/\r?\n\r?\n/);
+      buffer = parts.pop() ?? '';
+      for (const part of parts) {
+        const data = part
+          .split(/\r?\n/)
+          .filter((line) => line.startsWith('data:'))
+          .map((line) => line.slice(5).trim())
+          .join('\n');
+        if (!data) continue;
+        try {
+          const event = JSON.parse(data) as LiveEvent;
+          if (event.topic !== 'ping' && event.origin !== CLIENT_ID) onEvent(event.topic);
+        } catch {
+          // not ours — ignore
+        }
+      }
+    }
+  };
+
+  (async () => {
+    while (!signal.aborted) {
+      try {
+        await connect();
+      } catch {
+        // dropped or refused — wait and try again
+      }
+      if (signal.aborted) return;
+      const delay = RETRY_MS[Math.min(attempt++, RETRY_MS.length - 1)];
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  })();
+}

@@ -55,7 +55,7 @@ export default function DayFocus({ date, scope, readOnly, tasks, onClose, onPrev
   const navBtn = {
     width: 42,
     height: 42,
-    borderRadius: 14,
+    borderRadius: 6,
     border: '1px solid var(--stroke-2)',
     background: 'var(--glass-2)',
     color: 'var(--ink)',

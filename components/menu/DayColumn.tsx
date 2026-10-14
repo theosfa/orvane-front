@@ -42,7 +42,7 @@ function EditForm({ edit }: { edit: EditProps }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       {draft.map((m) => (
-        <div key={m.key} data-testid="draft-meal" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: '8px 10px', borderRadius: 12, background: 'var(--glass-2)' }}>
+        <div key={m.key} data-testid="draft-meal" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: '8px 10px', borderRadius: 6, background: 'var(--glass-2)' }}>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontSize: 11, color: 'var(--ink-2)' }}>
               {t(`meals.${m.mealType}`)} · {t('food.forPeople', { count: m.servings })}
@@ -53,7 +53,7 @@ function EditForm({ edit }: { edit: EditProps }) {
             type="button"
             aria-label={`${t('common.remove')} ${m.recipeName}`}
             onClick={() => edit.onRemoveFromDraft(m.key)}
-            style={{ flex: 'none', width: 28, height: 28, borderRadius: 9, border: '1px solid var(--stroke-2)', background: 'var(--glass-3)', color: 'var(--ink-2)', cursor: 'pointer' }}
+            style={{ flex: 'none', width: 28, height: 28, borderRadius: 4, border: '1px solid var(--stroke-2)', background: 'var(--glass-3)', color: 'var(--ink-2)', cursor: 'pointer' }}
           >
             ×
           </button>

@@ -427,45 +427,36 @@
   },
   "profile": {
     "title": "Profil",
-    "edit": "Edytuj profil",
     "joined": "W Nest & Nibble od",
+    "familyLine": "Rodzina „{name}” · {role}",
     "settingsTitle": "Ustawienia",
     "languageLabel": "Język aplikacji",
     "languageHint": "Interfejs, nazwy produktów i przepisów, przepisy od AI",
     "languageSaveError": "Nie udało się zapisać języka",
-    "statsRecipes": "Ugotowane przepisy",
-    "statsSaved": "Zaoszczędzone w tym roku",
+    "statsRecipes": "Napisane przepisy",
+    "statsLiked": "Polubione przepisy",
     "statsWeeks": "Zaplanowane tygodnie",
-    "statsWaste": "Uniknięte odpady",
-    "statsSeed": [
-      "186",
-      "1240 €",
-      "31",
-      "12 kg"
-    ],
-    "connectionsTitle": "Jak trzy aplikacje rozmawiają ze sobą",
-    "connectionsSeed": [
-      {
-        "pair": "Żywienie → Finanse",
-        "text": "Każdy zapisany przepis dostaje cenę z twoich prawdziwych paragonów.",
-        "on": true
+    "statsTasks": "Zrobione zadania",
+    "statsError": "Nie udało się wczytać statystyk",
+    "connectionsTitle": "Jak trzy aplikacje ze sobą współpracują",
+    "connections": {
+      "menuPlans": {
+        "pair": "Jedzenie → Plany",
+        "text": "Zrób z zaplanowanych dni menu listę zakupów i dodaj ją do Planów jako zadanie."
       },
-      {
-        "pair": "Plany → Żywienie",
-        "text": "Wolne miejsca na kolację w niedziele wypełniają się polubionymi przepisami.",
-        "on": true
+      "plansFinance": {
+        "pair": "Plany → Finanse",
+        "text": "Rozlicz zadanie zakupowe w Finansach: wydatek się zapisze, a zadanie oznaczy jako zrobione."
       },
-      {
-        "pair": "Finanse → Plany",
-        "text": "Gdy budżet się kończy, plan na następny tydzień robi się tańszy.",
-        "on": true
+      "financeFamily": {
+        "pair": "Finanse ↔ Rodzina",
+        "text": "Przesuwaj pieniądze między swoim portfelem a budżetem rodzinnym; przelewy nie liczą się jako wydatki."
       },
-      {
-        "pair": "Żywienie → Plany",
-        "text": "Gotowanie na zapas samo rezerwuje wieczór na resztki.",
-        "on": false
+      "family": {
+        "pair": "Rodzina",
+        "text": "Wspólne menu, plany i budżet dla maks. 5 osób. Zmiany od razu widzą wszyscy."
       }
-    ],
+    },
     "likedTitle": "Polubione przepisy",
     "likedEmptyTitle": "Nic jeszcze nie polubiono",
     "likedEmptyBody": "Oznaczaj przepisy serduszkiem — pojawią się tutaj.",
@@ -496,6 +487,8 @@
     "create": "Utwórz rodzinę",
     "invitationsTitle": "Zaproszenia dla ciebie",
     "invitationText": "„{family}” — zaprasza {by}",
+    "inviteToastTitle": "Masz zaproszenie do rodziny",
+    "inviteToastOpen": "Otwórz zaproszenie",
     "accept": "Dołącz",
     "decline": "Odrzuć",
     "role": {

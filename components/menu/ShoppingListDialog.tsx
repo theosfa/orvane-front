@@ -128,7 +128,7 @@ export default function ShoppingListDialog({
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
           <strong style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.02em' }}>{items ? title : t('food.pickDays')}</strong>
-          <button type="button" aria-label={t('common.close')} onClick={onClose} style={{ width: 32, height: 32, borderRadius: 10, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}>
+          <button type="button" aria-label={t('common.close')} onClick={onClose} style={{ width: 32, height: 32, borderRadius: 6, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}>
             ×
           </button>
         </div>
@@ -153,7 +153,7 @@ export default function ShoppingListDialog({
                 {week.days.map((d) => (
                   <label
                     key={d.date}
-                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 12, background: selected.has(d.date) ? 'var(--accent-tint)' : 'var(--glass-2)', cursor: 'pointer', fontSize: 14 }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 6, background: selected.has(d.date) ? 'var(--accent-tint)' : 'var(--glass-2)', cursor: 'pointer', fontSize: 14 }}
                   >
                     <input type="checkbox" checked={selected.has(d.date)} onChange={() => toggle(d.date)} aria-label={short(d.date)} />
                     <span style={{ flex: 1, fontWeight: 700 }}>{short(d.date)}</span>

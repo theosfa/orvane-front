@@ -20,6 +20,7 @@ import { today, parseISODate } from '@/lib/dates';
 import { PERIOD_PRESETS, PeriodPreset, parseAmount, periodRange } from '@/lib/finance';
 import { SettlePreset, parseSettle, settleCategory } from '@/lib/settle';
 import { useFamily } from '@/lib/family-context';
+import { useFamilyLive } from '@/lib/family-live';
 import ScopeSwitch from '@/components/ScopeSwitch';
 import type { Scope } from '@/lib/api';
 import { Card, Btn, Chip, GlassInput, GlassSelect, Grid, Pill, Kicker, ErrorMsg, StateMsg, EmptyState } from '@/components/ui';
@@ -96,7 +97,7 @@ function EntryForm({
   return (
     <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 14, ...(settle && { border: '1.5px solid var(--accent)' }) }}>
       {settle && (
-        <div data-testid="settle-banner" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 14px', borderRadius: 14, background: 'var(--accent-tint)' }}>
+        <div data-testid="settle-banner" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 14px', borderRadius: 6, background: 'var(--accent-tint)' }}>
           <span style={{ fontSize: 13, fontWeight: 600 }}>{t('finance.settleBanner', { title: settle.title })}</span>
           <Btn onClick={onCancelSettle} style={{ padding: '7px 12px' }}>
             {t('finance.settleCancel')}
@@ -224,6 +225,9 @@ function SpendingPageContent() {
   const refreshAll = () => {
     loadRefs().catch(() => setError(t('finance.loadError')));
   };
+
+  // another family member changed the family budget (balances, categories, operations)
+  useFamilyLive('finance', () => scope === 'family' && refreshAll());
 
   const confirmDelete = async () => {
     if (!toDelete) return;
@@ -374,8 +378,8 @@ function SpendingPageContent() {
                   </span>
                   <strong>{money(c.total)}</strong>
                 </div>
-                <div style={{ height: 7, borderRadius: 999, background: 'var(--glass-2)', overflow: 'hidden' }}>
-                  <div style={{ width: `${pct}%`, height: '100%', borderRadius: 999, background: c.type === 'income' ? 'var(--accent)' : 'var(--ink-2)' }} />
+                <div style={{ height: 7, borderRadius: 4, background: 'var(--glass-2)', overflow: 'hidden' }}>
+                  <div style={{ width: `${pct}%`, height: '100%', borderRadius: 4, background: c.type === 'income' ? 'var(--accent)' : 'var(--ink-2)' }} />
                 </div>
               </div>
             );
@@ -413,7 +417,7 @@ function SpendingPageContent() {
                 type="button"
                 aria-label={t('common.remove')}
                 onClick={() => setToDelete(tx)}
-                style={{ width: 32, height: 32, borderRadius: 10, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
+                style={{ width: 32, height: 32, borderRadius: 6, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
               >
                 ×
               </button>

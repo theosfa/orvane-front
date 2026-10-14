@@ -54,7 +54,7 @@ function RecipesPageContent() {
     setFilter('all');
   };
 
-  const calorieInput = { padding: '8px 12px', fontSize: 13, width: 84, borderRadius: 999 };
+  const calorieInput = { padding: '8px 12px', fontSize: 13, width: 84, borderRadius: 6 };
 
   const setLiked = (id: number, liked: boolean) => {
     setRecipes((prev) => prev?.map((r) => (r.id === id ? { ...r, liked } : r)) ?? prev);

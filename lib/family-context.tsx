@@ -1,9 +1,10 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { familyApi, FamilyOverview, Scope } from './api';
+import { familyApi, FamilyOverview, Scope, subscribeFamilyEvents } from './api';
 import { useAuth } from './auth-context';
 import { deriveScope } from './family-scope';
+import { announceFamilyChange } from './family-live';
 
 type FamilyContextValue = {
   overview: FamilyOverview | null; // null until loaded (or logged out)
@@ -45,6 +46,21 @@ export function FamilyProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (user) refresh();
     else setOverview(null);
+  }, [user, refresh]);
+
+  // live updates: changes made by other family members (or on another device) show up
+  // without a reload. The family itself is reloaded here; pages reload their own data.
+  useEffect(() => {
+    if (!user) return;
+    const ctrl = new AbortController();
+    subscribeFamilyEvents((topic) => (topic === 'family' ? refresh() : announceFamilyChange(topic)), {
+      signal: ctrl.signal,
+      onReconnect: () => {
+        refresh();
+        (['menu', 'tasks', 'finance'] as const).forEach(announceFamilyChange);
+      },
+    });
+    return () => ctrl.abort();
   }, [user, refresh]);
 
   const setScope = useCallback((next: Scope) => {

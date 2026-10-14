@@ -39,17 +39,17 @@ function DashboardPageContent() {
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
-      <Card style={{ padding: '38px 36px', background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)', color: 'var(--accent-ink)', boxShadow: 'var(--shadow-lg)', overflow: 'hidden', position: 'relative' }}>
+      <Card style={{ padding: '38px 36px', background: 'var(--accent)', color: 'var(--accent-ink)', boxShadow: 'none', overflow: 'hidden', position: 'relative' }}>
         <div style={{ position: 'absolute', top: -90, right: -60, width: 320, height: 320, borderRadius: '50%', background: 'rgba(255,255,255,0.14)' }} />
         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 14 }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.85 }}>{t('dashboard.greeting')}</div>
           <div style={{ fontSize: 'clamp(22px, 3vw, 34px)', fontWeight: 800, letterSpacing: '-0.03em', maxWidth: '30ch' }}>{user.email}</div>
           <div style={{ fontSize: 14, opacity: 0.9, maxWidth: '48ch' }}>{t('dashboard.subtitle')}</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 6 }}>
-            <Link href="/recipes/new" style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '11px 18px', borderRadius: 999, background: 'rgba(255,255,255,0.18)', color: 'var(--accent-ink)', border: '1px solid rgba(255,255,255,0.35)' }}>
+            <Link href="/recipes/new" style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '11px 18px', borderRadius: 6, background: 'rgba(255,255,255,0.18)', color: 'var(--accent-ink)', border: '1px solid rgba(255,255,255,0.35)' }}>
               {t('dashboard.addRecipe')}
             </Link>
-            <Link href="/menu" style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '11px 18px', borderRadius: 999, background: 'rgba(255,255,255,0.18)', color: 'var(--accent-ink)', border: '1px solid rgba(255,255,255,0.35)' }}>
+            <Link href="/menu" style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '11px 18px', borderRadius: 6, background: 'rgba(255,255,255,0.18)', color: 'var(--accent-ink)', border: '1px solid rgba(255,255,255,0.35)' }}>
               {t('nav.food.menu')}
             </Link>
           </div>
@@ -60,8 +60,8 @@ function DashboardPageContent() {
         <Card style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('dashboard.spendCard')}</div>
           <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.04em' }}>{money(spentTotal, 0)}</div>
-          <div style={{ height: 8, borderRadius: 999, background: 'var(--glass-2)', overflow: 'hidden' }}>
-            <div style={{ width: `${spentPct}%`, height: '100%', borderRadius: 999, background: 'var(--accent)' }} />
+          <div style={{ height: 8, borderRadius: 4, background: 'var(--glass-2)', overflow: 'hidden' }}>
+            <div style={{ width: `${spentPct}%`, height: '100%', borderRadius: 4, background: 'var(--accent)' }} />
           </div>
           <Link href="/finance/spending" style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-deep)' }}>{t('nav.finance.name')} →</Link>
         </Card>
@@ -71,7 +71,7 @@ function DashboardPageContent() {
           <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.04em' }}>{plannedDays}<span style={{ fontSize: 17, color: 'var(--ink-2)' }}> / 7</span></div>
           <div style={{ display: 'flex', gap: 4 }}>
             {DAY_SHORT.map((_, i) => (
-              <div key={i} style={{ flex: 1, height: 8, borderRadius: 999, background: (week?.days[i]?.meals.length ?? 0) > 0 ? 'var(--accent)' : 'var(--glass-2)' }} />
+              <div key={i} style={{ flex: 1, height: 8, borderRadius: 4, background: (week?.days[i]?.meals.length ?? 0) > 0 ? 'var(--accent)' : 'var(--glass-2)' }} />
             ))}
           </div>
           <Link href="/future/plan" style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-deep)' }}>{t('dashboard.openTasks', { count: openTasks })} →</Link>

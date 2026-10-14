@@ -12,6 +12,7 @@ import { DraftMeal, MealForm, dayToSave, emptyForm, isDayDirty, toDraft } from '
 import { Card, Btn, ErrorMsg, StateMsg, Pill } from '@/components/ui';
 import { useSlideDirection } from '@/lib/use-slide-direction';
 import { useFamily } from '@/lib/family-context';
+import { useFamilyLive } from '@/lib/family-live';
 import ScopeSwitch from '@/components/ScopeSwitch';
 
 type Editing = { date: string; draft: DraftMeal[]; form: MealForm };
@@ -53,6 +54,9 @@ function MenuPageContent() {
   useEffect(() => {
     loadWeek();
   }, [loadWeek, lang]);
+
+  // another family member changed the shared menu; a day being edited keeps its draft
+  useFamilyLive('menu', () => scope === 'family' && loadWeek());
 
   // only liked recipes can be planned
   useEffect(() => {

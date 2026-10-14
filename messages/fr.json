@@ -427,45 +427,36 @@
   },
   "profile": {
     "title": "Profil",
-    "edit": "Modifier le profil",
     "joined": "Sur Nest & Nibble depuis le",
+    "familyLine": "Famille « {name} » · {role}",
     "settingsTitle": "Paramètres",
     "languageLabel": "Langue de l’application",
     "languageHint": "Interface, noms des produits et des recettes, recettes de l’IA",
     "languageSaveError": "Impossible d’enregistrer la langue",
-    "statsRecipes": "Recettes cuisinées",
-    "statsSaved": "Économisé cette année",
+    "statsRecipes": "Recettes écrites",
+    "statsLiked": "Recettes aimées",
     "statsWeeks": "Semaines planifiées",
-    "statsWaste": "Gaspillage évité",
-    "statsSeed": [
-      "186",
-      "1 240 €",
-      "31",
-      "12 kg"
-    ],
-    "connectionsTitle": "Comment les trois applications communiquent",
-    "connectionsSeed": [
-      {
-        "pair": "Alimentation → Finances",
-        "text": "Chaque recette enregistrée est chiffrée d’après vos vrais tickets de caisse.",
-        "on": true
+    "statsTasks": "Tâches faites",
+    "statsError": "Impossible de charger vos chiffres",
+    "connectionsTitle": "Comment les trois apps se parlent",
+    "connections": {
+      "menuPlans": {
+        "pair": "Cuisine → Plans",
+        "text": "Transformez les jours planifiés du menu en liste de courses et ajoutez-la aux Plans comme tâche."
       },
-      {
-        "pair": "Projets → Alimentation",
-        "text": "Le dimanche, les créneaux de dîner vides se remplissent avec vos recettes favorites.",
-        "on": true
+      "plansFinance": {
+        "pair": "Plans → Finances",
+        "text": "Réglez une tâche de courses dans Finances : la dépense est enregistrée et la tâche cochée."
       },
-      {
-        "pair": "Finances → Projets",
-        "text": "Quand le budget s’amenuise, la semaine suivante devient plus économique.",
-        "on": true
+      "financeFamily": {
+        "pair": "Finances ↔ Famille",
+        "text": "Déplacez de l’argent entre votre portefeuille et le budget familial ; les virements ne comptent pas comme dépenses."
       },
-      {
-        "pair": "Alimentation → Projets",
-        "text": "Les plats cuisinés à l’avance réservent eux-mêmes une soirée restes.",
-        "on": false
+      "family": {
+        "pair": "Famille",
+        "text": "Menu, plans et budget partagés jusqu’à 5 personnes. Les changements apparaissent tout de suite pour tous."
       }
-    ],
+    },
     "likedTitle": "Recettes favorites",
     "likedEmptyTitle": "Aucun favori pour l’instant",
     "likedEmptyBody": "Ajoutez un cœur à une recette et elle apparaîtra ici.",
@@ -496,6 +487,8 @@
     "create": "Créer une famille",
     "invitationsTitle": "Invitations pour vous",
     "invitationText": "« {family} » — invitation de {by}",
+    "inviteToastTitle": "Vous êtes invité dans une famille",
+    "inviteToastOpen": "Voir l’invitation",
     "accept": "Rejoindre",
     "decline": "Refuser",
     "role": {

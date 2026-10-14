@@ -45,7 +45,7 @@ export default function FamilySection() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <Kicker>{t('family.invitationsTitle')}</Kicker>
       {invitations.map((inv) => (
-        <div key={inv.id} data-testid="invitation" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 14, background: 'var(--accent-tint)' }}>
+        <div key={inv.id} data-testid="invitation" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 6, background: 'var(--accent-tint)' }}>
           <span style={{ flex: '1 1 200px', fontSize: 14 }}>{t('family.invitationText', { family: inv.familyName, by: inv.invitedBy })}</span>
           <Btn variant="primary" disabled={!!family} onClick={() => run(() => familyApi.accept(inv.id))} style={{ padding: '8px 14px' }}>
             {t('family.accept')}
@@ -83,7 +83,7 @@ export default function FamilySection() {
       if (name.trim()) run(() => familyApi.create(name.trim()), () => setName(''));
     };
     return (
-      <Card as="section" data-testid="family-section" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <Card as="section" id="family" data-testid="family-section" style={{ display: 'flex', flexDirection: 'column', gap: 14, scrollMarginTop: 100 }}>
         <h2 style={{ fontSize: 17, fontWeight: 800 }}>{t('family.title')}</h2>
         <div style={{ fontSize: 13, color: 'var(--ink-2)' }}>{t('family.intro')}</div>
         {invitationList}
@@ -108,7 +108,7 @@ export default function FamilySection() {
   };
 
   return (
-    <Card as="section" data-testid="family-section" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <Card as="section" id="family" data-testid="family-section" style={{ display: 'flex', flexDirection: 'column', gap: 14, scrollMarginTop: 100 }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: 10 }}>
         <div>
           <Kicker>{t('family.title')}</Kicker>

@@ -9,6 +9,7 @@ import { FutureMockProvider } from '@/lib/mock/future-context';
 import { Bloom } from '@/components/ui';
 import Header from '@/components/Header';
 import Dock from '@/components/Dock';
+import InviteToast from '@/components/InviteToast';
 import './globals.css';
 
 export async function generateMetadata() {
@@ -36,6 +37,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         <div style={{ width: '100%', maxWidth: 1180, marginTop: 18 }}>{children}</div>
                       </div>
                       <Dock />
+                      <InviteToast />
                   </FutureMockProvider>
                 </AppModeProvider>
                 </FamilyProvider>

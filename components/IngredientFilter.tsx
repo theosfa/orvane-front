@@ -52,7 +52,7 @@ export default function IngredientFilter({
           fontWeight: 700,
           letterSpacing: '0.03em',
           padding: '9px 16px',
-          borderRadius: 999,
+          borderRadius: 4,
           background: selected.length ? 'var(--ink)' : 'var(--glass-2)',
           color: selected.length ? 'var(--bg)' : 'var(--ink)',
           border: '1px solid var(--stroke-2)',
@@ -76,7 +76,7 @@ export default function IngredientFilter({
             zIndex: 20,
             width: 'min(300px, calc(100vw - 32px))',
             padding: 10,
-            borderRadius: 18,
+            borderRadius: 8,
             background: 'var(--bg)',
             border: '1px solid var(--stroke-2)',
             boxShadow: 'var(--shadow)',
@@ -90,7 +90,7 @@ export default function IngredientFilter({
           <div style={{ maxHeight: 260, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
             {visible.length === 0 && <div style={{ padding: '10px 8px', fontSize: 13, color: 'var(--ink-2)' }}>{t('food.ingredientNoMatch')}</div>}
             {visible.map((o) => (
-              <label key={o.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px', borderRadius: 10, cursor: 'pointer', fontSize: 14 }}>
+              <label key={o.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px', borderRadius: 4, cursor: 'pointer', fontSize: 14 }}>
                 <input type="checkbox" checked={selected.includes(o.id)} onChange={() => toggle(o.id)} style={{ width: 16, height: 16, accentColor: 'var(--accent)', flexShrink: 0 }} />
                 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{o.name}</span>
               </label>

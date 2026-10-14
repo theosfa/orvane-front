@@ -13,7 +13,7 @@ export default function ServingsStepper({ value, onChange, max = MAX_SERVINGS }:
   const button = {
     width: 36,
     height: 36,
-    borderRadius: 12,
+    borderRadius: 6,
     border: '1px solid var(--stroke-2)',
     background: 'var(--glass-2)',
     color: 'var(--ink)',
@@ -39,7 +39,7 @@ export default function ServingsStepper({ value, onChange, max = MAX_SERVINGS }:
           if (e.target.value !== '' && Number.isFinite(n)) onChange(Math.min(max, clampServings(n)));
         }}
         onBlur={() => setDraft(String(value))}
-        style={{ width: 56, textAlign: 'center', fontFamily: 'inherit', fontSize: 16, fontWeight: 800, padding: '7px 4px', borderRadius: 12, background: 'var(--glass-3)', color: 'var(--ink)', border: '1px solid var(--stroke-2)' }}
+        style={{ width: 56, textAlign: 'center', fontFamily: 'inherit', fontSize: 16, fontWeight: 800, padding: '7px 4px', borderRadius: 6, background: 'var(--glass-3)', color: 'var(--ink)', border: '1px solid var(--stroke-2)' }}
       />
       <button type="button" aria-label={t('food.moreServings')} disabled={value >= max} onClick={() => onChange(Math.min(max, value + 1))} style={button}>
         +

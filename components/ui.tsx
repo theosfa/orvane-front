@@ -9,9 +9,9 @@ import { CSSProperties, ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, Te
 export function Bloom() {
   return (
     <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}>
-      <div style={{ position: 'absolute', top: -180, left: -120, width: 620, height: 620, borderRadius: '50%', background: 'var(--bloom-a)', filter: 'blur(130px)' }} />
-      <div style={{ position: 'absolute', top: 220, right: -200, width: 680, height: 680, borderRadius: '50%', background: 'var(--bloom-c)', filter: 'blur(150px)' }} />
-      <div style={{ position: 'absolute', bottom: -260, left: '38%', width: 700, height: 700, borderRadius: '50%', background: 'var(--bloom-b)', filter: 'blur(150px)' }} />
+      <div style={{ position: 'absolute', top: -180, left: -120, width: 620, height: 620, borderRadius: '50%', background: 'var(--bloom-a)', filter: 'blur(160px)', opacity: 0.45 }} />
+      <div style={{ position: 'absolute', top: 220, right: -200, width: 680, height: 680, borderRadius: '50%', background: 'var(--bloom-c)', filter: 'blur(170px)', opacity: 0.45 }} />
+      <div style={{ position: 'absolute', bottom: -260, left: '38%', width: 700, height: 700, borderRadius: '50%', background: 'var(--bloom-b)', filter: 'blur(170px)', opacity: 0.45 }} />
     </div>
   );
 }
@@ -59,7 +59,7 @@ export function Btn({
         fontWeight: 700,
         letterSpacing: '0.04em',
         padding: '12px 20px',
-        borderRadius: 16,
+        borderRadius: 6,
         cursor: 'pointer',
         ...base,
         ...style,
@@ -83,7 +83,7 @@ export function Chip({ active, children, style, ...rest }: { active?: boolean; c
         fontWeight: 700,
         letterSpacing: '0.03em',
         padding: '9px 16px',
-        borderRadius: 999,
+        borderRadius: 4,
         background: active ? 'var(--ink)' : 'var(--glass-2)',
         color: active ? 'var(--bg)' : 'var(--ink)',
         border: '1px solid var(--stroke-2)',
@@ -112,7 +112,7 @@ export function GlassInput({ style, ...rest }: { style?: CSSProperties } & Input
         fontFamily: 'inherit',
         fontSize: 14,
         padding: '13px 16px',
-        borderRadius: 16,
+        borderRadius: 6,
         background: 'var(--glass-3)',
         color: 'var(--ink)',
         border: '1px solid var(--stroke-2)',
@@ -132,7 +132,7 @@ export function GlassSelect({ style, children, ...rest }: { style?: CSSPropertie
         fontFamily: 'inherit',
         fontSize: 14,
         padding: '12px 14px',
-        borderRadius: 14,
+        borderRadius: 6,
         background: 'var(--glass-3)',
         color: 'var(--ink)',
         border: '1px solid var(--stroke-2)',
@@ -154,7 +154,7 @@ export function GlassTextarea({ style, ...rest }: { style?: CSSProperties } & Te
         fontSize: 14,
         lineHeight: 1.6,
         padding: '14px 16px',
-        borderRadius: 16,
+        borderRadius: 6,
         background: 'var(--glass-3)',
         color: 'var(--ink)',
         border: '1px solid var(--stroke-2)',
@@ -188,7 +188,7 @@ export function Pill({ children, style, accent }: { children: ReactNode; style?:
         fontSize: 11,
         fontWeight: 700,
         padding: '5px 11px',
-        borderRadius: 999,
+        borderRadius: 4,
         background: accent ? 'var(--accent)' : 'var(--glass-2)',
         color: accent ? 'var(--accent-ink)' : 'var(--ink)',
         border: accent ? 'none' : '1px solid var(--stroke-2)',
@@ -210,7 +210,7 @@ export function Grid({ min = 240, children, style }: { min?: number; children: R
 
 export function ErrorMsg({ children }: { children: ReactNode }) {
   return (
-    <p style={{ fontSize: 13, color: '#c0432a', background: 'rgba(192,67,42,0.1)', border: '1px solid rgba(192,67,42,0.25)', borderRadius: 14, padding: '11px 15px' }}>
+    <p style={{ fontSize: 13, color: '#c0432a', background: 'rgba(192,67,42,0.1)', border: '1px solid rgba(192,67,42,0.25)', borderRadius: 6, padding: '11px 15px' }}>
       {children}
     </p>
   );
