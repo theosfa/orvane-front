@@ -105,7 +105,7 @@ export default function InviteToast() {
         </div>
       </div>
       <Link
-        href="/profile#family"
+        href="/profile?tab=family#family"
         data-btn="primary"
         onClick={hide}
         style={{ flex: '0 0 auto', fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '10px 14px', borderRadius: 6, background: 'var(--accent)', color: 'var(--accent-ink)' }}

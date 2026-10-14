@@ -120,10 +120,26 @@ export type AuthResponse = {
   accessToken: string;
 };
 
-// GET /auth/profile: { user: { id, email, createdAt, language } }
+// GET /auth/profile: the signed-in user, incl. what others see (username, and the name if shown)
 export type ProfileResponse = {
-  user: { id: number; email: string; createdAt: string; language: string };
+  user: {
+    id: number;
+    email: string;
+    createdAt: string;
+    language: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    showFullName: boolean; // others see "First Last", otherwise only @username
+  };
 };
+
+export type ProfileUpdate = Partial<Pick<ProfileResponse['user'], 'username' | 'firstName' | 'lastName' | 'showFullName'>> & { language?: Language };
+
+// how a user looks to others: always the username, the name only if they show it
+export type PublicUser = { username: string; name: string | null };
+// a recipe's author; followed: the current user follows them. null: the account is gone
+export type RecipeAuthor = PublicUser & { followed: boolean };
 
 export type Ingredient = {
   id: number;
@@ -142,7 +158,7 @@ export type Totals = { calories: number; protein: number; fat: number; carbs: nu
 // isPublic = false: private, only its author sees it; isMine: the current user wrote it
 // autoTranslated: the name was machine-translated from the author's language
 // servings: how many people the ingredient amounts are for
-export type RecipeListItem = { id: number; name: string; autoTranslated: boolean; liked: boolean; isPublic: boolean; isMine: boolean; servings: number; calories: number };
+export type RecipeListItem = { id: number; name: string; autoTranslated: boolean; liked: boolean; isPublic: boolean; isMine: boolean; servings: number; calories: number; author: RecipeAuthor | null };
 
 export type RecipeFilters = { q?: string; minCalories?: number; maxCalories?: number; ingredientIds?: number[] };
 
@@ -168,6 +184,7 @@ export type Recipe = {
   liked: boolean;
   isPublic: boolean;
   isMine: boolean;
+  author: RecipeAuthor | null;
   total: Totals;
 };
 
@@ -328,7 +345,7 @@ export const authApi = {
     apiFetch<AuthResponse>('/auth/login', { method: 'POST', body: { email, password }, auth: false }),
   logout: () => apiFetch<void>('/auth/logout', { method: 'POST', auth: false }),
   profile: () => apiFetch<ProfileResponse>('/auth/profile'),
-  updateProfile: (data: { language: Language }) => apiFetch<ProfileResponse>('/auth/profile', { method: 'PATCH', body: data }),
+  updateProfile: (data: ProfileUpdate) => apiFetch<ProfileResponse>('/auth/profile', { method: 'PATCH', body: data }),
 };
 
 export const recipesApi = {
@@ -384,6 +401,27 @@ export const tasksApi = {
 };
 
 // every call answers with the current state, like overview()
+// GET /people/:username — someone's public page: their public recipes, followers
+export type PersonProfile = PublicUser & {
+  joinedAt: string;
+  isMe: boolean;
+  followedByMe: boolean;
+  followers: number;
+  following: number;
+  recipes: RecipeListItem[];
+};
+export type PersonListItem = PublicUser & { isMe: boolean; followedByMe: boolean };
+export type FollowState = { followedByMe: boolean; followers: number };
+
+const person = (username: string) => `/people/${encodeURIComponent(username)}`;
+export const peopleApi = {
+  profile: (username: string) => apiFetch<PersonProfile>(person(username)),
+  followers: (username: string) => apiFetch<PersonListItem[]>(`${person(username)}/followers`),
+  following: (username: string) => apiFetch<PersonListItem[]>(`${person(username)}/following`),
+  follow: (username: string) => apiFetch<FollowState>(`${person(username)}/follow`, { method: 'POST' }),
+  unfollow: (username: string) => apiFetch<FollowState>(`${person(username)}/follow`, { method: 'DELETE' }),
+};
+
 // GET /stats: what the user has done in the app, for the profile
 export type UserStats = { recipesWritten: number; recipesLiked: number; weeksPlanned: number; tasksDone: number };
 

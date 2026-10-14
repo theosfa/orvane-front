@@ -4,16 +4,16 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { recipesApi, RecipeListItem, ApiError } from '@/lib/api';
 import RequireAuth from '@/components/RequireAuth';
-import LikeButton from '@/components/LikeButton';
+import RecipeGrid from '@/components/RecipeGrid';
 import IngredientFilter from '@/components/IngredientFilter';
 import { useT } from '@/lib/i18n/context';
-import { Card, Btn, Chip, Pill, GlassInput, StateMsg, ErrorMsg, EmptyState } from '@/components/ui';
+import { Card, Btn, Chip, GlassInput, StateMsg, ErrorMsg, EmptyState } from '@/components/ui';
 
 function RecipesPageContent() {
   const { t, lang } = useT();
   const [recipes, setRecipes] = useState<RecipeListItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState<'all' | 'mine' | 'liked'>('all');
+  const [filter, setFilter] = useState<'all' | 'mine' | 'liked' | 'following'>('all');
   const [query, setQuery] = useState('');
   const [minCalories, setMinCalories] = useState('');
   const [maxCalories, setMaxCalories] = useState('');
@@ -60,7 +60,10 @@ function RecipesPageContent() {
     setRecipes((prev) => prev?.map((r) => (r.id === id ? { ...r, liked } : r)) ?? prev);
   };
 
-  const shown = recipes?.filter((r) => (filter === 'liked' ? r.liked : filter === 'mine' ? r.isMine : true)) ?? null;
+  const shown =
+    recipes?.filter((r) =>
+      filter === 'liked' ? r.liked : filter === 'mine' ? r.isMine : filter === 'following' ? !!r.author?.followed : true,
+    ) ?? null;
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 18, paddingBottom: 40 }}>
@@ -83,6 +86,7 @@ function RecipesPageContent() {
           <Chip active={filter === 'all'} onClick={() => setFilter('all')}>{t('food.filterAll')}</Chip>
           <Chip active={filter === 'mine'} onClick={() => setFilter('mine')}>{t('food.mine')}</Chip>
           <Chip active={filter === 'liked'} onClick={() => setFilter('liked')}>{t('nav.food.liked')}</Chip>
+          <Chip active={filter === 'following'} onClick={() => setFilter('following')}>{t('food.filterFollowing')}</Chip>
           <span style={{ width: 1, height: 22, background: 'var(--stroke-2)', margin: '0 4px' }} />
           <IngredientFilter options={ingredientOptions} selected={ingredientIds} onChange={setIngredientIds} />
           <span style={{ width: 1, height: 22, background: 'var(--stroke-2)', margin: '0 4px' }} />
@@ -110,29 +114,7 @@ function RecipesPageContent() {
           <EmptyState title={t('food.emptyTitle')}>{t('food.emptyBody')}</EmptyState>
         ))}
 
-      {shown && shown.length > 0 && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 18 }}>
-          {shown.map((r) => (
-            <Card key={r.id} as="article" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
-                <Link href={`/recipes/${r.id}`} style={{ color: 'inherit', flex: 1, minWidth: 0 }}>
-                  <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800, letterSpacing: '-0.025em' }}>{r.name}</h3>
-                </Link>
-                <LikeButton recipeId={r.id} liked={r.liked} onChange={(liked) => setLiked(r.id, liked)} />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <Link href={`/recipes/${r.id}`} style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent-deep)' }}>
-                  {t('food.viewRecipe')} →
-                </Link>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  {!r.isPublic && <Pill>{t('food.private')}</Pill>}
-                  <Pill>{t('units.kcal', { value: r.calories })}</Pill>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
+      {shown && shown.length > 0 && <RecipeGrid recipes={shown} onLikedChange={setLiked} />}
     </main>
   );
 }

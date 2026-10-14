@@ -30,7 +30,7 @@ describe('invitation notice', () => {
     act(() => familyMock.set({ overview: invited(5) }));
     expect(toast()).toHaveTextContent('You’re invited to a family');
     expect(toast()).toHaveTextContent('“Family 5” — invited by anna@test.dev');
-    expect(screen.getByRole('link', { name: 'Open invitation' })).toHaveAttribute('href', '/profile#family');
+    expect(screen.getByRole('link', { name: 'Open invitation' })).toHaveAttribute('href', '/profile?tab=family#family');
 
     wait(9_900);
     expect(toast()).toHaveAttribute('data-leaving', '0');

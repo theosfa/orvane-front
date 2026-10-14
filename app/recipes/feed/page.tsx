@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { recipesApi, Recipe } from '@/lib/api';
 import RequireAuth from '@/components/RequireAuth';
 import LikeButton from '@/components/LikeButton';
+import AuthorLink from '@/components/AuthorLink';
 import { useT } from '@/lib/i18n/context';
 import { Btn, EmptyState, ErrorMsg, StateMsg } from '@/components/ui';
 
@@ -49,6 +50,7 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
 
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 6 }}>
         <h2 style={{ margin: 0, fontSize: 'clamp(26px, 7vw, 38px)', fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 1.05 }}>{recipe.name}</h2>
+        {recipe.author && <AuthorLink author={recipe.author} style={{ fontSize: 14, color: 'inherit', opacity: 0.85 }} />}
         {recipe.autoTranslated && <span style={{ fontSize: 11, opacity: 0.7 }}>{t('food.autoTranslated')}</span>}
       </div>
 

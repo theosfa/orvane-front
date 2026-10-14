@@ -1,11 +1,11 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
-import { authApi, setToken, refreshAccessToken, ApiError, ProfileResponse } from './api';
+import { authApi, setToken, refreshAccessToken, ApiError, ProfileResponse, ProfileUpdate } from './api';
 import { useT } from './i18n/context';
 import { Language, isLanguage, DEFAULT_LANGUAGE } from './i18n/languages';
 
-type User = { id: number; email: string; createdAt: string; language: Language } | null;
+type User = (Omit<ProfileResponse['user'], 'language'> & { language: Language }) | null;
 
 type AuthContextValue = {
   user: User;
@@ -15,6 +15,8 @@ type AuthContextValue = {
   logout: () => void;
   // saves the interface language to the user's profile and switches the app to it
   updateLanguage: (language: Language) => Promise<void>;
+  // username, name and whether others see it; throws ApiError (409: username taken)
+  updateProfile: (data: ProfileUpdate) => Promise<void>;
 };
 
 const toLanguage = (value: string): Language => (isLanguage(value) ? value : DEFAULT_LANGUAGE);
@@ -33,7 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const applyProfile = useCallback(
     (profile: ProfileResponse) => {
       const language = toLanguage(profile.user.language);
-      setUser({ id: profile.user.id, email: profile.user.email, createdAt: profile.user.createdAt, language });
+      setUser({ ...profile.user, language });
       if (language !== langRef.current) {
         langRef.current = language;
         setLang(language);
@@ -86,8 +88,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     applyProfile(await authApi.updateProfile({ language }));
   };
 
+  const updateProfile = async (data: ProfileUpdate) => {
+    applyProfile(await authApi.updateProfile(data));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateLanguage }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, updateLanguage, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

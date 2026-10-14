@@ -177,6 +177,7 @@
     "publicHint": "Przepis zobaczą wszyscy użytkownicy",
     "privateHint": "Przepis zobaczysz tylko ty",
     "mine": "Moje",
+    "filterFollowing": "Obserwowani",
     "searchPlaceholder": "Szukaj po nazwie lub produkcie…",
     "filterAll": "Wszystkie",
     "kcal": "kcal",
@@ -457,11 +458,29 @@
         "text": "Wspólne menu, plany i budżet dla maks. 5 osób. Zmiany od razu widzą wszyscy."
       }
     },
-    "likedTitle": "Polubione przepisy",
-    "likedEmptyTitle": "Nic jeszcze nie polubiono",
-    "likedEmptyBody": "Oznaczaj przepisy serduszkiem — pojawią się tutaj.",
     "logout": "Wyloguj się",
-    "likedError": "Nie udało się wczytać przepisów"
+    "tabsLabel": "Sekcje profilu",
+    "tabPublic": "Publiczne przepisy",
+    "tabPrivate": "Prywatne przepisy",
+    "tabFamily": "Rodzina",
+    "tabSettings": "Ustawienia",
+    "publicEmptyTitle": "Brak publicznych przepisów",
+    "publicEmptyBody": "Opublikowane przepisy pojawią się tutaj i na Twojej publicznej stronie.",
+    "privateEmptyTitle": "Brak prywatnych przepisów",
+    "privateEmptyBody": "Przepisy oznaczone jako prywatne widzisz tylko Ty.",
+    "recipesError": "Nie udało się wczytać przepisów",
+    "viewPublic": "Twoja publiczna strona",
+    "nameTitle": "Jak widzą Cię inni",
+    "usernameLabel": "Nazwa użytkownika",
+    "usernameHint": "3–30 znaków: a–z, 0–9, _ i .",
+    "firstNameLabel": "Imię",
+    "lastNameLabel": "Nazwisko",
+    "showFullNameLabel": "Pokazuj innym imię i nazwisko",
+    "showFullNameHint": "W przeciwnym razie inni widzą tylko @{username}",
+    "profileSaved": "Zapisano",
+    "usernameTaken": "Ta nazwa jest zajęta",
+    "usernameInvalid": "Użyj 3–30 znaków: a–z, 0–9, _ i .",
+    "profileSaveError": "Nie udało się zapisać"
   },
   "family": {
     "scopeLabel": "Czyje dane",
@@ -517,5 +536,20 @@
     "errMember": "Ta osoba jest już w rodzinie",
     "errLastAdmin": "Rodzina potrzebuje co najmniej jednego administratora — najpierw nadaj tę rolę komuś innemu.",
     "errInFamily": "Aby dołączyć do innej rodziny, najpierw opuść obecną."
+  },
+  "people": {
+    "follow": "Obserwuj",
+    "unfollow": "Przestań obserwować",
+    "followers": "Obserwujący",
+    "following": "Obserwowani",
+    "recipes": "Przepisy",
+    "noRecipes": "Brak publicznych przepisów",
+    "noFollowers": "Nikt jeszcze nie obserwuje",
+    "noFollowing": "Nikogo jeszcze nie obserwuje",
+    "you": "Ty",
+    "editProfile": "Edytuj profil",
+    "notFound": "Nie ma takiego użytkownika",
+    "loadError": "Nie udało się wczytać profilu",
+    "followError": "Nie udało się zmienić obserwowania"
   }
 }

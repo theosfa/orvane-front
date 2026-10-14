@@ -31,6 +31,7 @@ function usePageMeta() {
   if (pathname === '/finance/wallets') return { kicker: finance, title: t('nav.finance.wallets') };
   if (pathname === '/finance/categories') return { kicker: finance, title: t('nav.finance.categories') };
   if (pathname === '/profile') return { kicker: t('brand.name'), title: t('nav.profile') };
+  if (pathname?.startsWith('/u/')) return { kicker: t('brand.name'), title: `@${decodeURIComponent(pathname.slice(3))}` };
   return { kicker: t('brand.name'), title: '' };
 }
 
@@ -39,7 +40,7 @@ export default function Header() {
   const { t } = useT();
   const { theme, setTheme } = useTheme();
   const { kicker, title } = usePageMeta();
-  const initial = user?.email[0]?.toUpperCase() ?? '?';
+  const initial = (user?.firstName || user?.username || '?')[0].toUpperCase();
 
   return (
     <header

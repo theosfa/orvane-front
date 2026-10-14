@@ -36,8 +36,8 @@ function weekOf(monday: string, meals: Record<string, MenuMeal[]> = {}): WeekMen
 
 const pasta: MenuMeal = { entryId: 1, mealType: 'dinner', recipeId: 7, recipeName: 'Pasta', servings: 2, addedBy: 'me@test.dev', calories: 600, protein: 20, fat: 10, carbs: 90 };
 const liked = [
-  { id: 7, name: 'Pasta', autoTranslated: false, liked: true, isPublic: true, isMine: false, servings: 2, calories: 1200 },
-  { id: 8, name: 'Omelette', autoTranslated: false, liked: true, isPublic: true, isMine: true, servings: 1, calories: 300 },
+  { id: 7, name: 'Pasta', autoTranslated: false, liked: true, isPublic: true, isMine: false, servings: 2, calories: 1200, author: null },
+  { id: 8, name: 'Omelette', autoTranslated: false, liked: true, isPublic: true, isMine: true, servings: 1, calories: 300, author: null },
 ];
 
 beforeEach(() => {

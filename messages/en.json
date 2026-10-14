@@ -177,6 +177,7 @@
     "publicHint": "Everyone can see this recipe",
     "privateHint": "Only you can see this recipe",
     "mine": "Mine",
+    "filterFollowing": "Following",
     "searchPlaceholder": "Search by name or ingredient…",
     "filterAll": "All",
     "kcal": "kcal",
@@ -457,11 +458,29 @@
         "text": "Share the menu, plans and budget with up to 5 people. Changes show up for everyone right away."
       }
     },
-    "likedTitle": "Liked recipes",
-    "likedEmptyTitle": "Nothing liked yet",
-    "likedEmptyBody": "Heart a recipe and it’ll show up here.",
     "logout": "Sign out",
-    "likedError": "Couldn’t load recipes"
+    "tabsLabel": "Profile sections",
+    "tabPublic": "Public recipes",
+    "tabPrivate": "Private recipes",
+    "tabFamily": "Family",
+    "tabSettings": "Settings",
+    "publicEmptyTitle": "No public recipes yet",
+    "publicEmptyBody": "Recipes you publish show up here and on your public page.",
+    "privateEmptyTitle": "No private recipes",
+    "privateEmptyBody": "Recipes marked private are seen only by you.",
+    "recipesError": "Couldn’t load your recipes",
+    "viewPublic": "See your public page",
+    "nameTitle": "How others see you",
+    "usernameLabel": "Username",
+    "usernameHint": "3–30 characters: a–z, 0–9, _ and .",
+    "firstNameLabel": "First name",
+    "lastNameLabel": "Last name",
+    "showFullNameLabel": "Show my name to others",
+    "showFullNameHint": "Otherwise others only see @{username}",
+    "profileSaved": "Saved",
+    "usernameTaken": "This username is taken",
+    "usernameInvalid": "Use 3–30 characters: a–z, 0–9, _ and .",
+    "profileSaveError": "Couldn’t save"
   },
   "family": {
     "scopeLabel": "Whose data",
@@ -517,5 +536,20 @@
     "errMember": "This person is already in the family",
     "errLastAdmin": "A family needs at least one admin — make someone else an admin first.",
     "errInFamily": "To join another family, leave your current one first."
+  },
+  "people": {
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "followers": "Followers",
+    "following": "Following",
+    "recipes": "Recipes",
+    "noRecipes": "No public recipes yet",
+    "noFollowers": "No followers yet",
+    "noFollowing": "Not following anyone yet",
+    "you": "You",
+    "editProfile": "Edit profile",
+    "notFound": "There’s no such user",
+    "loadError": "Couldn’t load the profile",
+    "followError": "Couldn’t update the subscription"
   }
 }

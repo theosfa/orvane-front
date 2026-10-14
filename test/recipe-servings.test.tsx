@@ -27,6 +27,7 @@ const recipe: Recipe = {
   liked: false,
   isPublic: true,
   isMine: true,
+  author: null,
   total: { calories: 390, protein: 8.1, fat: 0.9, carbs: 84 },
 };
 

@@ -177,6 +177,7 @@
     "publicHint": "Tous les utilisateurs verront cette recette",
     "privateHint": "Vous seul verrez cette recette",
     "mine": "Les miennes",
+    "filterFollowing": "Abonnements",
     "searchPlaceholder": "Rechercher par nom ou ingrédient…",
     "filterAll": "Toutes",
     "kcal": "kcal",
@@ -457,11 +458,29 @@
         "text": "Menu, plans et budget partagés jusqu’à 5 personnes. Les changements apparaissent tout de suite pour tous."
       }
     },
-    "likedTitle": "Recettes favorites",
-    "likedEmptyTitle": "Aucun favori pour l’instant",
-    "likedEmptyBody": "Ajoutez un cœur à une recette et elle apparaîtra ici.",
     "logout": "Se déconnecter",
-    "likedError": "Impossible de charger les recettes"
+    "tabsLabel": "Sections du profil",
+    "tabPublic": "Recettes publiques",
+    "tabPrivate": "Recettes privées",
+    "tabFamily": "Famille",
+    "tabSettings": "Paramètres",
+    "publicEmptyTitle": "Pas encore de recettes publiques",
+    "publicEmptyBody": "Les recettes publiées apparaissent ici et sur votre page publique.",
+    "privateEmptyTitle": "Aucune recette privée",
+    "privateEmptyBody": "Les recettes privées ne sont visibles que par vous.",
+    "recipesError": "Impossible de charger vos recettes",
+    "viewPublic": "Voir votre page publique",
+    "nameTitle": "Comment les autres vous voient",
+    "usernameLabel": "Nom d’utilisateur",
+    "usernameHint": "3 à 30 caractères : a–z, 0–9, _ et .",
+    "firstNameLabel": "Prénom",
+    "lastNameLabel": "Nom",
+    "showFullNameLabel": "Afficher mon nom aux autres",
+    "showFullNameHint": "Sinon, les autres ne voient que @{username}",
+    "profileSaved": "Enregistré",
+    "usernameTaken": "Ce nom d’utilisateur est pris",
+    "usernameInvalid": "Utilisez 3 à 30 caractères : a–z, 0–9, _ et .",
+    "profileSaveError": "Impossible d’enregistrer"
   },
   "family": {
     "scopeLabel": "Quelles données",
@@ -517,5 +536,20 @@
     "errMember": "Cette personne est déjà dans la famille",
     "errLastAdmin": "Une famille a besoin d’au moins un administrateur — nommez d’abord quelqu’un d’autre.",
     "errInFamily": "Pour rejoindre une autre famille, quittez d’abord la vôtre."
+  },
+  "people": {
+    "follow": "Suivre",
+    "unfollow": "Ne plus suivre",
+    "followers": "Abonnés",
+    "following": "Abonnements",
+    "recipes": "Recettes",
+    "noRecipes": "Pas encore de recettes publiques",
+    "noFollowers": "Pas encore d’abonnés",
+    "noFollowing": "Ne suit encore personne",
+    "you": "Vous",
+    "editProfile": "Modifier le profil",
+    "notFound": "Cet utilisateur n’existe pas",
+    "loadError": "Impossible de charger le profil",
+    "followError": "Impossible de modifier l’abonnement"
   }
 }

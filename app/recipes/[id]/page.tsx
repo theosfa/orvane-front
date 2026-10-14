@@ -7,6 +7,7 @@ import { recipesApi, Recipe, ApiError } from '@/lib/api';
 import type { Language } from '@/lib/i18n/languages';
 import RequireAuth from '@/components/RequireAuth';
 import LikeButton from '@/components/LikeButton';
+import AuthorLink from '@/components/AuthorLink';
 import ServingsStepper from '@/components/ServingsStepper';
 import { roundGrams, scaleAmount } from '@/lib/servings';
 import { useT } from '@/lib/i18n/context';
@@ -57,7 +58,10 @@ function RecipeDetailContent() {
       </Link>
 
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, letterSpacing: '-0.03em' }}>{recipe.name}</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }}>
+          <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, letterSpacing: '-0.03em' }}>{recipe.name}</h1>
+          {recipe.author && <AuthorLink author={recipe.author} style={{ fontSize: 14 }} />}
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           {!recipe.isPublic && <Pill>{t('food.private')}</Pill>}
           <LikeButton recipeId={recipe.id} liked={recipe.liked} />
