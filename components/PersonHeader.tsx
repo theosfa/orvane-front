@@ -27,7 +27,7 @@ export default function PersonHeader({
 
   return (
     <Card style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 22, padding: 28 }}>
-      <div style={{ width: 76, height: 76, flex: '0 0 76px', borderRadius: 8, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, fontWeight: 800 }}>
+      <div style={{ width: 76, height: 76, flex: '0 0 76px', borderRadius: 'var(--r-lg)', background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, fontWeight: 800 }}>
         {initial}
       </div>
       <div style={{ flex: '1 1 220px', display: 'flex', flexDirection: 'column', gap: 3, minWidth: 0 }}>

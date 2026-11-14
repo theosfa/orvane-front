@@ -2,18 +2,14 @@
 
 import { CSSProperties, ReactNode, ButtonHTMLAttributes, InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes } from 'react';
 
-// Shared visual primitives for the "glass" design system (bloom background,
-// frosted panels, pill controls) — ported from the FFF design mockup's
-// inline-style tokens (var(--glass), var(--r-lg), etc. in globals.css).
+// Shared visual primitives of the "lime & graphite" design: solid white cards with big
+// radii on a light grey canvas, pill-shaped controls, one lime accent. All colours and
+// radii come from the tokens in app/globals.css (var(--glass), var(--r-lg), …).
 
+// The old frosted design painted blurred colour blobs behind the page; the flat design
+// has a plain canvas. Kept as a no-op so existing imports keep working.
 export function Bloom() {
-  return (
-    <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}>
-      <div style={{ position: 'absolute', top: -180, left: -120, width: 620, height: 620, borderRadius: '50%', background: 'var(--bloom-a)', filter: 'blur(160px)', opacity: 0.45 }} />
-      <div style={{ position: 'absolute', top: 220, right: -200, width: 680, height: 680, borderRadius: '50%', background: 'var(--bloom-c)', filter: 'blur(170px)', opacity: 0.45 }} />
-      <div style={{ position: 'absolute', bottom: -260, left: '38%', width: 700, height: 700, borderRadius: '50%', background: 'var(--bloom-b)', filter: 'blur(170px)', opacity: 0.45 }} />
-    </div>
-  );
+  return null;
 }
 
 export function Card({ children, style, as: As = 'div', ...rest }: { children: ReactNode; style?: CSSProperties; as?: 'div' | 'section' | 'article' | 'aside' } & React.HTMLAttributes<HTMLElement>) {
@@ -21,11 +17,9 @@ export function Card({ children, style, as: As = 'div', ...rest }: { children: R
     <As
       data-card
       style={{
-        padding: 22,
+        padding: 24,
         borderRadius: 'var(--r-lg)',
         background: 'var(--glass)',
-        WebkitBackdropFilter: 'blur(26px) saturate(180%)',
-        backdropFilter: 'blur(26px) saturate(180%)',
         border: '1px solid var(--stroke)',
         boxShadow: 'var(--shadow)',
         ...style,
@@ -48,18 +42,17 @@ export function Btn({
   const base: CSSProperties =
     variant === 'primary'
       ? { background: 'var(--accent)', color: 'var(--accent-ink)', border: 0 }
-      : { background: 'var(--glass-2)', color: 'var(--ink)', border: '1px solid var(--stroke-2)' };
+      : { background: 'var(--glass-2)', color: 'var(--ink)', border: '1px solid transparent' };
   return (
     <button
       data-btn={variant}
       type="button"
       style={{
         fontFamily: 'inherit',
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: 700,
-        letterSpacing: '0.04em',
         padding: '12px 20px',
-        borderRadius: 6,
+        borderRadius: 'var(--r-pill)',
         cursor: 'pointer',
         ...base,
         ...style,
@@ -79,12 +72,11 @@ export function Chip({ active, children, style, ...rest }: { active?: boolean; c
       type="button"
       style={{
         fontFamily: 'inherit',
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: 700,
-        letterSpacing: '0.03em',
         padding: '9px 16px',
-        borderRadius: 4,
-        background: active ? 'var(--ink)' : 'var(--glass-2)',
+        borderRadius: 'var(--r-pill)',
+        background: active ? 'var(--ink)' : 'var(--glass)',
         color: active ? 'var(--bg)' : 'var(--ink)',
         border: '1px solid var(--stroke-2)',
         cursor: 'pointer',
@@ -112,7 +104,7 @@ export function GlassInput({ style, ...rest }: { style?: CSSProperties } & Input
         fontFamily: 'inherit',
         fontSize: 14,
         padding: '13px 16px',
-        borderRadius: 6,
+        borderRadius: 'var(--r-md)',
         background: 'var(--glass-3)',
         color: 'var(--ink)',
         border: '1px solid var(--stroke-2)',
@@ -132,7 +124,7 @@ export function GlassSelect({ style, children, ...rest }: { style?: CSSPropertie
         fontFamily: 'inherit',
         fontSize: 14,
         padding: '12px 14px',
-        borderRadius: 6,
+        borderRadius: 'var(--r-md)',
         background: 'var(--glass-3)',
         color: 'var(--ink)',
         border: '1px solid var(--stroke-2)',
@@ -154,7 +146,7 @@ export function GlassTextarea({ style, ...rest }: { style?: CSSProperties } & Te
         fontSize: 14,
         lineHeight: 1.6,
         padding: '14px 16px',
-        borderRadius: 6,
+        borderRadius: 'var(--r-md)',
         background: 'var(--glass-3)',
         color: 'var(--ink)',
         border: '1px solid var(--stroke-2)',
@@ -185,10 +177,10 @@ export function Pill({ children, style, accent }: { children: ReactNode; style?:
   return (
     <span
       style={{
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: 700,
-        padding: '5px 11px',
-        borderRadius: 4,
+        padding: '6px 12px',
+        borderRadius: 'var(--r-pill)',
         background: accent ? 'var(--accent)' : 'var(--glass-2)',
         color: accent ? 'var(--accent-ink)' : 'var(--ink)',
         border: accent ? 'none' : '1px solid var(--stroke-2)',
@@ -202,7 +194,7 @@ export function Pill({ children, style, accent }: { children: ReactNode; style?:
 
 export function Grid({ min = 240, children, style }: { min?: number; children: ReactNode; style?: CSSProperties }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${min}px, 1fr))`, gap: 18, ...style }}>
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${min}px, 1fr))`, gap: 16, ...style }}>
       {children}
     </div>
   );
@@ -210,7 +202,7 @@ export function Grid({ min = 240, children, style }: { min?: number; children: R
 
 export function ErrorMsg({ children }: { children: ReactNode }) {
   return (
-    <p style={{ fontSize: 13, color: '#c0432a', background: 'rgba(192,67,42,0.1)', border: '1px solid rgba(192,67,42,0.25)', borderRadius: 6, padding: '11px 15px' }}>
+    <p style={{ fontSize: 13, color: '#c0432a', background: 'rgba(192,67,42,0.1)', border: '1px solid rgba(192,67,42,0.25)', borderRadius: 'var(--r-md)', padding: '11px 15px' }}>
       {children}
     </p>
   );

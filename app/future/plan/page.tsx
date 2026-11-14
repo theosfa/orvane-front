@@ -172,7 +172,7 @@ function PlanPageContent() {
                           aria-label={t('future.openDay', { day: longLabel })}
                           title={t('future.openDay', { day: longLabel })}
                           onClick={() => setFocusDate(date)}
-                          style={{ width: 26, height: 26, borderRadius: 4, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer', fontSize: 13 }}
+                          style={{ width: 26, height: 26, borderRadius: 'var(--r-sm)', border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer', fontSize: 13 }}
                         >
                           ⤢
                         </button>

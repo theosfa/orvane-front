@@ -45,7 +45,7 @@ export default function FamilySection() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <Kicker>{t('family.invitationsTitle')}</Kicker>
       {invitations.map((inv) => (
-        <div key={inv.id} data-testid="invitation" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 6, background: 'var(--accent-tint)' }}>
+        <div key={inv.id} data-testid="invitation" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 'var(--r-md)', background: 'var(--accent-tint)' }}>
           <span style={{ flex: '1 1 200px', fontSize: 14 }}>{t('family.invitationText', { family: inv.familyName, by: inv.invitedBy })}</span>
           <Btn variant="primary" disabled={!!family} onClick={() => run(() => familyApi.accept(inv.id))} style={{ padding: '8px 14px' }}>
             {t('family.accept')}

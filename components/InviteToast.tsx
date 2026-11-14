@@ -95,7 +95,7 @@ export default function InviteToast() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div style={{ flex: '0 0 34px', width: 34, height: 34, borderRadius: 4, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800 }}>
+      <div style={{ flex: '0 0 34px', width: 34, height: 34, borderRadius: 'var(--r-sm)', background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800 }}>
         ◍
       </div>
       <div style={{ flex: '1 1 auto', minWidth: 0 }}>
@@ -108,7 +108,7 @@ export default function InviteToast() {
         href="/profile?tab=family#family"
         data-btn="primary"
         onClick={hide}
-        style={{ flex: '0 0 auto', fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '10px 14px', borderRadius: 6, background: 'var(--accent)', color: 'var(--accent-ink)' }}
+        style={{ flex: '0 0 auto', fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '10px 14px', borderRadius: 'var(--r-md)', background: 'var(--accent)', color: 'var(--accent-ink)' }}
       >
         {t('family.inviteToastOpen')}
       </Link>
@@ -116,7 +116,7 @@ export default function InviteToast() {
         type="button"
         aria-label={t('common.close')}
         onClick={hide}
-        style={{ flex: '0 0 auto', width: 28, height: 28, borderRadius: 4, border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
+        style={{ flex: '0 0 auto', width: 28, height: 28, borderRadius: 'var(--r-sm)', border: '1px solid var(--stroke-2)', background: 'var(--glass-2)', color: 'var(--ink-2)', cursor: 'pointer' }}
       >
         ×
       </button>

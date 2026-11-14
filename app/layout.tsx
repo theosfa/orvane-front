@@ -9,6 +9,7 @@ import { FutureMockProvider } from '@/lib/mock/future-context';
 import { Bloom } from '@/components/ui';
 import Header from '@/components/Header';
 import Dock from '@/components/Dock';
+import Sidebar from '@/components/Sidebar';
 import InviteToast from '@/components/InviteToast';
 import './globals.css';
 
@@ -32,9 +33,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <AppModeProvider>
                   <FutureMockProvider>
                       <Bloom />
-                      <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 16px 180px', minHeight: '100vh' }}>
-                        <Header />
-                        <div style={{ width: '100%', maxWidth: 1180, marginTop: 18 }}>{children}</div>
+                      {/* desktop: sidebar + content; phones: content + the bottom Dock (see .app-* in globals.css) */}
+                      <div className="app-shell">
+                        <Sidebar />
+                        <div className="app-main">
+                          <Header />
+                          <div className="app-content">{children}</div>
+                        </div>
                       </div>
                       <Dock />
                       <InviteToast />

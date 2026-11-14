@@ -281,7 +281,7 @@ function Settings() {
         <h2 style={{ fontSize: 17, fontWeight: 800, marginBottom: 10 }}>{t('profile.connectionsTitle')}</h2>
         {connections.map((c) => (
           <div key={c} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '12px 10px' }}>
-            <div style={{ flex: '0 0 auto', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '5px 10px', borderRadius: 4, background: 'var(--glass-2)', border: '1px solid var(--stroke-2)' }}>
+            <div style={{ flex: '0 0 auto', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '5px 10px', borderRadius: 'var(--r-sm)', background: 'var(--glass-2)', border: '1px solid var(--stroke-2)' }}>
               {t(`profile.connections.${c}.pair`)}
             </div>
             <div style={{ flex: 1, minWidth: 0, fontSize: 13 }}>{t(`profile.connections.${c}.text`)}</div>

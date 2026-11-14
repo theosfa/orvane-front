@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useT } from '@/lib/i18n/context';
 import { useTheme } from '@/lib/theme-context';
+import { Icon } from '@/components/icons';
 
 function usePageMeta() {
   const pathname = usePathname() ?? '/';
@@ -43,54 +44,44 @@ export default function Header() {
   const initial = (user?.firstName || user?.username || '?')[0].toUpperCase();
 
   return (
-    <header
-      style={{
-        position: 'sticky', top: 16, zIndex: 30, width: '100%', maxWidth: 1180, margin: '0 auto',
-        display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 16,
-        padding: '12px 12px 12px 20px', borderRadius: 8,
-        background: 'var(--glass)', WebkitBackdropFilter: 'blur(26px) saturate(180%)', backdropFilter: 'blur(26px) saturate(180%)',
-        border: '1px solid var(--stroke)', boxShadow: 'var(--shadow)',
-      }}
-    >
-      <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0, color: 'inherit' }}>
-        <div style={{ width: 34, height: 34, borderRadius: 4, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 900, letterSpacing: '-0.02em', flex: '0 0 auto' }}>
-          Л
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{kicker}</div>
-        </div>
+    <header style={{ width: '100%', maxWidth: 1240, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, minHeight: 48 }}>
+      {/* the logo lives in the sidebar on desktop; on phones it is here */}
+      <Link
+        href="/"
+        className="header-brand"
+        aria-label={t('brand.name')}
+        style={{ width: 44, height: 44, flex: '0 0 44px', borderRadius: 14, background: 'var(--graphite)', color: 'var(--accent)', alignItems: 'center', justifyContent: 'center', fontSize: 19, fontWeight: 800 }}
+      >
+        {t('brand.name')[0]}
       </Link>
+      <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-2)' }}>{kicker}</div>
+        <div style={{ fontSize: 'clamp(20px, 2.4vw, 28px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.15, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
+      </div>
 
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{ display: 'flex', gap: 3, padding: 3, borderRadius: 4, background: 'var(--glass-2)', border: '1px solid var(--stroke-2)' }}>
-          <button
-            type="button"
-            onClick={() => setTheme('light')}
-            style={{ fontFamily: 'inherit', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '7px 14px', borderRadius: 4, background: theme === 'light' ? 'var(--ink)' : 'transparent', color: theme === 'light' ? 'var(--bg)' : 'var(--ink)', border: 0, cursor: 'pointer' }}
-          >
-            {t('common.day')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setTheme('ink')}
-            style={{ fontFamily: 'inherit', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', padding: '7px 14px', borderRadius: 4, background: theme === 'ink' ? 'var(--ink)' : 'transparent', color: theme === 'ink' ? 'var(--bg)' : 'var(--ink)', border: 0, cursor: 'pointer' }}
-          >
-            {t('common.night')}
-          </button>
-        </div>
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <button
+          type="button"
+          className="header-brand"
+          onClick={() => setTheme(theme === 'light' ? 'ink' : 'light')}
+          aria-label={theme === 'light' ? t('common.night') : t('common.day')}
+          style={{ width: 44, height: 44, borderRadius: '50%', border: 0, background: 'var(--glass)', color: 'var(--ink)', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+        >
+          <Icon name={theme === 'light' ? 'moon' : 'sun'} size={18} />
+        </button>
 
         {user ? (
           <Link
             href="/profile"
-            style={{ width: 38, height: 38, borderRadius: 4, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 900, flex: '0 0 auto' }}
+            aria-label={t('nav.profile')}
+            style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, flex: '0 0 auto' }}
           >
             {initial}
           </Link>
         ) : (
           <Link
             href="/login"
-            style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', padding: '10px 16px', borderRadius: 6, background: 'var(--accent)', color: 'var(--accent-ink)', flex: '0 0 auto' }}
+            style={{ fontSize: 13, fontWeight: 700, padding: '12px 20px', borderRadius: 'var(--r-pill)', background: 'var(--graphite)', color: 'var(--graphite-ink)', flex: '0 0 auto' }}
           >
             {t('nav.login')}
           </Link>

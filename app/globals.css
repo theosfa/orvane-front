@@ -1,37 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* "Lime & graphite": light grey canvas, solid white cards with big radii, one lime accent,
+   graphite for the strong blocks (sidebar, hero, primary chips). */
 :root {
-  --bg: #eeedec; --ink: #201e1d; --ink-2: #6b6767;
-  --glass: rgba(255,255,255,0.55); --glass-2: rgba(255,255,255,0.34); --glass-3: rgba(255,255,255,0.72);
-  --stroke: rgba(255,255,255,0.75); --stroke-2: rgba(32,30,29,0.10);
-  --accent: #178a4d; --accent-ink: #ffffff; --accent-deep: #0c5f33; --accent-tint: rgba(23,138,77,0.13);
-  --shadow: 0 1px 2px rgba(30,32,29,0.06); --shadow-lg: 0 8px 28px rgba(30,32,29,0.12);
-  --bloom-a: rgba(23,138,77,0.30); --bloom-b: rgba(126,214,164,0.36); --bloom-c: rgba(120,170,160,0.28);
-  --r-lg: 8px; --r-md: 6px; --r-sm: 4px;
+  --bg: #e9eae5; --ink: #1b1d18; --ink-2: #63665e;
+  --glass: #ffffff; --glass-2: #f1f2ee; --glass-3: #f4f5f1;
+  --stroke: transparent; --stroke-2: rgba(27,29,24,0.10);
+  --accent: #c6f24e; --accent-ink: #1b1d18; --accent-deep: #44620c; --accent-tint: rgba(198,242,78,0.32);
+  --graphite: #1b1d18; --graphite-2: #26291f; --graphite-ink: #ffffff; --graphite-ink-2: #b9bcb2; --graphite-line: #3a3d34;
+  --shadow: none; --shadow-lg: 0 12px 36px rgba(27,29,24,0.14);
+  --r-lg: 28px; --r-md: 16px; --r-sm: 10px; --r-pill: 999px;
+  --sidebar-w: 248px;
 }
 
 [data-theme="ink"] {
-  --bg: #161514; --ink: #f4f3f2; --ink-2: #a8a4a3;
-  --glass: rgba(60,57,56,0.52); --glass-2: rgba(60,57,56,0.34); --glass-3: rgba(74,70,69,0.62);
-  --stroke: rgba(244,243,242,0.14); --stroke-2: rgba(244,243,242,0.09);
-  --shadow: 0 1px 2px rgba(0,0,0,0.3); --shadow-lg: 0 10px 32px rgba(0,0,0,0.45);
+  --bg: #111210; --ink: #f2f3ee; --ink-2: #a3a69c;
+  --glass: #1c1e1a; --glass-2: #262922; --glass-3: #23261f;
+  --stroke: transparent; --stroke-2: rgba(242,243,238,0.10);
+  --accent-deep: #d4f57a; --accent-tint: rgba(198,242,78,0.16);
+  --graphite: #0a0b09; --graphite-2: #1c1e1a; --graphite-line: #2c2f28;
+  --shadow: none; --shadow-lg: 0 12px 36px rgba(0,0,0,0.5);
 }
-
-[data-app="future"] { --accent: #2f6fd0; --accent-ink: #ffffff; --accent-deep: #1b4a94; --accent-tint: rgba(47,111,208,0.13);
-  --bloom-a: rgba(47,111,208,0.28); --bloom-b: rgba(140,180,240,0.34); --bloom-c: rgba(120,150,190,0.26); }
-[data-app="food"] { --accent: #178a4d; --accent-ink: #ffffff; --accent-deep: #0c5f33; --accent-tint: rgba(23,138,77,0.13);
-  --bloom-a: rgba(23,138,77,0.30); --bloom-b: rgba(126,214,164,0.36); --bloom-c: rgba(120,170,160,0.28); }
-[data-app="finance"] { --accent: #9a6a0c; --accent-ink: #ffffff; --accent-deep: #6d4a05; --accent-tint: rgba(154,106,12,0.14);
-  --bloom-a: rgba(196,148,38,0.30); --bloom-b: rgba(240,203,124,0.34); --bloom-c: rgba(180,160,120,0.26); }
-
-[data-theme="ink"][data-app="future"] { --accent: #6aa6ff; --accent-ink: #101a28; --accent-deep: #a9c9ff; --accent-tint: rgba(106,166,255,0.18);
-  --bloom-a: rgba(106,166,255,0.28); --bloom-b: rgba(140,180,240,0.20); --bloom-c: rgba(70,110,180,0.28); }
-[data-theme="ink"][data-app="food"] { --accent: #3ec27d; --accent-ink: #15201a; --accent-deep: #8ce0b3; --accent-tint: rgba(62,194,125,0.18);
-  --bloom-a: rgba(62,194,125,0.30); --bloom-b: rgba(140,224,179,0.20); --bloom-c: rgba(70,150,150,0.28); }
-[data-theme="ink"][data-app="finance"] { --accent: #e0a93f; --accent-ink: #211a0c; --accent-deep: #f3cd86; --accent-tint: rgba(224,169,63,0.18);
-  --bloom-a: rgba(224,169,63,0.26); --bloom-b: rgba(243,205,134,0.18); --bloom-c: rgba(150,130,70,0.26); }
 
 html { scroll-behavior: smooth; }
 
@@ -39,14 +30,14 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: 'Archivo', system-ui, sans-serif;
+  font-family: 'Manrope', system-ui, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   transition: background .2s ease, color .2s ease;
 }
 
-h1, h2, h3 { margin: 0; font-family: 'Archivo', system-ui, sans-serif; }
+h1, h2, h3 { margin: 0; font-family: 'Manrope', system-ui, sans-serif; }
 p { margin: 0; }
 a { color: var(--accent-deep); text-decoration: none; }
 a:hover { color: var(--accent); }
@@ -168,7 +159,7 @@ button { font-family: inherit; }
   align-items: center;
   gap: 12px;
   padding: 12px 12px 12px 14px;
-  border-radius: 8px;
+  border-radius: var(--r-md);
   background: var(--glass-3);
   -webkit-backdrop-filter: blur(26px) saturate(180%);
   backdrop-filter: blur(26px) saturate(180%);
@@ -184,4 +175,36 @@ button { font-family: inherit; }
 }
 @media (max-width: 480px) {
   .invite-toast { flex-wrap: wrap; }
+}
+
+/* ---------- App shell: sidebar on desktop, bottom dock on phones ---------- */
+.app-shell { position: relative; z-index: 1; display: flex; min-height: 100vh; }
+.app-sidebar { display: none; }
+.app-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 140px; }
+.app-content { width: 100%; max-width: 1240px; margin-top: 16px; }
+.mobile-dock { display: flex; }
+.header-brand { display: flex; }
+
+@media (min-width: 960px) {
+  .app-sidebar {
+    display: flex; flex-direction: column; gap: 6px;
+    position: sticky; top: 0; height: 100vh; flex: 0 0 var(--sidebar-w); width: var(--sidebar-w);
+    padding: 16px 0 16px 16px;
+  }
+  .app-main { padding: 16px 24px 48px; }
+  .mobile-dock { display: none; }
+  .header-brand { display: none; }
+}
+
+.side-link {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--r-md);
+  color: var(--graphite-ink-2); font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: background .16s, color .16s;
+}
+.side-link:hover { background: var(--graphite-2); color: var(--graphite-ink); }
+.side-link[data-active='1'] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.side-link[data-active='1']:hover { background: var(--accent); color: var(--accent-ink); }
+.side-group-title {
+  padding: 14px 12px 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--graphite-ink-2); opacity: 0.75;
 }

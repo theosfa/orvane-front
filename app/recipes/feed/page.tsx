@@ -28,7 +28,7 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
   return (
     <article
       style={{
-        position: 'relative', width: '100%', maxWidth: 480, height: '100%', borderRadius: 8, overflow: 'hidden',
+        position: 'relative', width: '100%', maxWidth: 480, height: '100%', borderRadius: 'var(--r-lg)', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', gap: 16, padding: '22px 76px 22px 22px',
         background: `linear-gradient(160deg, hsl(${hue} 55% 42%) 0%, hsl(${(hue + 40) % 360} 60% 24%) 100%)`,
         color: '#fff', boxShadow: 'var(--shadow-lg)',
@@ -40,7 +40,7 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
       </div>
 
       <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 700 }}>
-        <span style={{ ...glass, padding: '6px 12px', borderRadius: 4 }}>{t('units.kcal', { value: Math.round(recipe.total.calories) })}</span>
+        <span style={{ ...glass, padding: '6px 12px', borderRadius: 'var(--r-sm)' }}>{t('units.kcal', { value: Math.round(recipe.total.calories) })}</span>
         <span style={{ opacity: 0.85 }}>
           {t('units.macros', { protein: Math.round(recipe.total.protein), fat: Math.round(recipe.total.fat), carbs: Math.round(recipe.total.carbs) })}
         </span>
@@ -61,7 +61,7 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {recipe.ingredients.slice(0, MAX_INGREDIENTS).map((ri) => (
-              <span key={ri.ingredientId} style={{ ...glass, padding: '5px 10px', borderRadius: 4, fontSize: 12, fontWeight: 600, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span key={ri.ingredientId} style={{ ...glass, padding: '5px 10px', borderRadius: 'var(--r-sm)', fontSize: 12, fontWeight: 600, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {ri.name}
               </span>
             ))}
@@ -89,7 +89,7 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
 
       <Link
         href={`/recipes/${recipe.id}`}
-        style={{ position: 'relative', alignSelf: 'flex-start', padding: '11px 18px', borderRadius: 6, background: '#fff', color: `hsl(${hue} 60% 24%)`, fontSize: 13, fontWeight: 800 }}
+        style={{ position: 'relative', alignSelf: 'flex-start', padding: '11px 18px', borderRadius: 'var(--r-md)', background: '#fff', color: `hsl(${hue} 60% 24%)`, fontSize: 13, fontWeight: 800 }}
       >
         {t('feed.openRecipe')} →
       </Link>
