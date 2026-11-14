@@ -2,7 +2,18 @@
 
 import Link from 'next/link';
 import { useT } from '@/lib/i18n/context';
-import { Card, Btn, Pill, Grid } from '@/components/ui';
+import { Card, Pill } from '@/components/ui';
+import { Icon, IconName } from '@/components/icons';
+
+type Feature = 'food' | 'finance' | 'future' | 'family' | 'social';
+const FEATURES: Array<{ id: Feature; icon: IconName }> = [
+  { id: 'food', icon: 'recipes' },
+  { id: 'finance', icon: 'wallets' },
+  { id: 'future', icon: 'plan' },
+  { id: 'family', icon: 'profile' },
+  { id: 'social', icon: 'liked' },
+];
+const FACTS = ['Free', 'Family', 'Lang'] as const;
 
 export default function Home() {
   const { t } = useT();
@@ -10,61 +21,52 @@ export default function Home() {
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingBottom: 60 }}>
       <section style={{ padding: 'clamp(28px, 5vw, 52px)', borderRadius: 'var(--r-lg)', background: 'var(--graphite)', color: 'var(--graphite-ink)', overflow: 'hidden', position: 'relative' }}>
-        <div aria-hidden="true" style={{ position: 'absolute', top: -110, right: -80, width: 340, height: 340, borderRadius: '50%', background: 'var(--accent)', opacity: 0.9 }} />
+        <div aria-hidden="true" className="hero-blob" />
         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 18, maxWidth: 720 }}>
-          <div style={{ fontSize: 'clamp(30px, 4.6vw, 54px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.04 }}>{t('landing.heroTitle')}</div>
-          <div style={{ fontSize: 16, fontWeight: 500, color: 'var(--graphite-ink-2)', maxWidth: '56ch' }}>{t('landing.heroSub')}</div>
+          <h2 style={{ fontSize: 'clamp(30px, 4.6vw, 54px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.04 }}>{t('landing.heroTitle')}</h2>
+          <p style={{ fontSize: 16, fontWeight: 500, color: 'var(--graphite-ink-2)', maxWidth: '58ch' }}>{t('landing.heroSub')}</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 8 }}>
             <Link href="/register" style={{ fontSize: 14, fontWeight: 700, padding: '14px 24px', borderRadius: 'var(--r-pill)', background: 'var(--accent)', color: 'var(--accent-ink)' }}>
               {t('landing.ctaStart')}
             </Link>
-            <a href="#food" style={{ fontSize: 14, fontWeight: 700, padding: '14px 24px', borderRadius: 'var(--r-pill)', border: '1px solid var(--graphite-line)', color: 'var(--graphite-ink)' }}>
+            <a href="#features" style={{ fontSize: 14, fontWeight: 700, padding: '14px 24px', borderRadius: 'var(--r-pill)', border: '1px solid var(--graphite-line)', color: 'var(--graphite-ink)' }}>
               {t('landing.ctaHow')}
             </a>
           </div>
         </div>
       </section>
 
-      <Grid min={260}>
-        <Card id="food" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <Pill accent>{t('landing.foodTag')}</Pill>
-          <h2 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em' }}>{t('landing.foodTitle')}</h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 13 }}>{t('landing.foodBody')}</p>
-          <p style={{ fontSize: 12, color: 'var(--ink-2)', borderTop: '1px solid var(--stroke-2)', paddingTop: 10 }}>{t('landing.foodNote')}</p>
-        </Card>
-        <Card style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <Pill accent>{t('landing.financeTag')}</Pill>
-          <h2 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em' }}>{t('landing.financeTitle')}</h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 13 }}>{t('landing.financeBody')}</p>
-          <p style={{ fontSize: 12, color: 'var(--ink-2)', borderTop: '1px solid var(--stroke-2)', paddingTop: 10 }}>{t('landing.financeNote')}</p>
-        </Card>
-        <Card style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <Pill accent>{t('landing.futureTag')}</Pill>
-          <h2 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em' }}>{t('landing.futureTitle')}</h2>
-          <p style={{ color: 'var(--ink-2)', fontSize: 13 }}>{t('landing.futureBody')}</p>
-          <p style={{ fontSize: 12, color: 'var(--ink-2)', borderTop: '1px solid var(--stroke-2)', paddingTop: 10 }}>{t('landing.futureNote')}</p>
-        </Card>
-      </Grid>
-
-      <Card style={{ textAlign: 'center', padding: '48px 24px', display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
-        <h2 style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', maxWidth: 560 }}>{t('landing.closingTitle')}</h2>
-        <p style={{ color: 'var(--ink-2)', fontSize: 14, maxWidth: 440 }}>{t('landing.closingSub')}</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, justifyContent: 'center', marginTop: 16 }}>
-          <div style={{ border: '1px solid var(--stroke-2)', borderRadius: 'var(--r-md)', padding: '20px 24px', width: 220, textAlign: 'left', background: 'var(--glass-2)' }}>
-            <div style={{ fontSize: 26, fontWeight: 800 }}>{t('landing.freeTitle')}</div>
-            <p style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 8 }}>{t('landing.freeBody')}</p>
-          </div>
-          <div style={{ border: '1px solid var(--stroke-2)', borderRadius: 'var(--r-md)', padding: '20px 24px', width: 220, textAlign: 'left', background: 'var(--glass-2)' }}>
-            <div style={{ fontSize: 26, fontWeight: 800 }}>
-              {t('landing.proTitle')} <small style={{ fontSize: 13, color: 'var(--ink-2)' }}>{t('landing.proPer')}</small>
+      <div id="features" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, scrollMarginTop: 16 }}>
+        {FEATURES.map((f) => (
+          <Card key={f.id} as="section" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+              <Pill accent>{t(`landing.${f.id}Tag`)}</Pill>
+              <span aria-hidden="true" style={{ width: 40, height: 40, borderRadius: 14, background: 'var(--glass-2)', color: 'var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon name={f.icon} size={18} />
+              </span>
             </div>
-            <p style={{ fontSize: 12, color: 'var(--ink-2)', marginTop: 8 }}>{t('landing.proBody')}</p>
-          </div>
+            <h3 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.2 }}>{t(`landing.${f.id}Title`)}</h3>
+            <p style={{ color: 'var(--ink-2)', fontSize: 14 }}>{t(`landing.${f.id}Body`)}</p>
+            <p style={{ fontSize: 13, color: 'var(--ink-2)', borderTop: '1px solid var(--stroke-2)', paddingTop: 10, marginTop: 'auto' }}>{t(`landing.${f.id}Note`)}</p>
+          </Card>
+        ))}
+      </div>
+
+      <section style={{ borderRadius: 'var(--r-lg)', padding: 'clamp(28px, 5vw, 48px)', background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center', textAlign: 'center' }}>
+        <h2 style={{ fontSize: 'clamp(26px, 3.6vw, 40px)', fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 1.1, maxWidth: 680 }}>{t('landing.closingTitle')}</h2>
+        <p style={{ fontSize: 15, fontWeight: 600, maxWidth: 540 }}>{t('landing.closingSub')}</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', width: '100%' }}>
+          {FACTS.map((k) => (
+            <div key={k} style={{ flex: '1 1 180px', maxWidth: 240, borderRadius: 'var(--r-md)', padding: '18px 20px', background: '#1b1d18', color: '#ffffff', textAlign: 'left' }}>
+              <div style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1, color: '#c6f24e' }}>{t(`landing.fact${k}Value`)}</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#b9bcb2', marginTop: 8 }}>{t(`landing.fact${k}Label`)}</div>
+            </div>
+          ))}
         </div>
-        <Link href="/register" style={{ marginTop: 8 }}>
-          <Btn variant="primary">{t('landing.ctaStart')}</Btn>
+        <Link href="/register" style={{ fontSize: 14, fontWeight: 700, padding: '14px 26px', borderRadius: 'var(--r-pill)', background: '#1b1d18', color: '#ffffff' }}>
+          {t('landing.ctaStart')}
         </Link>
-      </Card>
+      </section>
 
       <footer style={{ textAlign: 'center', color: 'var(--ink-2)', fontSize: 12, padding: '10px 0 40px' }}>{t('landing.footer')}</footer>
     </main>

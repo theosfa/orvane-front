@@ -15,7 +15,7 @@ function usePageMeta() {
   const finance = t('nav.finance.name');
   const future = t('nav.future.name');
 
-  if (pathname === '/') return { kicker: t('brand.name'), title: t('landing.heroTitle').split(' ').slice(0, 3).join(' ') };
+  if (pathname === '/') return { kicker: t('brand.name'), title: t('nav.home') };
   if (pathname === '/login') return { kicker: t('brand.name'), title: t('nav.login') };
   if (pathname === '/register') return { kicker: t('brand.name'), title: t('nav.register') };
   if (pathname === '/dashboard') return { kicker: t('dashboard.kicker'), title: t('dashboard.title') };
