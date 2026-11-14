@@ -24,6 +24,19 @@
   --shadow: none; --shadow-lg: 0 12px 36px rgba(0,0,0,0.5);
 }
 
+/* Each app keeps its own colour, as before, in the new bright style:
+   Food — lime, Plans — sky blue, Finance — amber. --app-* are always available
+   (app switcher tiles); --accent follows the app you are in (data-app on <html>). */
+:root {
+  --app-food: #c6f24e; --app-future: #8ec5ff; --app-finance: #ffc94a;
+}
+[data-app="food"] { --accent: #c6f24e; --accent-ink: #1b1d18; --accent-deep: #44620c; --accent-tint: rgba(198,242,78,0.32); }
+[data-app="future"] { --accent: #8ec5ff; --accent-ink: #0f1d2e; --accent-deep: #1d4f91; --accent-tint: rgba(142,197,255,0.30); }
+[data-app="finance"] { --accent: #ffc94a; --accent-ink: #2a1d05; --accent-deep: #7a5200; --accent-tint: rgba(255,201,74,0.30); }
+[data-theme="ink"][data-app="food"] { --accent-deep: #d4f57a; --accent-tint: rgba(198,242,78,0.16); }
+[data-theme="ink"][data-app="future"] { --accent-deep: #a9d2ff; --accent-tint: rgba(142,197,255,0.16); }
+[data-theme="ink"][data-app="finance"] { --accent-deep: #ffd77a; --accent-tint: rgba(255,201,74,0.16); }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -214,3 +227,6 @@ button { font-family: inherit; }
 @media (max-width: 720px) {
   .hero-blob { top: -90px; right: -90px; width: 150px; height: 150px; }
 }
+
+/* very narrow phones: the Day/Night switch shows icons only */
+@media (max-width: 400px) { .theme-label { display: none; } }

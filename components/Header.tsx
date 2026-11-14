@@ -60,15 +60,25 @@ export default function Header() {
       </div>
 
       <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-        <button
-          type="button"
-          className="header-brand"
-          onClick={() => setTheme(theme === 'light' ? 'ink' : 'light')}
-          aria-label={theme === 'light' ? t('common.night') : t('common.day')}
-          style={{ width: 44, height: 44, borderRadius: '50%', border: 0, background: 'var(--glass)', color: 'var(--ink)', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-        >
-          <Icon name={theme === 'light' ? 'moon' : 'sun'} size={18} />
-        </button>
+        <div role="group" style={{ display: 'flex', gap: 3, padding: 4, borderRadius: 'var(--r-pill)', background: 'var(--glass)' }}>
+          {(['light', 'ink'] as const).map((th) => (
+            <button
+              key={th}
+              type="button"
+              onClick={() => setTheme(th)}
+              aria-pressed={theme === th}
+              aria-label={th === 'light' ? t('common.day') : t('common.night')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit', fontSize: 12, fontWeight: 700, padding: '8px 12px',
+                borderRadius: 'var(--r-pill)', border: 0, cursor: 'pointer',
+                background: theme === th ? 'var(--ink)' : 'transparent', color: theme === th ? 'var(--bg)' : 'var(--ink)',
+              }}
+            >
+              <Icon name={th === 'light' ? 'sun' : 'moon'} size={14} />
+              <span className="theme-label">{th === 'light' ? t('common.day') : t('common.night')}</span>
+            </button>
+          ))}
+        </div>
 
         {user ? (
           <Link
