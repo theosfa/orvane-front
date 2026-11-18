@@ -19,8 +19,9 @@ const user = {
   showFullName: false,
 };
 const updateProfile = vi.fn();
+const logout = vi.fn();
 vi.mock('@/lib/auth-context', () => ({
-  useAuth: () => ({ user, logout: vi.fn(), updateLanguage: vi.fn(), updateProfile }),
+  useAuth: () => ({ user, logout, updateLanguage: vi.fn(), updateProfile }),
 }));
 vi.mock('@/lib/api', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/api')>();
@@ -38,7 +39,7 @@ vi.mock('@/components/FamilySection', () => ({ default: () => <section data-test
 const stats = vi.mocked(statsApi);
 
 const recipe = (id: number, name: string, isPublic: boolean, isMine = true): RecipeListItem => ({
-  id, name, isPublic, isMine, autoTranslated: false, liked: false, servings: 1, calories: 300, author: { username: 'anna', name: null, followed: false },
+  id, name, isPublic, isMine, autoTranslated: false, liked: false, servings: 1, calories: 300, author: { username: 'anna', name: null, followed: false }, photoId: null,
 });
 const me: PersonProfile = {
   username: 'anna', name: null, joinedAt: user.createdAt, isMe: true, followedByMe: false, followers: 4, following: 2,
@@ -60,6 +61,26 @@ beforeEach(() => {
 });
 
 const values = () => screen.getAllByTestId('profile-stat').map((el) => el.textContent);
+
+describe('sign out', () => {
+  it('is at the bottom of the profile on every tab and leads to the landing', async () => {
+    const u = userEvent.setup();
+    renderWithIntl(<ProfilePage />);
+    const btn = await screen.findByTestId('profile-logout');
+    expect(btn).toHaveTextContent('Sign out');
+
+    // the very last thing on the page
+    const main = screen.getByRole('main');
+    expect(main.lastElementChild?.contains(btn)).toBe(true);
+
+    await u.click(screen.getByRole('tab', { name: /settings/i }));
+    expect(screen.getAllByRole('button', { name: 'Sign out' })).toHaveLength(1);
+
+    await u.click(btn);
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(mockRouter.push).toHaveBeenCalledWith('/');
+  });
+});
 
 describe('profile header and numbers', () => {
   it('shows my name, username, followers and real numbers', async () => {

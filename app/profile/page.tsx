@@ -23,7 +23,7 @@ const TAB_LABEL = { public: 'profile.tabPublic', private: 'profile.tabPrivate', 
 const isTab = (v: string | null): v is Tab => TABS.includes(v as Tab);
 
 function ProfilePageContent() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { t, format } = useT();
@@ -128,6 +128,20 @@ function ProfilePageContent() {
         {tab === 'family' && <FamilySection />}
         {tab === 'settings' && <Settings />}
       </div>
+
+      {/* always at the very bottom of the profile, whatever tab is open */}
+      <div style={{ borderTop: '1px solid var(--stroke-2)', paddingTop: 18, marginTop: 6 }}>
+        <Btn
+          data-testid="profile-logout"
+          onClick={() => {
+            logout();
+            router.push('/');
+          }}
+          style={{ width: '100%', textAlign: 'center', padding: '13px 22px', color: '#c0432a' }}
+        >
+          {t('profile.logout')}
+        </Btn>
+      </div>
     </main>
   );
 }
@@ -172,8 +186,7 @@ function PrivateRecipes() {
 }
 
 function Settings() {
-  const { user, logout, updateLanguage, updateProfile } = useAuth();
-  const router = useRouter();
+  const { user, updateLanguage, updateProfile } = useAuth();
   const { t, lang } = useT();
   const [langError, setLangError] = useState<string | null>(null);
 
@@ -289,15 +302,6 @@ function Settings() {
         ))}
       </Card>
 
-      <Btn
-        onClick={() => {
-          logout();
-          router.push('/');
-        }}
-        style={{ alignSelf: 'flex-start' }}
-      >
-        {t('profile.logout')}
-      </Btn>
     </>
   );
 }
