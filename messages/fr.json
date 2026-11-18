@@ -291,7 +291,19 @@
     "addToPlan": "Ajouter aux Plans",
     "pdfHint": "« Exporter en PDF » ouvre l’impression — choisissez « Enregistrer en PDF ».",
     "openPlans": "Ouvrir les Plans →",
-    "changeDays": "← Changer les jours"
+    "changeDays": "← Changer les jours",
+    "photosLabel": "Photos du plat",
+    "photoAdd": "Ajouter",
+    "photoMain": "Principale",
+    "photoMakeMain": "Définir comme photo principale",
+    "photoRemove": "Supprimer la photo",
+    "photoUploading": "Envoi…",
+    "photoGenerating": "Création de la photo du plat…",
+    "photosHint": "La photo principale apparaît sur la carte de la recette. Jusqu’à 10 photos.",
+    "photoError": "Impossible d’envoyer la photo. Essayez-en une autre.",
+    "aiPhotoError": "Impossible de créer la photo du plat — vous pouvez ajouter la vôtre.",
+    "aiPhotoLimit": "La limite quotidienne de photos IA est atteinte — vous pouvez ajouter la vôtre.",
+    "photosPending": "En attente des photos…"
   },
   "feed": {
     "hint": "Faites défiler vers le bas pour la recette suivante",

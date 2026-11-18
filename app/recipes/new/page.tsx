@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useRef, useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { recipesApi, aiApi, CreateRecipeInput, ApiError } from '@/lib/api';
+import { recipesApi, aiApi, photosApi, CreateRecipeInput, ApiError } from '@/lib/api';
+import { prepareImage } from '@/lib/image';
+import PhotoEditor, { PhotoTile } from '@/components/PhotoEditor';
 import RequireAuth from '@/components/RequireAuth';
 import IngredientPicker from '@/components/IngredientPicker';
 import ServingsStepper from '@/components/ServingsStepper';
@@ -11,6 +13,8 @@ import { useT } from '@/lib/i18n/context';
 import { Card, Btn, Chip, GlassInput, GlassTextarea, Field, ErrorMsg, Kicker } from '@/components/ui';
 
 type StepRow = { stepText: string };
+
+const newKey = () => Math.random().toString(36).slice(2);
 type IngredientRow = { ingredientId: string; name: string; amount: string };
 
 function NewRecipePageContent() {
@@ -28,6 +32,48 @@ function NewRecipePageContent() {
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiNote, setAiNote] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
+  const [photos, setPhotos] = useState<PhotoTile[]>([]);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  // the tile of the latest AI photo: a new generation replaces it, a stale result is dropped
+  const aiPhotoKey = useRef<string | null>(null);
+  const photosPending = photos.some((p) => p.status !== 'ready');
+
+  const setTile = (key: string, patch: Partial<PhotoTile> | null) =>
+    setPhotos((prev) => (patch ? prev.map((p) => (p.key === key ? { ...p, ...patch } : p)) : prev.filter((p) => p.key !== key)));
+
+  const handleAddPhotos = (files: File[]) => {
+    setPhotoError(null);
+    for (const file of files) {
+      const key = newKey();
+      setPhotos((prev) => [...prev, { key, status: 'uploading' }]);
+      prepareImage(file)
+        .then((blob) => photosApi.upload(blob))
+        .then(({ id }) => setTile(key, { id, status: 'ready' }))
+        .catch(() => {
+          setTile(key, null);
+          setPhotoError(t('food.photoError'));
+        });
+    }
+  };
+
+  // a photo of the finished dish for an AI recipe; runs in the background while the user edits
+  const generateDishPhoto = (dishName: string, ingredientNames: string[]) => {
+    const key = newKey();
+    const previous = aiPhotoKey.current;
+    aiPhotoKey.current = key;
+    setPhotos((prev) => [{ key, status: 'generating' }, ...prev.filter((p) => p.key !== previous)]);
+    aiApi
+      .generateImage(dishName, ingredientNames)
+      .then(({ id }) => {
+        if (aiPhotoKey.current === key) setTile(key, { id, status: 'ready' });
+      })
+      .catch((err) => {
+        if (aiPhotoKey.current !== key) return;
+        aiPhotoKey.current = null;
+        setTile(key, null);
+        setPhotoError(err instanceof ApiError && err.status === 429 ? t('food.aiPhotoLimit') : t('food.aiPhotoError'));
+      });
+  };
 
   const handleGenerate = async () => {
     if (!aiPrompt.trim()) return;
@@ -46,6 +92,7 @@ function NewRecipePageContent() {
       setIngredients(rows.length ? rows : [{ ingredientId: '', name: '', amount: '' }]);
       setSteps(suggestion.steps.length ? suggestion.steps.map((s) => ({ stepText: s.stepText })) : [{ stepText: '' }]);
       setAiNote(t('food.aiApplied'));
+      generateDishPhoto(suggestion.name, suggestion.ingredients.map((i) => i.name));
     } catch {
       setAiError(t('food.aiError'));
     } finally {
@@ -89,6 +136,7 @@ function NewRecipePageContent() {
             amount: Number(r.amount),
           })),
         steps: steps.filter((s) => s.stepText.trim()).map((s, i) => ({ stepNum: i + 1, stepText: s.stepText })),
+        photoIds: photos.filter((p) => p.status === 'ready' && p.id).map((p) => p.id!),
       };
       const created = await recipesApi.create(dto);
       router.push(`/recipes/${created.id}`);
@@ -143,6 +191,17 @@ function NewRecipePageContent() {
         <Field label={t('food.nameLabel')}>
           <GlassInput placeholder={t('food.namePlaceholder')} value={name} onChange={(e) => setName(e.target.value)} required style={{ fontSize: 19, fontWeight: 800 }} />
         </Field>
+
+        <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <Kicker>{t('food.photosLabel')}</Kicker>
+          <PhotoEditor
+            tiles={photos}
+            onAdd={handleAddPhotos}
+            onRemove={(key) => setTile(key, null)}
+            onMakeMain={(key) => setPhotos((prev) => [...prev.filter((p) => p.key === key), ...prev.filter((p) => p.key !== key)])}
+            error={photoError}
+          />
+        </Card>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
           <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-2)' }}>{t('food.servingsLabel')}</span>
@@ -268,8 +327,8 @@ function NewRecipePageContent() {
         </Card>
 
         {error && <ErrorMsg>{error}</ErrorMsg>}
-        <Btn variant="primary" type="submit" disabled={submitting} style={{ width: '100%', textAlign: 'center', padding: '14px 22px' }}>
-          {submitting ? t('food.saving') : t('food.save')}
+        <Btn variant="primary" type="submit" disabled={submitting || photosPending} style={{ width: '100%', textAlign: 'center', padding: '14px 22px' }}>
+          {submitting ? t('food.saving') : photosPending ? t('food.photosPending') : t('food.save')}
         </Btn>
       </form>
     </main>

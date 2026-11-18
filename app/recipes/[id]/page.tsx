@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { recipesApi, Recipe, ApiError } from '@/lib/api';
+import { recipesApi, photosApi, photoUrl, Recipe, RecipePhoto, ApiError } from '@/lib/api';
+import { prepareImage } from '@/lib/image';
+import PhotoEditor, { PhotoTile } from '@/components/PhotoEditor';
 import type { Language } from '@/lib/i18n/languages';
 import RequireAuth from '@/components/RequireAuth';
 import LikeButton from '@/components/LikeButton';
@@ -11,7 +13,47 @@ import AuthorLink from '@/components/AuthorLink';
 import ServingsStepper from '@/components/ServingsStepper';
 import { roundGrams, scaleAmount } from '@/lib/servings';
 import { useT } from '@/lib/i18n/context';
-import { Card, Btn, Pill, ErrorMsg, StateMsg } from '@/components/ui';
+import { Card, Btn, Pill, ErrorMsg, StateMsg, Kicker } from '@/components/ui';
+
+// the author manages the photos here; every change is saved right away
+function OwnerPhotos({ recipeId, photos, onChange }: { recipeId: number; photos: RecipePhoto[]; onChange: (photos: RecipePhoto[]) => void }) {
+  const { t } = useT();
+  const [uploading, setUploading] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const run = (p: Promise<RecipePhoto[]>) =>
+    p.then(onChange).catch(() => setError(t('food.photoError')));
+
+  const tiles: PhotoTile[] = [
+    ...photos.map((p) => ({ key: p.id, id: p.id, status: 'ready' as const })),
+    ...uploading.map((key) => ({ key, status: 'uploading' as const })),
+  ];
+
+  return (
+    <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <Kicker>{t('food.photosLabel')}</Kicker>
+      <PhotoEditor
+        tiles={tiles}
+        error={error}
+        onRemove={(id) => run(recipesApi.removePhoto(recipeId, id))}
+        onMakeMain={(id) => run(recipesApi.makeMainPhoto(recipeId, id))}
+        onAdd={(files) => {
+          setError(null);
+          for (const file of files) {
+            const key = Math.random().toString(36).slice(2);
+            setUploading((prev) => [...prev, key]);
+            prepareImage(file)
+              .then((blob) => photosApi.upload(blob))
+              .then(({ id }) => recipesApi.addPhotos(recipeId, [id]))
+              .then(onChange)
+              .catch(() => setError(t('food.photoError')))
+              .finally(() => setUploading((prev) => prev.filter((k) => k !== key)));
+          }
+        }}
+      />
+    </Card>
+  );
+}
 
 function RecipeDetailContent() {
   const params = useParams<{ id: string }>();
@@ -22,6 +64,8 @@ function RecipeDetailContent() {
   const [originalLang, setOriginalLang] = useState<Language | undefined>();
   // how many people to cook for; null until the recipe loads (then the author's count)
   const [servings, setServings] = useState<number | null>(null);
+  // which photo is shown big; the main one by default
+  const [shownPhoto, setShownPhoto] = useState<string | null>(null);
 
   // t changes with the language, so this also reloads the recipe in the new language
   useEffect(() => {
@@ -48,6 +92,8 @@ function RecipeDetailContent() {
   if (!recipe) return <StateMsg>{t('common.loading')}</StateMsg>;
 
   const people = servings ?? recipe.servings;
+  const photos = recipe.photos ?? []; // an older API answers without photos
+  const bigPhoto = photos.find((p) => p.id === shownPhoto) ?? photos[0];
   const scale = (v: number | string) => scaleAmount(v, recipe.servings, people);
   const round1 = (v: number) => Math.round(v * 10) / 10;
 
@@ -79,6 +125,44 @@ function RecipeDetailContent() {
             {originalLang ? t('food.showTranslation') : t('food.showOriginal')}
           </button>
         </div>
+      )}
+
+      {bigPhoto && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- served by our API, already resized */}
+          <img
+            src={photoUrl(bigPhoto.id)}
+            alt={recipe.name}
+            data-testid="recipe-photo"
+            style={{ width: '100%', aspectRatio: '4 / 3', maxHeight: 460, objectFit: 'cover', borderRadius: 'var(--r-lg)', display: 'block', background: 'var(--glass-2)' }}
+          />
+          {!recipe.isMine && photos.length > 1 && (
+            <div style={{ display: 'flex', gap: 8, overflowX: 'auto' }}>
+              {photos.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setShownPhoto(p.id)}
+                  style={{ flex: '0 0 64px', height: 64, padding: 0, borderRadius: 'var(--r-sm)', overflow: 'hidden', cursor: 'pointer', border: p.id === bigPhoto.id ? '2px solid var(--accent-deep)' : '1px solid var(--stroke-2)' }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={photoUrl(p.id)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {recipe.isMine && (
+        <OwnerPhotos
+          recipeId={recipe.id}
+          photos={photos}
+          onChange={(photos) => {
+            setShownPhoto(null);
+            setRecipe((r) => (r ? { ...r, photos } : r));
+          }}
+        />
       )}
 
       <Card as="section" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>

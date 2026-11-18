@@ -291,7 +291,19 @@
     "addToPlan": "Add to Plans",
     "pdfHint": "“Export as PDF” opens the print dialog — choose “Save as PDF”.",
     "openPlans": "Open Plans →",
-    "changeDays": "← Change days"
+    "changeDays": "← Change days",
+    "photosLabel": "Dish photos",
+    "photoAdd": "Add",
+    "photoMain": "Main",
+    "photoMakeMain": "Make main photo",
+    "photoRemove": "Remove photo",
+    "photoUploading": "Uploading…",
+    "photoGenerating": "Creating a photo of the dish…",
+    "photosHint": "The main photo is shown on the recipe card. Up to 10 photos.",
+    "photoError": "Couldn’t upload the photo. Try another one.",
+    "aiPhotoError": "Couldn’t create a photo of the dish — you can add your own.",
+    "aiPhotoLimit": "The daily limit of AI photos is reached — you can add your own.",
+    "photosPending": "Waiting for photos…"
   },
   "feed": {
     "hint": "Scroll down for the next recipe",

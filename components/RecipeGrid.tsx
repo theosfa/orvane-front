@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import type { RecipeListItem } from '@/lib/api';
+import { photoUrl, type RecipeListItem } from '@/lib/api';
 import LikeButton from '@/components/LikeButton';
 import AuthorLink from '@/components/AuthorLink';
 import { Card, Pill } from '@/components/ui';
@@ -23,6 +23,12 @@ export default function RecipeGrid({
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 18 }}>
       {recipes.map((r) => (
         <Card key={r.id} as="article" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {r.photoId && (
+            <Link href={`/recipes/${r.id}`} tabIndex={-1} aria-hidden="true">
+              {/* eslint-disable-next-line @next/next/no-img-element -- served by our API, already resized */}
+              <img src={photoUrl(r.photoId)} alt="" loading="lazy" style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: 'var(--r-md)', display: 'block', background: 'var(--glass-2)' }} />
+            </Link>
+          )}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
             <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Link href={`/recipes/${r.id}`} style={{ color: 'inherit' }}>

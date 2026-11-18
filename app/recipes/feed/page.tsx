@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { recipesApi, Recipe } from '@/lib/api';
+import { recipesApi, photoUrl, Recipe } from '@/lib/api';
 import RequireAuth from '@/components/RequireAuth';
 import LikeButton from '@/components/LikeButton';
 import AuthorLink from '@/components/AuthorLink';
@@ -21,6 +21,12 @@ type Item = { key: string; recipe: Recipe };
 function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
   const { t } = useT();
   const hue = hueFor(recipe.id);
+  const photo = recipe.photos?.[0];
+  const gradient = `linear-gradient(160deg, hsl(${hue} 55% 42%) 0%, hsl(${(hue + 40) % 360} 60% 24%) 100%)`;
+  // with a photo: the photo fills the card, darkened towards the bottom so the text stays readable
+  const background = photo
+    ? `linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 28%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.88) 100%), url(${photoUrl(photo.id)}) center / cover no-repeat, ${gradient}`
+    : gradient;
   const glass = { background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(255,255,255,0.28)' };
 
   return (
@@ -28,14 +34,16 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
       style={{
         position: 'relative', width: '100%', maxWidth: 480, height: '100%', borderRadius: 'var(--r-lg)', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', gap: 16, padding: '22px 76px 22px 22px',
-        background: `linear-gradient(160deg, hsl(${hue} 55% 42%) 0%, hsl(${(hue + 40) % 360} 60% 24%) 100%)`,
+        background,
         color: '#fff', boxShadow: 'var(--shadow-lg)',
       }}
     >
-      {/* big faint first letter as the card's "picture" until recipes have photos */}
-      <div aria-hidden style={{ position: 'absolute', top: -40, right: -20, fontSize: 260, fontWeight: 900, lineHeight: 1, opacity: 0.12, pointerEvents: 'none' }}>
-        {recipe.name.charAt(0).toUpperCase()}
-      </div>
+      {/* no photo: a big faint first letter as the card's "picture" */}
+      {!photo && (
+        <div aria-hidden style={{ position: 'absolute', top: -40, right: -20, fontSize: 260, fontWeight: 900, lineHeight: 1, opacity: 0.12, pointerEvents: 'none' }}>
+          {recipe.name.charAt(0).toUpperCase()}
+        </div>
+      )}
 
       <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 700 }}>
         <span style={{ ...glass, padding: '6px 12px', borderRadius: 'var(--r-sm)' }}>{t('units.kcal', { value: Math.round(recipe.total.calories) })}</span>

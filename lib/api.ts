@@ -84,8 +84,10 @@ export async function apiFetch<T>(path: string, opts: RequestOptions = {}, retri
   }
   if (!url.searchParams.has('lang')) url.searchParams.set('lang', apiLanguage);
 
+  // FormData (file upload) — браузер сам ставит multipart Content-Type с boundary
+  const isForm = typeof FormData !== 'undefined' && body instanceof FormData;
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+    ...(isForm ? {} : { 'Content-Type': 'application/json' }),
     'X-Client-Id': CLIENT_ID,
   };
 
@@ -94,7 +96,7 @@ export async function apiFetch<T>(path: string, opts: RequestOptions = {}, retri
   const res = await fetch(url.toString(), {
     method,
     headers,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
+    body: isForm ? (body as FormData) : body !== undefined ? JSON.stringify(body) : undefined,
     cache: 'no-store',
     credentials: 'include', // send the refresh cookie to /auth/*
   });
@@ -112,6 +114,11 @@ export async function apiFetch<T>(path: string, opts: RequestOptions = {}, retri
   }
 
   return data as T;
+}
+
+// Photos are served by the API without auth (<img> can't send a token; ids are random uuids)
+export function photoUrl(id: string) {
+  return `${API_URL.replace(/\/$/, '')}/photos/${id}.webp`;
 }
 
 // ---- Typed shapes matching your Nest DTOs / entities ----
@@ -158,7 +165,11 @@ export type Totals = { calories: number; protein: number; fat: number; carbs: nu
 // isPublic = false: private, only its author sees it; isMine: the current user wrote it
 // autoTranslated: the name was machine-translated from the author's language
 // servings: how many people the ingredient amounts are for
-export type RecipeListItem = { id: number; name: string; autoTranslated: boolean; liked: boolean; isPublic: boolean; isMine: boolean; servings: number; calories: number; author: RecipeAuthor | null };
+// photoId: the main photo (shown on cards), null if the recipe has none
+export type RecipeListItem = { id: number; name: string; autoTranslated: boolean; liked: boolean; isPublic: boolean; isMine: boolean; servings: number; calories: number; author: RecipeAuthor | null; photoId: string | null };
+
+// a photo of the dish; in a recipe's list the first one is the main photo
+export type RecipePhoto = { id: string };
 
 export type RecipeFilters = { q?: string; minCalories?: number; maxCalories?: number; ingredientIds?: number[] };
 
@@ -185,6 +196,7 @@ export type Recipe = {
   isPublic: boolean;
   isMine: boolean;
   author: RecipeAuthor | null;
+  photos: RecipePhoto[]; // in order, the first is the main one
   total: Totals;
 };
 
@@ -196,6 +208,7 @@ export type CreateRecipeInput = {
   servings: number;
   ingredients: RecipeIngredientInput[];
   steps: RecipeStep[];
+  photoIds?: string[]; // photos uploaded beforehand (photosApi.upload / aiApi.generateImage), first = main
 };
 
 // ingredientId = null: the AI suggested something that isn't in the DB yet
@@ -362,12 +375,28 @@ export const recipesApi = {
   liked: () => apiFetch<RecipeListItem[]>('/recipes/liked'),
   like: (id: number) => apiFetch<{ liked: boolean }>(`/recipes/${id}/like`, { method: 'POST' }),
   unlike: (id: number) => apiFetch<{ liked: boolean }>(`/recipes/${id}/like`, { method: 'DELETE' }),
+  // photos of one's own recipe; each returns the recipe's photos in their new order
+  addPhotos: (id: number, photoIds: string[]) => apiFetch<RecipePhoto[]>(`/recipes/${id}/photos`, { method: 'POST', body: { photoIds } }),
+  removePhoto: (id: number, photoId: string) => apiFetch<RecipePhoto[]>(`/recipes/${id}/photos/${photoId}`, { method: 'DELETE' }),
+  makeMainPhoto: (id: number, photoId: string) => apiFetch<RecipePhoto[]>(`/recipes/${id}/photos/${photoId}/main`, { method: 'POST' }),
+};
+
+export const photosApi = {
+  // stores the image (resized to WebP on the server); the id is then passed with the recipe
+  upload: (file: Blob) => {
+    const form = new FormData();
+    form.append('file', file, 'photo.jpg');
+    return apiFetch<RecipePhoto>('/photos', { method: 'POST', body: form });
+  },
 };
 
 export const aiApi = {
   // lang: the language the recipe should be written in
   generateRecipe: (prompt: string, lang: Language) =>
     apiFetch<GeneratedRecipe>('/ai/recipes/generate', { method: 'POST', body: { prompt, lang } }),
+  // a photo of the finished dish (generated, ~10–15 s); 429 when the daily limit is used up
+  generateImage: (name: string, ingredients: string[]) =>
+    apiFetch<RecipePhoto>('/ai/recipes/image', { method: 'POST', body: { name, ingredients } }),
 };
 
 export const ingredientsApi = {
