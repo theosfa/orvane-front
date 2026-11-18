@@ -12,7 +12,6 @@ import { Btn, EmptyState, ErrorMsg, StateMsg } from '@/components/ui';
 const BATCH = 5; // recipes per request
 const PREFETCH = 2; // load more when this many cards are left
 const MAX_INGREDIENTS = 6;
-const MAX_STEPS = 2;
 
 // the same recipe always gets the same colours
 const hueFor = (id: number) => (id * 47) % 360;
@@ -22,7 +21,6 @@ type Item = { key: string; recipe: Recipe };
 function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
   const { t } = useT();
   const hue = hueFor(recipe.id);
-  const steps = [...recipe.steps].sort((a, b) => a.stepNum - b.stepNum);
   const glass = { background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(255,255,255,0.28)' };
 
   return (
@@ -54,6 +52,7 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
         {recipe.autoTranslated && <span style={{ fontSize: 11, opacity: 0.7 }}>{t('food.autoTranslated')}</span>}
       </div>
 
+      {/* шаги в карточку не помещаются на телефоне — они на странице рецепта */}
       {recipe.ingredients.length > 0 && (
         <section style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.75 }}>
@@ -71,19 +70,6 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
               </span>
             )}
           </div>
-        </section>
-      )}
-
-      {steps.length > 0 && (
-        <section style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.75 }}>{t('feed.steps')}</div>
-          {steps.slice(0, MAX_STEPS).map((s) => (
-            <div key={s.stepNum} style={{ display: 'flex', gap: 10, fontSize: 13, lineHeight: 1.4 }}>
-              <span style={{ ...glass, flex: '0 0 22px', height: 22, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800 }}>{s.stepNum}</span>
-              <span style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.stepText}</span>
-            </div>
-          ))}
-          {steps.length > MAX_STEPS && <span style={{ fontSize: 12, fontWeight: 700, opacity: 0.8 }}>{t('feed.moreSteps', { count: steps.length - MAX_STEPS })}</span>}
         </section>
       )}
 
