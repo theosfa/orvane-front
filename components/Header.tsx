@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useT } from '@/lib/i18n/context';
 import { useTheme } from '@/lib/theme-context';
+import { APP_HOME, useAppMode } from '@/lib/app-mode-context';
 import { Icon } from '@/components/icons';
 
 function usePageMeta() {
@@ -40,6 +41,7 @@ export default function Header() {
   const { user } = useAuth();
   const { t } = useT();
   const { theme, setTheme } = useTheme();
+  const { app } = useAppMode();
   const { kicker, title } = usePageMeta();
   const initial = (user?.firstName || user?.username || '?')[0].toUpperCase();
 
@@ -47,7 +49,7 @@ export default function Header() {
     <header style={{ width: '100%', maxWidth: 1240, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, minHeight: 48 }}>
       {/* the logo lives in the sidebar on desktop; on phones it is here */}
       <Link
-        href="/"
+        href={user ? APP_HOME[app] : '/'}
         className="header-brand"
         aria-label={t('brand.name')}
         style={{ width: 44, height: 44, flex: '0 0 44px', borderRadius: 14, background: 'var(--graphite)', color: 'var(--accent)', alignItems: 'center', justifyContent: 'center', fontSize: 19, fontWeight: 800 }}

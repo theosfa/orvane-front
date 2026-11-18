@@ -1,8 +1,12 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useT } from '@/lib/i18n/context';
-import { Card, Pill } from '@/components/ui';
+import { useAuth } from '@/lib/auth-context';
+import { APP_HOME } from '@/lib/app-mode-context';
+import { Card, Pill, StateMsg } from '@/components/ui';
 import { Icon, IconName } from '@/components/icons';
 
 type Feature = 'food' | 'finance' | 'future' | 'family' | 'social';
@@ -17,6 +21,18 @@ const FACTS = ['Free', 'Family', 'Lang'] as const;
 
 export default function Home() {
   const { t } = useT();
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  // лендинг — для гостей; вошедших сразу ведём в приложение (раздел «Питание»)
+  useEffect(() => {
+    if (!loading && user) router.replace(APP_HOME.food);
+  }, [loading, user, router]);
+
+  // пока не знаем, вошёл ли человек (или уже уходим на редирект), лендинг не показываем, чтобы он не мелькал
+  if (loading || user) {
+    return <StateMsg>{t('common.loading')}</StateMsg>;
+  }
 
   return (
     <main style={{ display: 'flex', flexDirection: 'column', gap: 16, paddingBottom: 60 }}>

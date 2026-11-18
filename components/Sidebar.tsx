@@ -74,7 +74,7 @@ export default function Sidebar() {
           padding: '20px 12px 12px', borderRadius: 'var(--r-lg)', background: 'var(--graphite)', color: 'var(--graphite-ink)',
         }}
       >
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 8px 14px', color: 'var(--graphite-ink)', textDecoration: 'none' }}>
+        <Link href={user ? APP_HOME[app] : '/'} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 8px 14px', color: 'var(--graphite-ink)', textDecoration: 'none' }}>
           <span style={{ width: 40, height: 40, borderRadius: 14, background: 'var(--accent)', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18 }}>
             {brand[0]}
           </span>
