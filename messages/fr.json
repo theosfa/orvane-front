@@ -257,7 +257,6 @@
     "moreServings": "Plus de personnes",
     "cookFor": "On cuisine pour",
     "originalServings": "{count, plural, one {La recette est prévue pour # personne} other {La recette est prévue pour # personnes}}",
-    "ingredientsFor": "{count, plural, one {Ingrédients pour # personne} other {Ingrédients pour # personnes}}",
     "forPeople": "{count, plural, one {pour # personne} other {pour # personnes}}",
     "perPerson": "{value, number} kcal par personne",
     "prevWeek": "Semaine précédente",
@@ -303,7 +302,9 @@
     "photoError": "Impossible d’envoyer la photo. Essayez-en une autre.",
     "aiPhotoError": "Impossible de créer la photo du plat — vous pouvez ajouter la vôtre.",
     "aiPhotoLimit": "La limite quotidienne de photos IA est atteinte — vous pouvez ajouter la vôtre.",
-    "photosPending": "En attente des photos…"
+    "photosPending": "En attente des photos…",
+    "perPersonOf": "{value} par personne",
+    "nutritionShow": "Afficher dans la liste des ingrédients"
   },
   "feed": {
     "hint": "Faites défiler vers le bas pour la recette suivante",

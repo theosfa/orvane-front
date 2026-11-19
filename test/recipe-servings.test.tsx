@@ -37,19 +37,47 @@ beforeEach(() => {
   api.get.mockResolvedValue(recipe);
 });
 
+describe('recipe detail nutrition switch', () => {
+  it('shows calories by default and switches the ingredient list to the picked macro', async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<RecipeDetailPage />);
+
+    const kcal = await screen.findByRole('button', { name: '390 kcal' });
+    expect(kcal).toHaveAttribute('aria-pressed', 'true');
+    const [rice, salt] = screen.getAllByTestId('ingredient-row');
+    expect(rice).toHaveTextContent('300 g · 390 kcal');
+    expect(screen.queryByText(/Ingredients for/)).toBeNull();
+
+    await user.click(screen.getByRole('button', { name: 'C 84 g' }));
+    expect(screen.getByRole('button', { name: 'C 84 g' })).toHaveAttribute('aria-pressed', 'true');
+    expect(kcal).toHaveAttribute('aria-pressed', 'false');
+    expect(rice).toHaveTextContent('300 g · C 84 g');
+    expect(salt).toHaveTextContent('3 g · C 0 g');
+    expect(screen.getByText('C 42 g per person')).toBeInTheDocument();
+
+    // the picked macro follows the number of people
+    await user.click(screen.getByRole('button', { name: 'More people' }));
+    await user.click(screen.getByRole('button', { name: 'More people' }));
+    expect(rice).toHaveTextContent('600 g · C 168 g');
+
+    await user.click(screen.getByRole('button', { name: 'P 16.2 g' }));
+    expect(rice).toHaveTextContent('600 g · P 16.2 g');
+  });
+});
+
 describe('recipe detail servings', () => {
   it('starts at the author’s count and recalculates ingredients and calories', async () => {
     const user = userEvent.setup();
     renderWithIntl(<RecipeDetailPage />);
 
-    expect(await screen.findByText('Ingredients for 2 people')).toBeInTheDocument();
+    expect(await screen.findByText('Calories for 2 people')).toBeInTheDocument();
     expect(screen.getByText('The recipe is written for 2 people')).toBeInTheDocument();
     const [rice, salt] = screen.getAllByTestId('ingredient-row');
     expect(rice).toHaveTextContent('300 g');
 
     await user.click(screen.getByRole('button', { name: 'More people' }));
     await user.click(screen.getByRole('button', { name: 'More people' }));
-    expect(screen.getByText('Ingredients for 4 people')).toBeInTheDocument();
+    expect(screen.getByText('Calories for 4 people')).toBeInTheDocument();
     expect(rice).toHaveTextContent('600 g');
     expect(salt).toHaveTextContent('6 g');
     expect(screen.getByText('780 kcal')).toBeInTheDocument();

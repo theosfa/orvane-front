@@ -55,6 +55,9 @@ function OwnerPhotos({ recipeId, photos, onChange }: { recipeId: number; photos:
   );
 }
 
+type Metric = 'calories' | 'protein' | 'fat' | 'carbs';
+const METRICS: Metric[] = ['calories', 'protein', 'fat', 'carbs'];
+
 function RecipeDetailContent() {
   const params = useParams<{ id: string }>();
   const { t } = useT();
@@ -66,6 +69,8 @@ function RecipeDetailContent() {
   const [servings, setServings] = useState<number | null>(null);
   // which photo is shown big; the main one by default
   const [shownPhoto, setShownPhoto] = useState<string | null>(null);
+  // what the ingredient list shows next to the grams; picked with the nutrition pills
+  const [metric, setMetric] = useState<Metric>('calories');
 
   // t changes with the language, so this also reloads the recipe in the new language
   useEffect(() => {
@@ -96,6 +101,8 @@ function RecipeDetailContent() {
   const bigPhoto = photos.find((p) => p.id === shownPhoto) ?? photos[0];
   const scale = (v: number | string) => scaleAmount(v, recipe.servings, people);
   const round1 = (v: number) => Math.round(v * 10) / 10;
+  // "540 kcal" or "P 32.5 g" — kcal rounded to whole numbers, macros to one decimal
+  const nutrient = (m: Metric, v: number) => (m === 'calories' ? t('units.kcal', { value: Math.round(v) }) : t(`units.${m}`, { value: round1(v) }));
 
   return (
     <main style={{ maxWidth: 960, width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 32, paddingBottom: 40 }}>
@@ -175,23 +182,40 @@ function RecipeDetailContent() {
 
       <section>
         <h2 style={{ fontSize: 15, fontWeight: 800, marginBottom: 12 }}>{t('food.calTitle', { count: people })}</h2>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          <Pill accent>{t('units.kcal', { value: Math.round(scale(recipe.total.calories)) })}</Pill>
-          <Pill>{t('units.protein', { value: round1(scale(recipe.total.protein)) })}</Pill>
-          <Pill>{t('units.fat', { value: round1(scale(recipe.total.fat)) })}</Pill>
-          <Pill>{t('units.carbs', { value: round1(scale(recipe.total.carbs)) })}</Pill>
-          <Pill>{t('food.perPerson', { value: Math.round(recipe.total.calories / recipe.servings) })}</Pill>
+        {/* the pills pick what the ingredient list shows next to the grams */}
+        <div role="group" aria-label={t('food.nutritionShow')} style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {METRICS.map((m) => {
+            const active = metric === m;
+            return (
+              <button
+                key={m}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setMetric(m)}
+                style={{
+                  fontFamily: 'inherit', fontSize: 12, fontWeight: 700, padding: '6px 12px', borderRadius: 'var(--r-pill)', cursor: 'pointer',
+                  background: active ? 'var(--accent)' : 'var(--glass-2)',
+                  color: active ? 'var(--accent-ink)' : 'var(--ink)',
+                  border: active ? '1px solid transparent' : '1px solid var(--stroke-2)',
+                }}
+              >
+                {nutrient(m, scale(recipe.total[m]))}
+              </button>
+            );
+          })}
+          <Pill>
+            {metric === 'calories'
+              ? t('food.perPerson', { value: Math.round(recipe.total.calories / recipe.servings) })
+              : t('food.perPersonOf', { value: nutrient(metric, recipe.total[metric] / recipe.servings) })}
+          </Pill>
         </div>
-      </section>
 
-      <section>
-        <h2 style={{ fontSize: 15, fontWeight: 800, marginBottom: 12 }}>{t('food.ingredientsFor', { count: people })}</h2>
-        <Card style={{ padding: '4px 20px' }}>
+        <Card style={{ padding: '4px 20px', marginTop: 14 }}>
           {recipe.ingredients.map((ri) => (
             <div key={ri.ingredientId} data-testid="ingredient-row" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '13px 0', borderBottom: '1px dashed var(--stroke-2)' }}>
               <span>{ri.name}</span>
-              <span style={{ color: 'var(--ink-2)' }}>
-                {t('units.grams', { value: roundGrams(scale(ri.amount)) })} · {t('units.kcal', { value: Math.round(scale(ri.calories)) })}
+              <span style={{ color: 'var(--ink-2)', whiteSpace: 'nowrap' }}>
+                {t('units.grams', { value: roundGrams(scale(ri.amount)) })} · {nutrient(metric, scale(ri[metric]))}
               </span>
             </div>
           ))}
