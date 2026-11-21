@@ -12,6 +12,7 @@ import LikeButton from '@/components/LikeButton';
 import AuthorLink from '@/components/AuthorLink';
 import ServingsStepper from '@/components/ServingsStepper';
 import { roundGrams, scaleAmount } from '@/lib/servings';
+import { scaleStepText } from '@/lib/scale-steps';
 import { useT } from '@/lib/i18n/context';
 import { Card, Btn, Pill, ErrorMsg, StateMsg, Kicker } from '@/components/ui';
 
@@ -60,7 +61,7 @@ const METRICS: Metric[] = ['calories', 'protein', 'fat', 'carbs'];
 
 function RecipeDetailContent() {
   const params = useParams<{ id: string }>();
-  const { t } = useT();
+  const { t, lang } = useT();
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [error, setError] = useState<string | null>(null);
   // set: show the recipe in the author's language instead of the auto-translation
@@ -232,7 +233,18 @@ function RecipeDetailContent() {
                 <span style={{ flex: '0 0 auto', width: 27, height: 27, borderRadius: '50%', background: 'var(--accent-tint)', color: 'var(--accent-deep)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800 }}>
                   {s.stepNum}
                 </span>
-                <span style={{ paddingTop: 4, fontSize: 14 }}>{s.stepText}</span>
+                <span style={{ paddingTop: 4, fontSize: 14 }}>
+                  {/* amounts in the text follow the number of people; recalculated ones are highlighted */}
+                  {scaleStepText(s.stepText, people / recipe.servings, originalLang ?? lang).map((part, i) =>
+                    part.scaled ? (
+                      <strong key={i} data-testid="scaled-amount" style={{ color: 'var(--accent-deep)' }}>
+                        {part.text}
+                      </strong>
+                    ) : (
+                      <span key={i}>{part.text}</span>
+                    ),
+                  )}
+                </span>
               </div>
             ))}
         </div>

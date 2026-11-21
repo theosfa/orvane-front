@@ -23,7 +23,7 @@ const recipe: Recipe = {
     { ingredientId: 1, name: 'Rice', amount: '300.00', calories: 390, protein: 8.1, fat: 0.9, carbs: 84 },
     { ingredientId: 2, name: 'Salt', amount: '3.00', calories: 0, protein: 0, fat: 0, carbs: 0 },
   ],
-  steps: [{ stepNum: 1, stepText: 'Boil.' }],
+  steps: [{ stepNum: 1, stepText: 'Boil 300 g rice with 3 g salt for 15 minutes.' }],
   liked: false,
   isPublic: true,
   isMine: true,
@@ -62,6 +62,20 @@ describe('recipe detail nutrition switch', () => {
 
     await user.click(screen.getByRole('button', { name: 'P 16.2 g' }));
     expect(rice).toHaveTextContent('600 g · P 16.2 g');
+  });
+});
+
+describe('recipe detail steps', () => {
+  it('recalculates the amounts inside the steps for the chosen number of people', async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<RecipeDetailPage />);
+
+    expect(await screen.findByText('Boil 300 g rice with 3 g salt for 15 minutes.')).toBeInTheDocument();
+    expect(screen.queryAllByTestId('scaled-amount')).toHaveLength(0);
+
+    await user.click(screen.getByRole('button', { name: 'Fewer people' }));
+    expect(screen.getAllByTestId('scaled-amount').map((el) => el.textContent)).toEqual(['150 g', '1.5 g']);
+    expect(screen.getByText(/for 15 minutes\./)).toBeInTheDocument();
   });
 });
 
