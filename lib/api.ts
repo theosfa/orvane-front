@@ -356,6 +356,11 @@ export const authApi = {
     apiFetch<AuthResponse>('/auth/register', { method: 'POST', body: { email, password, language }, auth: false }),
   login: (email: string, password: string) =>
     apiFetch<AuthResponse>('/auth/login', { method: 'POST', body: { email, password }, auth: false }),
+  // Client ID for the Google button; null when Google sign-in isn't set up on the server
+  googleConfig: () => apiFetch<{ clientId: string | null }>('/auth/google/config', { auth: false }),
+  // the ID token from the Google button; created: a new account was made (first sign-in)
+  google: (credential: string, language?: Language) =>
+    apiFetch<AuthResponse & { created: boolean }>('/auth/google', { method: 'POST', body: { credential, language }, auth: false }),
   logout: () => apiFetch<void>('/auth/logout', { method: 'POST', auth: false }),
   profile: () => apiFetch<ProfileResponse>('/auth/profile'),
   updateProfile: (data: ProfileUpdate) => apiFetch<ProfileResponse>('/auth/profile', { method: 'PATCH', body: data }),

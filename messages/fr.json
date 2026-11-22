@@ -115,7 +115,10 @@
     "errBadCredentials": "E-mail ou mot de passe incorrect",
     "errGeneric": "Une erreur s’est produite",
     "errEmailTaken": "Cet e-mail est déjà enregistré",
-    "errWeakPassword": "Le mot de passe doit contenir au moins 6 caractères"
+    "errWeakPassword": "Le mot de passe doit contenir au moins 6 caractères",
+    "orEmail": "ou par e-mail",
+    "errGoogle": "Connexion avec Google impossible. Réessayez.",
+    "errGoogleLoad": "La connexion Google n’a pas chargé — vérifiez la connexion ou utilisez l’e-mail."
   },
   "dashboard": {
     "kicker": "Les trois applications",

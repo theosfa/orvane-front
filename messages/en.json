@@ -115,7 +115,10 @@
     "errBadCredentials": "Wrong email or password",
     "errGeneric": "Something went wrong",
     "errEmailTaken": "That email is already registered",
-    "errWeakPassword": "Password must be at least 6 characters"
+    "errWeakPassword": "Password must be at least 6 characters",
+    "orEmail": "or with email",
+    "errGoogle": "Couldn’t sign in with Google. Try again.",
+    "errGoogleLoad": "Google sign-in didn’t load — check your connection or use email."
   },
   "dashboard": {
     "kicker": "All three apps",

@@ -12,6 +12,8 @@ type AuthContextValue = {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
+  // the ID token from the Google button: signs in, or creates the account on the first visit
+  loginWithGoogle: (credential: string) => Promise<void>;
   logout: () => void;
   // saves the interface language to the user's profile and switches the app to it
   updateLanguage: (language: Language) => Promise<void>;
@@ -76,6 +78,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await refreshProfile();
   };
 
+  const loginWithGoogle = async (credential: string) => {
+    const res = await authApi.google(credential, lang);
+    setToken(res.accessToken);
+    await refreshProfile();
+  };
+
   const logout = () => {
     authApi.logout().catch(() => {}); // revoke the refresh token + clear its cookie
     setToken(null);
@@ -93,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateLanguage, updateProfile }}>
+    <AuthContext.Provider value={{ user, loading, login, register, loginWithGoogle, logout, updateLanguage, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

@@ -115,7 +115,10 @@
     "errBadCredentials": "Nieprawidłowy e-mail lub hasło",
     "errGeneric": "Coś poszło nie tak",
     "errEmailTaken": "Ten e-mail jest już zarejestrowany",
-    "errWeakPassword": "Hasło musi mieć co najmniej 6 znaków"
+    "errWeakPassword": "Hasło musi mieć co najmniej 6 znaków",
+    "orEmail": "lub przez e-mail",
+    "errGoogle": "Nie udało się zalogować przez Google. Spróbuj ponownie.",
+    "errGoogleLoad": "Logowanie przez Google się nie wczytało — sprawdź połączenie lub użyj e-maila."
   },
   "dashboard": {
     "kicker": "Wszystkie trzy aplikacje",

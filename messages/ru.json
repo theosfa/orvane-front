@@ -115,7 +115,10 @@
     "errBadCredentials": "Неверный email или пароль",
     "errGeneric": "Что-то пошло не так",
     "errEmailTaken": "Такой email уже зарегистрирован",
-    "errWeakPassword": "Пароль должен быть не короче 6 символов"
+    "errWeakPassword": "Пароль должен быть не короче 6 символов",
+    "orEmail": "или по email",
+    "errGoogle": "Не удалось войти через Google. Попробуйте ещё раз.",
+    "errGoogleLoad": "Вход через Google не загрузился — проверьте интернет или войдите по email."
   },
   "dashboard": {
     "kicker": "Все три приложения",

@@ -8,6 +8,7 @@ import { ApiError } from '@/lib/api';
 import { useT } from '@/lib/i18n/context';
 import { APP_HOME } from '@/lib/app-mode-context';
 import { Card, Btn, GlassInput, Field, ErrorMsg } from '@/components/ui';
+import GoogleSignIn from '@/components/GoogleSignIn';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -39,6 +40,8 @@ export default function LoginPage() {
           <h1 style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.03em' }}>{t('auth.loginTitle')}</h1>
           <p style={{ color: 'var(--ink-2)', fontSize: 13, marginTop: 8 }}>{t('auth.loginSub')}</p>
         </div>
+
+        <GoogleSignIn />
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <Field label={t('auth.email')}>
