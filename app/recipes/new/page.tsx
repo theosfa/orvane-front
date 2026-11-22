@@ -3,7 +3,7 @@
 import { useRef, useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { recipesApi, aiApi, photosApi, CreateRecipeInput, ApiError } from '@/lib/api';
+import { recipesApi, aiApi, photosApi, CreateRecipeInput, ApiError, GeneratedRecipe } from '@/lib/api';
 import { prepareImage } from '@/lib/image';
 import PhotoEditor, { PhotoTile } from '@/components/PhotoEditor';
 import RequireAuth from '@/components/RequireAuth';
@@ -23,7 +23,12 @@ function NewRecipePageContent() {
   const [name, setName] = useState('');
   const [isPublic, setIsPublic] = useState(true);
   const [servings, setServings] = useState(2);
-  const [importUrl, setImportUrl] = useState('');
+  // recipe from a photo: a local preview while the AI reads it
+  const [readingPhoto, setReadingPhoto] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoNote, setPhotoNote] = useState<string | null>(null);
+  const [photoReadError, setPhotoReadError] = useState<string | null>(null);
+  const recipePhotoInput = useRef<HTMLInputElement>(null);
   const [ingredients, setIngredients] = useState<IngredientRow[]>([{ ingredientId: '', name: '', amount: '' }]);
   const [steps, setSteps] = useState<StepRow[]>([{ stepText: '' }]);
   const [error, setError] = useState<string | null>(null);
@@ -75,6 +80,49 @@ function NewRecipePageContent() {
       });
   };
 
+  // an AI suggestion (from the chat or a photo) fills the whole form
+  const applySuggestion = (suggestion: GeneratedRecipe) => {
+    setName(suggestion.name);
+    setServings(suggestion.servings);
+    const rows = suggestion.ingredients.map((i) => ({
+      ingredientId: i.ingredientId ? String(i.ingredientId) : '',
+      name: i.name,
+      amount: String(i.amount),
+    }));
+    setIngredients(rows.length ? rows : [{ ingredientId: '', name: '', amount: '' }]);
+    setSteps(suggestion.steps.length ? suggestion.steps.map((s) => ({ stepText: s.stepText })) : [{ stepText: '' }]);
+  };
+
+  // a photo of a written recipe (transcribed) or of a dish (a recipe made up from it — and the photo
+  // itself becomes the main photo); a written recipe gets a generated dish photo, like the chat
+  const handleRecipePhoto = async (file: File) => {
+    setPhotoReadError(null);
+    setPhotoNote(null);
+    const preview = typeof URL.createObjectURL === 'function' ? URL.createObjectURL(file) : null;
+    setPhotoPreview(preview);
+    setReadingPhoto(true);
+    try {
+      const result = await aiApi.recipeFromPhoto(await prepareImage(file), lang);
+      applySuggestion(result);
+      if (result.kind === 'dish' && result.photoId) {
+        const key = newKey();
+        const previous = aiPhotoKey.current;
+        aiPhotoKey.current = key; // drops a dish photo still being generated for an earlier recipe
+        setPhotos((prev) => [{ key, id: result.photoId!, status: 'ready' }, ...prev.filter((p) => p.key !== previous)]);
+        setPhotoNote(t('food.photoImportDish', { name: result.name }));
+      } else {
+        generateDishPhoto(result.name, result.ingredients.map((i) => i.name));
+        setPhotoNote(t('food.photoImportWritten'));
+      }
+    } catch (err) {
+      setPhotoReadError(err instanceof ApiError && err.status === 422 ? t('food.photoImportNothing') : t('food.photoImportError'));
+    } finally {
+      setReadingPhoto(false);
+      setPhotoPreview(null);
+      if (preview) URL.revokeObjectURL(preview);
+    }
+  };
+
   const handleGenerate = async () => {
     if (!aiPrompt.trim()) return;
     setAiError(null);
@@ -82,15 +130,7 @@ function NewRecipePageContent() {
     setGenerating(true);
     try {
       const suggestion = await aiApi.generateRecipe(aiPrompt, lang);
-      setName(suggestion.name);
-      setServings(suggestion.servings);
-      const rows = suggestion.ingredients.map((i) => ({
-        ingredientId: i.ingredientId ? String(i.ingredientId) : '',
-        name: i.name,
-        amount: String(i.amount),
-      }));
-      setIngredients(rows.length ? rows : [{ ingredientId: '', name: '', amount: '' }]);
-      setSteps(suggestion.steps.length ? suggestion.steps.map((s) => ({ stepText: s.stepText })) : [{ stepText: '' }]);
+      applySuggestion(suggestion);
       setAiNote(t('food.aiApplied'));
       generateDishPhoto(suggestion.name, suggestion.ingredients.map((i) => i.name));
     } catch {
@@ -165,21 +205,37 @@ function NewRecipePageContent() {
 
       <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <Kicker>{t('food.importKicker')}</Kicker>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-          <GlassInput value={importUrl} onChange={(e) => setImportUrl(e.target.value)} placeholder={t('food.importPlaceholder')} style={{ flex: '1 1 260px' }} />
-          <Btn variant="primary">{t('food.importBtn')}</Btn>
-          <Btn variant="ghost" style={{ border: '1px dashed var(--stroke-2)' }}>
-            {t('food.importPhotoBtn')}
+        <div style={{ fontSize: 13, color: 'var(--ink-2)' }}>{t('food.photoImportHint')}</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12 }}>
+          {readingPhoto && photoPreview && (
+            // eslint-disable-next-line @next/next/no-img-element -- local preview (blob:)
+            <img src={photoPreview} alt="" style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 'var(--r-sm)', border: '1px solid var(--stroke-2)' }} />
+          )}
+          <Btn variant="primary" onClick={() => recipePhotoInput.current?.click()} disabled={readingPhoto || generating}>
+            {readingPhoto ? t('food.photoImportBusy') : t('food.photoImportBtn')}
           </Btn>
+          {photoNote && <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>{photoNote}</span>}
+          <input
+            ref={recipePhotoInput}
+            type="file"
+            accept="image/*"
+            hidden
+            data-testid="recipe-photo-input"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              e.target.value = '';
+              if (file) handleRecipePhoto(file);
+            }}
+          />
         </div>
-        <div style={{ fontSize: 12, color: 'var(--ink-2)' }}>{t('food.importStatusStub')}</div>
+        {photoReadError && <ErrorMsg>{photoReadError}</ErrorMsg>}
       </Card>
 
       <Card as="section" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <Kicker>{t('food.aiKicker')}</Kicker>
         <GlassTextarea value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} placeholder={t('food.aiPlaceholder')} rows={2} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Btn variant="primary" onClick={handleGenerate} disabled={generating || !aiPrompt.trim()}>
+          <Btn variant="primary" onClick={handleGenerate} disabled={generating || readingPhoto || !aiPrompt.trim()}>
             {generating ? t('food.aiGenerating') : t('food.aiBtn')}
           </Btn>
           {aiNote && <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>{aiNote}</span>}

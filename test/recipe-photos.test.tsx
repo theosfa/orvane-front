@@ -11,7 +11,7 @@ vi.mock('@/lib/api', async (importOriginal) => {
   return {
     ...actual,
     recipesApi: { get: vi.fn(), create: vi.fn(), like: vi.fn(), unlike: vi.fn(), addPhotos: vi.fn(), removePhoto: vi.fn(), makeMainPhoto: vi.fn() },
-    aiApi: { generateRecipe: vi.fn(), generateImage: vi.fn() },
+    aiApi: { generateRecipe: vi.fn(), generateImage: vi.fn(), recipeFromPhoto: vi.fn() },
     photosApi: { upload: vi.fn() },
   };
 });
@@ -111,6 +111,61 @@ describe('new recipe photos', () => {
     expect(await screen.findByText(/daily limit of AI photos/)).toBeInTheDocument();
     expect(screen.queryAllByTestId('photo-tile')).toHaveLength(0);
     expect(screen.getByRole('button', { name: 'Save recipe' })).toBeEnabled();
+  });
+});
+
+describe('recipe from a photo', () => {
+  const syrniki = {
+    name: 'Grandma’s syrniki',
+    servings: 4,
+    ingredients: [
+      { ingredientId: 11, name: 'Cottage cheese', amount: 500 },
+      { ingredientId: 12, name: 'Egg', amount: 100 },
+    ],
+    steps: [{ stepNum: 1, stepText: 'Mash 500 g cottage cheese.' }],
+  };
+
+  it('fills the form from a written recipe and creates a dish photo', async () => {
+    const user = userEvent.setup();
+    ai.recipeFromPhoto.mockResolvedValue({ ...syrniki, kind: 'written', photoId: null });
+    ai.generateImage.mockReturnValue(new Promise(() => {}));
+    renderWithIntl(<NewRecipePage />);
+
+    expect(screen.queryByPlaceholderText(/link/i)).toBeNull(); // the link import is gone
+    await user.upload(screen.getByTestId('recipe-photo-input'), file('card.jpg'));
+
+    expect(await screen.findByDisplayValue('Grandma’s syrniki')).toBeInTheDocument();
+    expect(ai.recipeFromPhoto).toHaveBeenCalledWith(expect.any(File), 'en');
+    expect(screen.getByDisplayValue('Mash 500 g cottage cheese.')).toBeInTheDocument();
+    expect(screen.getByText('The recipe from the photo is in the form — check it and save')).toBeInTheDocument();
+    expect(ai.generateImage).toHaveBeenCalledWith('Grandma’s syrniki', ['Cottage cheese', 'Egg']);
+  });
+
+  it('uses the dish photo itself as the main photo', async () => {
+    const user = userEvent.setup();
+    ai.recipeFromPhoto.mockResolvedValue({ ...syrniki, name: 'Chicken with potatoes', kind: 'dish', photoId: P1 });
+    recipes.create.mockResolvedValue(recipe());
+    renderWithIntl(<NewRecipePage />);
+
+    await user.upload(screen.getByTestId('recipe-photo-input'), file('dinner.jpg'));
+    expect(await screen.findByText(/Looks like “Chicken with potatoes”/)).toBeInTheDocument();
+    expect(ai.generateImage).not.toHaveBeenCalled();
+    const [tile] = screen.getAllByTestId('photo-tile');
+    expect(tile.querySelector('img')?.getAttribute('src')).toContain(P1);
+    expect(within(tile).getByText('Main')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Save recipe' }));
+    await waitFor(() => expect(recipes.create.mock.calls[0][0].photoIds).toEqual([P1]));
+  });
+
+  it('says so when there is nothing on the photo', async () => {
+    const user = userEvent.setup();
+    ai.recipeFromPhoto.mockRejectedValue(new ApiError(422, null));
+    renderWithIntl(<NewRecipePage />);
+
+    await user.upload(screen.getByTestId('recipe-photo-input'), file('cat.jpg'));
+    expect(await screen.findByText('No recipe or dish found on the photo. Try another one.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Choose a photo' })).toBeEnabled();
   });
 });
 

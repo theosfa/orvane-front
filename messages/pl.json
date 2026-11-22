@@ -156,11 +156,7 @@
     "emptyBody": "Dodaj pierwszy — od razu trafi do menu na ten tydzień.",
     "newBack": "← Do wszystkich przepisów",
     "newTitle": "Nowy przepis",
-    "importKicker": "Krok 1 · przynieś przepis",
-    "importPlaceholder": "Wklej link do przepisu — spróbujemy go odczytać",
-    "importBtn": "Importuj",
-    "importPhotoBtn": "Albo dodaj zdjęcie",
-    "importStatusStub": "Import z linku jest jeszcze w przygotowaniu. Na razie wypełnij formularz poniżej ręcznie.",
+    "importKicker": "Krok 1 · przepis ze zdjęcia",
     "aiKicker": "Albo zapytaj asystenta AI",
     "aiPlaceholder": "Np. szybka kolacja z kurczakiem i ryżem",
     "aiBtn": "Wygeneruj",
@@ -307,7 +303,14 @@
     "aiPhotoLimit": "Dzienny limit zdjęć AI został wykorzystany — możesz dodać własne.",
     "photosPending": "Czekamy na zdjęcia…",
     "perPersonOf": "{value} na osobę",
-    "nutritionShow": "Pokaż na liście składników"
+    "nutritionShow": "Pokaż na liście składników",
+    "photoImportHint": "Zrób zdjęcie przepisu napisanego ręcznie lub w książce — albo gotowego dania. AI odczyta przepis lub wymyśli go na podstawie zdjęcia.",
+    "photoImportBtn": "Wybierz zdjęcie",
+    "photoImportBusy": "Czytamy zdjęcie…",
+    "photoImportWritten": "Przepis ze zdjęcia jest w formularzu — sprawdź i zapisz",
+    "photoImportDish": "Wygląda na „{name}” — przepis wymyślony na podstawie zdjęcia, sprawdź i zapisz",
+    "photoImportNothing": "Na zdjęciu nie ma przepisu ani dania. Spróbuj innego zdjęcia.",
+    "photoImportError": "Nie udało się odczytać zdjęcia. Spróbuj ponownie."
   },
   "feed": {
     "hint": "Przewiń w dół, aby zobaczyć kolejny przepis",

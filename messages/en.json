@@ -156,11 +156,7 @@
     "emptyBody": "Add your first one — it’ll land straight in this week’s menu.",
     "newBack": "← Back to recipes",
     "newTitle": "New recipe",
-    "importKicker": "Step 1 · bring it in",
-    "importPlaceholder": "Paste a recipe link — we’ll read it for you",
-    "importBtn": "Import",
-    "importPhotoBtn": "Or drop a photo",
-    "importStatusStub": "Link import is still cooking — fill in the form below by hand for now.",
+    "importKicker": "Step 1 · recipe from a photo",
     "aiKicker": "Or ask the AI assistant",
     "aiPlaceholder": "e.g. a quick chicken and rice dinner",
     "aiBtn": "Generate",
@@ -307,7 +303,14 @@
     "aiPhotoLimit": "The daily limit of AI photos is reached — you can add your own.",
     "photosPending": "Waiting for photos…",
     "perPersonOf": "{value} per person",
-    "nutritionShow": "Show in the ingredient list"
+    "nutritionShow": "Show in the ingredient list",
+    "photoImportHint": "Snap a recipe written by hand or in a book — or a photo of a finished dish. The AI will read the recipe or come up with one from the photo.",
+    "photoImportBtn": "Choose a photo",
+    "photoImportBusy": "Reading the photo…",
+    "photoImportWritten": "The recipe from the photo is in the form — check it and save",
+    "photoImportDish": "Looks like “{name}” — a recipe made up from the photo, check it and save",
+    "photoImportNothing": "No recipe or dish found on the photo. Try another one.",
+    "photoImportError": "Couldn’t read the photo. Try again."
   },
   "feed": {
     "hint": "Scroll down for the next recipe",

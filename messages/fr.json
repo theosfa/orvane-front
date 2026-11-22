@@ -156,11 +156,7 @@
     "emptyBody": "Ajoutez la première — elle ira directement dans le menu de la semaine.",
     "newBack": "← Toutes les recettes",
     "newTitle": "Nouvelle recette",
-    "importKicker": "Étape 1 · importer une recette",
-    "importPlaceholder": "Collez le lien d’une recette — nous essaierons de la lire",
-    "importBtn": "Importer",
-    "importPhotoBtn": "Ou ajouter une photo",
-    "importStatusStub": "L’import par lien est encore en préparation. Remplissez le formulaire ci-dessous à la main pour l’instant.",
+    "importKicker": "Étape 1 · recette depuis une photo",
     "aiKicker": "Ou demandez à l’assistant IA",
     "aiPlaceholder": "Par ex. un dîner rapide au poulet et au riz",
     "aiBtn": "Générer",
@@ -307,7 +303,14 @@
     "aiPhotoLimit": "La limite quotidienne de photos IA est atteinte — vous pouvez ajouter la vôtre.",
     "photosPending": "En attente des photos…",
     "perPersonOf": "{value} par personne",
-    "nutritionShow": "Afficher dans la liste des ingrédients"
+    "nutritionShow": "Afficher dans la liste des ingrédients",
+    "photoImportHint": "Photographiez une recette écrite à la main ou dans un livre — ou un plat terminé. L’IA lira la recette ou en inventera une d’après la photo.",
+    "photoImportBtn": "Choisir une photo",
+    "photoImportBusy": "Lecture de la photo…",
+    "photoImportWritten": "La recette de la photo est dans le formulaire — vérifiez et enregistrez",
+    "photoImportDish": "On dirait « {name} » — recette inventée d’après la photo, vérifiez et enregistrez",
+    "photoImportNothing": "Aucune recette ni plat sur la photo. Essayez-en une autre.",
+    "photoImportError": "Impossible de lire la photo. Réessayez."
   },
   "feed": {
     "hint": "Faites défiler vers le bas pour la recette suivante",

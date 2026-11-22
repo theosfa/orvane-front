@@ -219,6 +219,10 @@ export type GeneratedRecipe = {
   steps: RecipeStep[];
 };
 
+// a recipe read from a photo: kind "written" — a recipe written by hand / in a book, transcribed;
+// "dish" — a photo of the food, the recipe is made up from it and photoId is that photo (main photo)
+export type RecipeFromPhoto = GeneratedRecipe & { kind: 'written' | 'dish'; photoId: string | null };
+
 export type CreateIngredientInput = {
   name: string;
   caloriesPer100g: number;
@@ -399,6 +403,13 @@ export const aiApi = {
   // lang: the language the recipe should be written in
   generateRecipe: (prompt: string, lang: Language) =>
     apiFetch<GeneratedRecipe>('/ai/recipes/generate', { method: 'POST', body: { prompt, lang } }),
+  // a recipe from a photo (handwritten / printed recipe, or a photo of the dish); 422: nothing found on it
+  recipeFromPhoto: (file: Blob, lang: Language) => {
+    const form = new FormData();
+    form.append('file', file, 'photo.jpg');
+    form.append('lang', lang);
+    return apiFetch<RecipeFromPhoto>('/ai/recipes/from-photo', { method: 'POST', body: form });
+  },
   // a photo of the finished dish (generated, ~10–15 s); 429 when the daily limit is used up
   generateImage: (name: string, ingredients: string[]) =>
     apiFetch<RecipePhoto>('/ai/recipes/image', { method: 'POST', body: { name, ingredients } }),
