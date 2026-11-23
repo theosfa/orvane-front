@@ -31,8 +31,9 @@ function FeedCard({ recipe, showHint }: { recipe: Recipe; showHint: boolean }) {
 
   return (
     <article
+      className="feed-card"
       style={{
-        position: 'relative', width: '100%', maxWidth: 480, height: '100%', borderRadius: 'var(--r-lg)', overflow: 'hidden',
+        position: 'relative', width: '100%', height: '100%', borderRadius: 'var(--r-lg)', overflow: 'hidden',
         display: 'flex', flexDirection: 'column', gap: 16, padding: '22px 76px 22px 22px',
         background,
         color: '#fff', boxShadow: 'var(--shadow-lg)',

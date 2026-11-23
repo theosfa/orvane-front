@@ -213,8 +213,11 @@ button { font-family: inherit; }
    right of the sidebar, so the sidebar's links stay clickable */
 .feed-scroller { position: fixed; inset: 0; z-index: 2; }
 .app-header { position: relative; z-index: 3; }
+/* feed card: phone width on phones, 1.75× wider on a computer */
+.feed-card { max-width: 480px; }
 @media (min-width: 960px) {
   .feed-scroller { left: var(--sidebar-w); }
+  .feed-card { max-width: 840px; }
 }
 
 .side-link {
