@@ -209,6 +209,14 @@ button { font-family: inherit; }
   .header-brand { display: none; }
 }
 
+/* the reels-style feed is a full-screen layer under the header and the dock; on desktop it starts
+   right of the sidebar, so the sidebar's links stay clickable */
+.feed-scroller { position: fixed; inset: 0; z-index: 2; }
+.app-header { position: relative; z-index: 3; }
+@media (min-width: 960px) {
+  .feed-scroller { left: var(--sidebar-w); }
+}
+
 .side-link {
   display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--r-md);
   color: var(--graphite-ink-2); font-size: 14px; font-weight: 600; text-decoration: none;

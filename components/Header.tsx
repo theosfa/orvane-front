@@ -46,7 +46,7 @@ export default function Header() {
   const initial = (user?.firstName || user?.username || '?')[0].toUpperCase();
 
   return (
-    <header style={{ width: '100%', maxWidth: 1240, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, minHeight: 48 }}>
+    <header className="app-header" style={{ width: '100%', maxWidth: 1240, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, minHeight: 48 }}>
       {/* the logo lives in the sidebar on desktop; on phones it is here */}
       <Link
         href={user ? APP_HOME[app] : '/'}

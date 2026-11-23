@@ -185,7 +185,8 @@ function FeedPageContent() {
     <div
       ref={scroller}
       onScroll={onScroll}
-      style={{ position: 'fixed', inset: 0, zIndex: 2, overflowY: 'auto', scrollSnapType: 'y mandatory', overscrollBehavior: 'contain', scrollbarWidth: 'none' }}
+      className="feed-scroller"
+      style={{ overflowY: 'auto', scrollSnapType: 'y mandatory', overscrollBehavior: 'contain', scrollbarWidth: 'none' }}
     >
       <style>{'@keyframes feed-hint { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(5px) } }'}</style>
 
